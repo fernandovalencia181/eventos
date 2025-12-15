@@ -1,15 +1,30 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Features;
+
+// IMPORTACIONES DE LIVEWIRE (Lo que ya venía)
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
-use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+// IMPORTACIONES DE TU EQUIPO (NUEVO)
+use App\Http\Controllers\EventoController;
+// use App\Http\Controllers\TicketController; // Descomentar cuando tu compa cree el suyo
+// use App\Http\Controllers\StaffController;  // Descomentar cuando tu compa cree el suyo
+
+// =========================================================================
+// 🌍 ZONA PÚBLICA (Lo que ve todo el mundo sin loguearse)
+// =========================================================================
+
+// Cambiamos la función anónima por TU controlador para mostrar los eventos reales
+Route::get('/', [EventoController::class, 'index'])->name('home');
+
+
+// =========================================================================
+// 🔒 ZONA PRIVADA (Dashboard y Configuración - Lo que trajo Laravel)
+// =========================================================================
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -33,3 +48,21 @@ Route::middleware(['auth'])->group(function () {
         )
         ->name('two-factor.show');
 });
+
+// =========================================================================
+// 👷 ZONA DE EQUIPO (Agreguen sus rutas aquí abajo para no pisarse)
+// =========================================================================
+
+// ZONA FERNANDO (Gestión de Eventos - Solo Admin/Auth)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/eventos/crear', [EventoController::class, 'create'])->name('eventos.create');
+    Route::post('/eventos', [EventoController::class, 'store'])->name('eventos.store');
+});
+
+
+// ---> ZONA COMPAÑERO 2 (Tickets y Registro - Público o Auth)
+// Ejemplo: Route::get('/registro/{id}', [TicketController::class, 'create']);
+
+
+// ---> ZONA COMPAÑERO 3 (Staff y Scanner)
+// Ejemplo: Route::get('/scanner', [StaffController::class, 'index']);
