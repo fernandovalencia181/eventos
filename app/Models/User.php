@@ -8,11 +8,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasApiTokens;
+    use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +28,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rol',
     ];
 
     /**
@@ -60,5 +66,21 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+    /**
+     * FUNCIÓN HELPER: Para preguntar fácil si es admin
+     * Uso: if ($user->isAdmin()) { ... }
+     */
+    public function isAdmin()
+    {
+        return $this->rol === 'admin';
+    }
+
+    /**
+     * FUNCIÓN HELPER: Para preguntar si es Staff (opcional)
+     */
+    public function isStaff()
+    {
+        return $this->rol === 'staff' || $this->rol === 'admin';
     }
 }
