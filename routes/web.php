@@ -52,4 +52,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/password', Password::class)->name('user-password.edit');
     Route::get('settings/appearance', Appearance::class)->name('appearance.edit');
     Route::get('settings/two-factor', TwoFactor::class)->name('two-factor.show');
+    // 1. Mostrar el formulario de edición (recibe el ID del evento)
+    Route::get('/eventos/{evento}/editar', [EventoController::class, 'edit'])->name('eventos.edit');
+    // 2. Guardar los cambios (PUT es el verbo para actualizar)
+    Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('eventos.update');
+    // 3. Eliminar el evento (DELETE)
+    Route::delete('/eventos/{evento}', [EventoController::class, 'destroy'])->name('eventos.destroy');
 });

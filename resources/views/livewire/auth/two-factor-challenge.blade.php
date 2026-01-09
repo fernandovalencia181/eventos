@@ -1,95 +1,54 @@
-<x-layouts.auth>
-    <div class="flex flex-col gap-6">
-        <div
-            class="relative w-full h-auto"
-            x-cloak
-            x-data="{
-                showRecoveryInput: @js($errors->has('recovery_code')),
-                code: '',
-                recovery_code: '',
-                toggleInput() {
-                    this.showRecoveryInput = !this.showRecoveryInput;
-
-                    this.code = '';
-                    this.recovery_code = '';
-
-                    $dispatch('clear-2fa-auth-code');
-
-                    $nextTick(() => {
-                        this.showRecoveryInput
-                            ? this.$refs.recovery_code?.focus()
-                            : $dispatch('focus-2fa-auth-code');
-                    });
-                },
-            }"
-        >
-            <div x-show="!showRecoveryInput">
-                <x-auth-header
-                    :title="__('Authentication Code')"
-                    :description="__('Enter the authentication code provided by your authenticator application.')"
-                />
-            </div>
-
-            <div x-show="showRecoveryInput">
-                <x-auth-header
-                    :title="__('Recovery Code')"
-                    :description="__('Please confirm access to your account by entering one of your emergency recovery codes.')"
-                />
-            </div>
-
-            <form method="POST" action="{{ route('two-factor.login.store') }}">
-                @csrf
-
-                <div class="space-y-5 text-center">
-                    <div x-show="!showRecoveryInput">
-                        <div class="flex items-center justify-center my-5">
-                            <flux:otp
-                                x-model="code"
-                                length="6"
-                                name="code"
-                                label="OTP Code"
-                                label:sr-only
-                                class="mx-auto"
-                             />
-                        </div>
-                    </div>
-
-                    <div x-show="showRecoveryInput">
-                        <div class="my-5">
-                            <flux:input
-                                type="text"
-                                name="recovery_code"
-                                x-ref="recovery_code"
-                                x-bind:required="showRecoveryInput"
-                                autocomplete="one-time-code"
-                                x-model="recovery_code"
-                            />
-                        </div>
-
-                        @error('recovery_code')
-                            <flux:text color="red">
-                                {{ $message }}
-                            </flux:text>
-                        @enderror
-                    </div>
-
-                    <flux:button
-                        variant="primary"
-                        type="submit"
-                        class="w-full"
-                    >
-                        {{ __('Continue') }}
-                    </flux:button>
-                </div>
-
-                <div class="mt-5 space-x-0.5 text-sm leading-5 text-center">
-                    <span class="opacity-50">{{ __('or you can') }}</span>
-                    <div class="inline font-medium underline cursor-pointer opacity-80">
-                        <span x-show="!showRecoveryInput" @click="toggleInput()">{{ __('login using a recovery code') }}</span>
-                        <span x-show="showRecoveryInput" @click="toggleInput()">{{ __('login using an authentication code') }}</span>
-                    </div>
-                </div>
-            </form>
+<x-guest-layout>
+    <div x-data="{ recovery: false }">
+        
+        <div class="mb-6 text-center">
+            <h2 class="text-xl font-bold text-secondary-900">Autenticación en dos pasos</h2>
+            
+            <p class="text-sm text-secondary-500 mt-2" x-show="!recovery">
+                Confirma el acceso ingresando el código de tu aplicación autenticadora.
+            </p>
+            <p class="text-sm text-secondary-500 mt-2" x-show="recovery" style="display: none;">
+                Ingresa uno de tus códigos de emergencia para acceder.
+            </p>
         </div>
+
+        @if ($errors->any())
+            <div class="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('two-factor.login') }}">
+            @csrf
+
+            <div class="mt-4" x-show="!recovery">
+                <label for="code" class="block text-sm font-medium text-secondary-700">Código de Autenticación</label>
+                <input id="code" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-center tracking-widest text-lg" type="text" inputmode="numeric" name="code" autofocus x-ref="code" autocomplete="one-time-code" />
+            </div>
+
+            <div class="mt-4" x-show="recovery" style="display: none;">
+                <label for="recovery_code" class="block text-sm font-medium text-secondary-700">Código de Recuperación</label>
+                <input id="recovery_code" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="text" name="recovery_code" x-ref="recovery_code" autocomplete="one-time-code" />
+            </div>
+
+            <div class="flex items-center justify-end mt-6">
+                <button type="button" class="text-sm text-secondary-600 hover:text-primary-600 underline cursor-pointer mr-4"
+                        x-on:click="
+                            recovery = ! recovery;
+                            $nextTick(() => { recovery ? $refs.recovery_code.focus() : $refs.code.focus() })
+                        ">
+                    <span x-show="!recovery">Usar código de recuperación</span>
+                    <span x-show="recovery" style="display: none;">Usar código de autenticación</span>
+                </button>
+
+                <button type="submit" class="bg-primary-600 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:bg-primary-700 transition">
+                    Acceder
+                </button>
+            </div>
+        </form>
     </div>
-</x-layouts.auth>
+</x-guest-layout>
