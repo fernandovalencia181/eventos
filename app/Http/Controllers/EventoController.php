@@ -37,6 +37,6 @@ class EventoController extends Controller
         Evento::create($validated);
 
         // 3. Redirigir al inicio con un mensaje de éxito
-        return redirect()->route('home');
+        return redirect()->route('home')->with('success', '¡El evento se ha creado correctamente!');
     }
 }
