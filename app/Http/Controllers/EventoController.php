@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Evento; // <--- Importante: Importar el modelo
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EventoController extends Controller
 {
@@ -71,12 +72,25 @@ class EventoController extends Controller
             'fecha' => 'required|date',
             'lugar' => 'required|string',
             'aforo_maximo' => 'required|integer|min:1',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // 2. Actualizamos el evento
+        // 2. Manejar la subida de la nueva imagen
+        if ($request->hasFile('imagen')) {
+            // Eliminar la imagen anterior si existe
+            if ($evento->imagen) {
+                Storage::disk('public')->delete($evento->imagen);
+            }
+            
+            // Guardar la nueva
+            $path = $request->file('imagen')->store('eventos', 'public');
+            $validated['imagen'] = $path;
+        }
+
+        // 3. Actualizamos el evento
         $evento->update($validated);
 
-        // 3. Volvemos al dashboard con mensaje de éxito
+        // 4. Volvemos al dashboard con mensaje de éxito
         return redirect()->route('admin.dashboard')->with('success', 'Evento actualizado correctamente.');
     }
 

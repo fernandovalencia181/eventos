@@ -28,8 +28,17 @@
                         @forelse ($eventos as $evento)
                         <tr class="hover:bg-secondary-50 transition">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-bold text-secondary-900">{{ $evento->nombre }}</div>
-                                <div class="text-xs text-secondary-500">{{ Str::limit($evento->lugar, 30) }}</div>
+                                <div class="flex items-center">
+                                    @if($evento->imagen)
+                                        <div class="flex-shrink-0 h-10 w-10 mr-4">
+                                            <img class="h-10 w-10 rounded-full object-cover" src="{{ Storage::url($evento->imagen) }}" alt="{{ $evento->nombre }}">
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <div class="text-sm font-bold text-secondary-900">{{ $evento->nombre }}</div>
+                                        <div class="text-xs text-secondary-500">{{ Str::limit($evento->lugar, 30) }}</div>
+                                    </div>
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-secondary-600">
                                 {{ \Carbon\Carbon::parse($evento->fecha)->format('d/m/Y H:i') }}

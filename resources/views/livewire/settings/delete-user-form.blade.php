@@ -1,34 +1,55 @@
-<section class="mt-10 space-y-6">
-    <div class="relative mb-5">
-        <flux:heading>{{ __('Delete account') }}</flux:heading>
-        <flux:subheading>{{ __('Delete your account and all of its resources') }}</flux:subheading>
+<section class="mt-10 pt-10 border-t border-secondary-200 w-full">
+    
+    <div class="mb-6">
+        <h3 class="text-lg font-bold text-red-600">{{ __('Borrar Cuenta') }}</h3>
+        <p class="mt-1 text-sm text-secondary-500">
+            {{ __('Una vez que se elimine tu cuenta, todos sus recursos y datos se eliminarán permanentemente.') }}
+        </p>
     </div>
 
-    <flux:modal.trigger name="confirm-user-deletion">
-        <flux:button variant="danger" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
-            {{ __('Delete account') }}
-        </flux:button>
-    </flux:modal.trigger>
+    <div class="bg-red-50 p-6 rounded-xl border border-red-100">
+        <p class="text-sm text-red-800 mb-4">
+            {{ __('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.') }}
+        </p>
 
-    <flux:modal name="confirm-user-deletion" :show="$errors->isNotEmpty()" focusable class="max-w-lg">
-        <form method="POST" wire:submit="deleteUser" class="space-y-6">
-            <div>
-                <flux:heading size="lg">{{ __('Are you sure you want to delete your account?') }}</flux:heading>
+        <button 
+            wire:click="$set('confirmingUserDeletion', true)" 
+            wire:loading.attr="disabled"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg font-bold shadow-sm hover:bg-red-700 transition">
+            {{ __('Sí, borrar mi cuenta') }}
+        </button>
 
-                <flux:subheading>
-                    {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
-                </flux:subheading>
+        @if($confirmingUserDeletion)
+            <div class="mt-6 p-4 bg-white rounded-lg border border-red-200 shadow-lg animation-fade-in">
+                <h4 class="text-md font-bold text-secondary-900 mb-2">{{ __('Confirma tu contraseña para continuar') }}</h4>
+                
+                <div class="mb-4">
+                    <input 
+                        wire:model="password" 
+                        type="password" 
+                        class="block w-full rounded-lg border-secondary-300 shadow-sm focus:border-red-500 focus:ring-red-500" 
+                        placeholder="Escribe tu contraseña"
+                        wire:keydown.enter="deleteUser" />
+                    
+                    @error('password') 
+                        <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> 
+                    @enderror
+                </div>
+
+                <div class="flex justify-end gap-3">
+                    <button 
+                        wire:click="$set('confirmingUserDeletion', false)" 
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                        {{ __('Cancelar') }}
+                    </button>
+
+                    <button 
+                        wire:click="deleteUser" 
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 shadow-md">
+                        {{ __('Eliminar Definitivamente') }}
+                    </button>
+                </div>
             </div>
-
-            <flux:input wire:model="password" :label="__('Password')" type="password" />
-
-            <div class="flex justify-end space-x-2 rtl:space-x-reverse">
-                <flux:modal.close>
-                    <flux:button variant="filled">{{ __('Cancel') }}</flux:button>
-                </flux:modal.close>
-
-                <flux:button variant="danger" type="submit">{{ __('Delete account') }}</flux:button>
-            </div>
-        </form>
-    </flux:modal>
+        @endif
+    </div>
 </section>

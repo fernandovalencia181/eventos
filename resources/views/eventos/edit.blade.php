@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-8">
                 
-                <form action="{{ route('eventos.update', $evento) }}" method="POST">
+                <form action="{{ route('eventos.update', $evento) }}" method="POST" enctype="multipart/form-data">
                     @csrf 
                     @method('PUT') <div class="grid grid-cols-1 gap-6">
                         <div>
@@ -20,6 +20,17 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Descripción</label>
                             <textarea name="descripcion" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('descripcion', $evento->descripcion) }}</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Imagen del Evento (Opcional)</label>
+                            @if($evento->imagen)
+                                <div class="mb-2">
+                                    <img src="{{ Storage::url($evento->imagen) }}" alt="Imagen actual" class="h-32 w-auto object-cover rounded-md">
+                                    <p class="text-xs text-gray-500 mt-1">Imagen actual</p>
+                                </div>
+                            @endif
+                            <input type="file" name="imagen" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

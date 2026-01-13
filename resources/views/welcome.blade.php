@@ -33,9 +33,13 @@
             
             @forelse($eventos as $evento)
                 <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-secondary-100">
-                    <div class="h-48 bg-gradient-to-r from-primary-500 to-primary-700 flex items-center justify-center">
-                        <span class="text-white text-4xl font-bold opacity-30">IMG</span>
-                    </div>
+                    @if($evento->imagen)
+                        <img src="{{ Storage::url($evento->imagen) }}" alt="{{ $evento->nombre }}" class="h-48 w-full object-cover">
+                    @else
+                        <div class="h-48 bg-gradient-to-r from-primary-500 to-primary-700 flex items-center justify-center">
+                            <span class="text-white text-4xl font-bold opacity-30">{{ substr($evento->nombre, 0, 1) }}</span>
+                        </div>
+                    @endif
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-xs font-semibold bg-primary-50 text-primary-700 px-2 py-1 rounded-full">
