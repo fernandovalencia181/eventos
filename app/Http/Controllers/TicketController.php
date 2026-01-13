@@ -32,7 +32,7 @@ class TicketController extends Controller
             'evento_id' => $evento->id,
             'user_id' => Auth::id(),
             'nombre_asistente' => Auth::user()->name, // Por defecto el usuario logueado
-            'estado' => 'pendiente', // O 'generada'
+            'estado' => 'generada',
             'token_seguridad_qr' => Str::random(32),
         ]);
 

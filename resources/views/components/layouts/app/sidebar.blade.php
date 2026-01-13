@@ -13,9 +13,14 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="calendar" :href="route('calendario')" :current="request()->routeIs('calendario')" wire:navigate>{{ __('Calendario') }}</flux:navlist.item>
-                    <flux:navlist.item icon="ticket" :href="route('mis.entradas')" :current="request()->routeIs('mis.entradas')" wire:navigate>{{ __('Mis Entradas') }}</flux:navlist.item>
+                    @if(Auth::user()->isAdmin())
+                        <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Panel Admin') }}</flux:navlist.item>
+                        <flux:navlist.item icon="plus-circle" :href="route('eventos.create')" :current="request()->routeIs('eventos.create')" wire:navigate>{{ __('Crear Evento') }}</flux:navlist.item>
+                    @else
+                        <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                        <flux:navlist.item icon="calendar" :href="route('calendario')" :current="request()->routeIs('calendario')" wire:navigate>{{ __('Calendario') }}</flux:navlist.item>
+                        <flux:navlist.item icon="ticket" :href="route('mis.entradas')" :current="request()->routeIs('mis.entradas')" wire:navigate>{{ __('Mis Entradas') }}</flux:navlist.item>
+                    @endif
                     <flux:navlist.item icon="globe-alt" :href="route('home')" wire:navigate>{{ __('Ir al Lobby') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>

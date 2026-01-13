@@ -48,9 +48,18 @@
                         <h3 class="text-xl font-bold text-secondary-900 mb-2">{{ $evento->nombre }}</h3>
                         <p class="text-secondary-500 text-sm mb-4">📍 {{ $evento->lugar }}</p>
                         
-                        <button class="w-full py-2.5 bg-secondary-900 text-white font-medium rounded-xl hover:bg-primary-600 transition-colors">
-                            Obtener Ticket
-                        </button>
+                        @auth
+                            <form action="{{ route('eventos.reservar', $evento) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="w-full py-2.5 bg-secondary-900 text-white font-medium rounded-xl hover:bg-primary-600 transition-colors">
+                                    Obtener Ticket
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="block text-center w-full py-2.5 bg-secondary-200 text-secondary-700 font-medium rounded-xl hover:bg-secondary-300 transition-colors">
+                                Inicia sesión para reservar
+                            </a>
+                        @endauth
                     </div>
                 </div>
             @empty

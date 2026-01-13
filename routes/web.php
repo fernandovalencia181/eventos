@@ -14,6 +14,8 @@ use App\Livewire\Settings\TwoFactor;
 use App\Http\Controllers\TicketController; // Descomentar cuando tu compa cree el suyo
 use App\Http\Controllers\PdfController; // Descomentar cuando tu compa cree el suyo
 use App\Http\Controllers\StaffController; 
+use App\Livewire\MisEntradas;
+use App\Livewire\Calendario; 
 // =========================================================================
 // 🌍 ZONA PÚBLICA (Lo que ve todo el mundo sin loguearse)
 // =========================================================================
@@ -43,6 +45,9 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     // Gestión de Eventos
     Route::get('/eventos/crear', [EventoController::class, 'create'])->name('eventos.create');
     Route::post('/eventos', [EventoController::class, 'store'])->name('eventos.store');
+    Route::get('/eventos/{evento}/editar', [EventoController::class, 'edit'])->name('eventos.edit');
+    Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('eventos.update');
+    Route::delete('/eventos/{evento}', [EventoController::class, 'destroy'])->name('eventos.destroy');
     
     // Aquí irán futuras rutas de admin (editar, borrar, escanear, etc.)
 });
@@ -73,15 +78,21 @@ Route::middleware(['auth'])->group(function () {
 // 👷 ZONA DE EQUIPO (Agreguen sus rutas aquí abajo para no pisarse)
 // =========================================================================
 
-// ZONA FERNANDO (Gestión de Eventos - Solo Admin/Auth)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/eventos/crear', [EventoController::class, 'create'])->name('eventos.create');
-    Route::post('/eventos', [EventoController::class, 'store'])->name('eventos.store');
-});
+// (La gestión de eventos ya está arriba en la Zona Admin, eliminamos duplicados aquí)
 
 
 // ---> ZONA COMPAÑERO 2 (Tickets y Registro - Público o Auth)
-// Ejemplo: Route::get('/registro/{id}', [TicketController::class, 'create']);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/mis-entradas', MisEntradas::class)->name('mis.entradas');
+    Route::get('/calendario', Calendario::class)->name('calendario');
+    
+    // Reserva de entradas (POST desde el Lobby)
+    Route::post('/eventos/{evento}/reservar', [TicketController::class, 'store'])->name('eventos.reservar');
+    
+    // Descarga de PDF
+    Route::get('/ticket/{ticket}/descargar', [PdfController::class, 'descargar'])
+        ->name('ticket.descargar');
+});
 
 
 // ---> ZONA COMPAÑERO 3 (Staff y Scanner)
