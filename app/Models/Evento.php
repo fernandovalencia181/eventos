@@ -13,7 +13,9 @@ class Evento extends Model
         'descripcion',
         'fecha',
         'lugar',
-        'aforo_maximo'
+        'aforo_maximo',
+        'imagen',
+        'precio_ticket', // Si lo tienes en la base de datos
     ];
 
     public function tickets()

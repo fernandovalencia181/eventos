@@ -1,22 +1,19 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
-
-// IMPORTACIONES DE LIVEWIRE (Lo que ya venía)
+use Illuminate\Support\Facades\Auth;
+// CONTROLADORES
+use App\Http\Controllers\EventoController;
+// LIVEWIRE
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
 
 // IMPORTACIONES DE TU EQUIPO (NUEVO)
-use App\Http\Controllers\EventoController;
-use App\Livewire\MisEntradas; 
-use App\Livewire\Calendario;
-use App\Http\Controllers\PdfController;
-use App\Http\Controllers\TicketController;
-// use App\Http\Controllers\StaffController;  // Descomentar cuando tu compa cree el suyo
-
+use App\Http\Controllers\TicketController; // Descomentar cuando tu compa cree el suyo
+use App\Http\Controllers\PdfController; // Descomentar cuando tu compa cree el suyo
+use App\Http\Controllers\StaffController; 
 // =========================================================================
 // 🌍 ZONA PÚBLICA (Lo que ve todo el mundo sin loguearse)
 // =========================================================================
@@ -24,15 +21,35 @@ use App\Http\Controllers\TicketController;
 // Cambiamos la función anónima por TU controlador para mostrar los eventos reales
 Route::get('/', [EventoController::class, 'index'])->name('home');
 
+// --- 2. ZONA DE REDIRECCIÓN (Login exitoso) ---
+Route::get('/dashboard', function () {
+    /** @var \App\Models\User $user */ // <--- ESTO LE DICE A VS CODE QUIÉN ES EL USUARIO
+    $user = Auth::user();  
 
-// =========================================================================
-// 🔒 ZONA PRIVADA (Dashboard y Configuración - Lo que trajo Laravel)
-// =========================================================================
+    if ($user->rol === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+    
+    return redirect()->route('home');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
 
+// --- 3. ZONA ADMINISTRADOR (Protegida por middleware 'admin') ---
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
+    
+    // Panel Principal
+    Route::get('/admin/dashboard', [EventoController::class, 'dashboard'])->name('admin.dashboard');
+    
+    // Gestión de Eventos
+    Route::get('/eventos/crear', [EventoController::class, 'create'])->name('eventos.create');
+    Route::post('/eventos', [EventoController::class, 'store'])->name('eventos.store');
+    
+    // Aquí irán futuras rutas de admin (editar, borrar, escanear, etc.)
+});
+
+
+// --- 4. ZONA USUARIO AUTENTICADO (Ajustes de perfil) ---
+// Estas son las rutas que traía Jetstream para cambiar clave, foto, etc.
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
@@ -65,16 +82,6 @@ Route::middleware(['auth'])->group(function () {
 
 // ---> ZONA COMPAÑERO 2 (Tickets y Registro - Público o Auth)
 // Ejemplo: Route::get('/registro/{id}', [TicketController::class, 'create']);
-Route::middleware([
-    'auth', // <--- Usa la autenticación web estándar de Laravel
-    'verified' // Opcional: Solo si requieres verificar email
-])->group(function () {
-    Route::get('/mis-entradas', MisEntradas::class)->name('mis.entradas');
-    Route::get('/calendario', Calendario::class)->name('calendario');
-    Route::post('/eventos/{evento}/reservar', [TicketController::class, 'store'])->name('eventos.reservar');
-    Route::get('/ticket/{ticket}/descargar', [PdfController::class, 'descargar'])
-        ->name('ticket.descargar');
-});
 
 
 // ---> ZONA COMPAÑERO 3 (Staff y Scanner)

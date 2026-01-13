@@ -18,6 +18,7 @@ return new class extends Migration
             $table->dateTime('fecha');
             $table->integer('aforo_maximo'); // Requisito [cite: 42, 58]
             $table->string('lugar');
+            $table->string('imagen')->nullable();
             $table->timestamps();
         });
     }

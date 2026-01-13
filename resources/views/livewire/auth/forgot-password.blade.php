@@ -1,31 +1,43 @@
-<x-layouts.auth>
-    <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Forgot password')" :description="__('Enter your email to receive a password reset link')" />
-
-        <!-- Session Status -->
-        <x-auth-session-status class="text-center" :status="session('status')" />
-
-        <form method="POST" action="{{ route('password.email') }}" class="flex flex-col gap-6">
-            @csrf
-
-            <!-- Email Address -->
-            <flux:input
-                name="email"
-                :label="__('Email Address')"
-                type="email"
-                required
-                autofocus
-                placeholder="email@example.com"
-            />
-
-            <flux:button variant="primary" type="submit" class="w-full" data-test="email-password-reset-link-button">
-                {{ __('Email password reset link') }}
-            </flux:button>
-        </form>
-
-        <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-400">
-            <span>{{ __('Or, return to') }}</span>
-            <flux:link :href="route('login')" wire:navigate>{{ __('log in') }}</flux:link>
-        </div>
+<x-guest-layout>
+    <div class="mb-6 text-center">
+        <h2 class="text-xl font-bold text-secondary-900">¿Olvidaste tu contraseña?</h2>
+        <p class="text-sm text-secondary-500 mt-2">
+            No te preocupes. Escribe tu correo y te enviaremos un enlace para recuperarla.
+        </p>
     </div>
-</x-layouts.auth>
+
+    @if (session('status'))
+        <div class="mb-4 font-medium text-sm text-green-600 bg-green-50 p-3 rounded-lg border border-green-200">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('password.email') }}">
+        @csrf
+
+        <div class="block">
+            <label for="email" class="block text-sm font-medium text-secondary-700">Correo Electrónico</label>
+            <input id="email" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="email" name="email" :value="old('email')" required autofocus />
+        </div>
+
+        <div class="flex items-center justify-end mt-6">
+            <a href="{{ route('login') }}" class="text-sm text-secondary-600 hover:text-primary-600 underline mr-4">
+                Volver al Login
+            </a>
+            
+            <button type="submit" class="bg-primary-600 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:bg-primary-700 transition transform hover:-translate-y-0.5">
+                Enviar Enlace
+            </button>
+        </div>
+    </form>
+</x-guest-layout>
