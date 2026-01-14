@@ -11,8 +11,10 @@ class EventoController extends Controller
     // Función para mostrar la página principal
     public function index()
     {
-        // 1. Pedimos los eventos a la BD (select * from eventos)
-        $eventos = Evento::all(); 
+        // 1. Pedimos los eventos a la BD, filtrando solo los futuros
+        $eventos = Evento::where('fecha', '>=', now())
+                         ->orderBy('fecha', 'asc')
+                         ->get(); 
 
         // 2. Retornamos la vista 'welcome' y le pasamos los datos
         return view('welcome', compact('eventos'));

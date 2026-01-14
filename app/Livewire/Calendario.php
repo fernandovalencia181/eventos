@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Ticket;
+use App\Models\Evento;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,6 +12,8 @@ class Calendario extends Component
     public $month;
     public $year;
     public $events = [];
+    public $eventsByDate = [];
+    public $openDate = null; // Para controlar qué día está expandido
 
     public function mount()
     {
@@ -22,19 +24,37 @@ class Calendario extends Component
 
     public function loadEvents()
     {
-        // Cargar eventos donde el usuario tiene ticket
-        $tickets = Ticket::with('evento')
-            ->where('user_id', Auth::id())
-            ->get();
+        // CARGAR TODOS LOS EVENTOS (SOLO PARA ADMIN)
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Acceso denegado');
+        }
 
-        $this->events = $tickets->map(function ($ticket) {
+        $allEvents = Evento::get();
+
+        $this->events = $allEvents->map(function ($evento) {
             return [
-                'id' => $ticket->evento->id,
-                'title' => $ticket->evento->nombre,
-                'date' => Carbon::parse($ticket->evento->fecha), // Asegúrate que en el modelo Evento sea 'fecha_hora' o 'fecha'
-                'type' => 'evento'
+                'id' => $evento->id,
+                'title' => $evento->nombre,
+                'date' => Carbon::parse($evento->fecha),
+                'type' => 'evento',
+                // Puedes agregar más colores o lógica aquí
+                'color' => 'bg-indigo-100 text-indigo-700' 
             ];
         });
+
+        // Agrupar eventos por fecha 'Y-m-d' para fácil acceso en la vista
+        $this->eventsByDate = $this->events->groupBy(function($event) {
+            return $event['date']->format('Y-m-d');
+        })->toArray();
+    }
+
+    public function toggleDate($dateStr)
+    {
+        if ($this->openDate === $dateStr) {
+            $this->openDate = null;
+        } else {
+            $this->openDate = $dateStr;
+        }
     }
 
     public function nextMonth()

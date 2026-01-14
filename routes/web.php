@@ -48,7 +48,10 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/eventos/{evento}/editar', [EventoController::class, 'edit'])->name('eventos.edit');
     Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('eventos.update');
     Route::delete('/eventos/{evento}', [EventoController::class, 'destroy'])->name('eventos.destroy');
-    
+
+    // Calendario (Ahora solo para admins)
+    Route::get('/admin/calendario', Calendario::class)->name('calendario');
+
     // Aquí irán futuras rutas de admin (editar, borrar, escanear, etc.)
 });
 
@@ -84,7 +87,7 @@ Route::middleware(['auth'])->group(function () {
 // ---> ZONA COMPAÑERO 2 (Tickets y Registro - Público o Auth)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mis-entradas', MisEntradas::class)->name('mis.entradas');
-    Route::get('/calendario', Calendario::class)->name('calendario');
+    // Calendario movido a Admin
     
     // Reserva de entradas (POST desde el Lobby)
     Route::post('/eventos/{evento}/reservar', [TicketController::class, 'store'])->name('eventos.reservar');

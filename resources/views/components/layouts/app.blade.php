@@ -14,12 +14,14 @@
 </head>
 <body class="font-sans antialiased bg-secondary-50">
     
-    <div class="min-h-screen">
+    <div class="min-h-screen flex flex-col">
         @include('navigation-menu')
 
-        <main>
+        <main class="flex-grow">
             {{ $slot }}
         </main>
+        
+        @include('footer')
     </div>
 
     @livewireScripts

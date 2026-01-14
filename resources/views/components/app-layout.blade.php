@@ -21,13 +21,7 @@
             {{ $slot }}
         </main>
         
-        <footer class="bg-white border-t border-secondary-200 mt-auto">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <p class="text-center text-sm text-secondary-400">
-                    &copy; {{ date('Y') }} EventosU. Todos los derechos reservados.
-                </p>
-            </div>
-        </footer>
+        @include('footer')
 
     </div>
 
