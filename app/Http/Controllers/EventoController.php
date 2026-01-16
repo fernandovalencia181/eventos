@@ -86,4 +86,4 @@ class EventoController extends Controller
         $evento->delete();
         return redirect()->route('admin.dashboard')->with('success', 'Evento eliminado.');
     }
-}
+}      

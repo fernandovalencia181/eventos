@@ -25,6 +25,10 @@ Route::get('/dashboard', function () {
         return redirect()->route('admin.dashboard');
     }
     
+    if ($user->rol === 'staff') {
+        return redirect()->route('staff.dashboard');
+    }
+    
     return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -40,6 +44,47 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::post('/eventos', [EventoController::class, 'store'])->name('eventos.store');
     
     // Aquí irán futuras rutas de admin (editar, borrar, escanear, etc.)
+});
+
+
+// --- 5. ZONA STAFF (Protegida por middleware 'staff') ---
+Route::middleware(['auth', 'verified', 'staff'])->prefix('staff')->name('staff.')->group(function () {
+    
+    // Dashboard Staff
+    Route::get('/dashboard', function () {
+        $eventos = \App\Models\Evento::where('fecha', '>=', now())
+            ->orderBy('fecha')
+            ->get();
+        return view('staff.dashboard', compact('eventos'));
+    })->name('dashboard');
+    
+    // Gestión de Evento Específico
+    Route::prefix('evento/{eventoId}')->name('evento.')->group(function () {
+        
+        // Check-in / Validación
+        Route::get('/validacion', function ($eventoId) {
+            $evento = \App\Models\Evento::findOrFail($eventoId);
+            return view('staff.validacion', compact('evento', 'eventoId'));
+        })->name('validacion');
+        
+        // Control de Aforo
+        Route::get('/aforo', function ($eventoId) {
+            $evento = \App\Models\Evento::findOrFail($eventoId);
+            return view('staff.aforo', compact('evento', 'eventoId'));
+        })->name('aforo');
+        
+        // Gestión de Incidencias
+        Route::get('/incidencias', function ($eventoId) {
+            $evento = \App\Models\Evento::findOrFail($eventoId);
+            return view('staff.incidencias', compact('evento', 'eventoId'));
+        })->name('incidencias');
+        
+        // Gestión de Invitados Especiales
+        Route::get('/invitados', function ($eventoId) {
+            $evento = \App\Models\Evento::findOrFail($eventoId);
+            return view('staff.invitados', compact('evento', 'eventoId'));
+        })->name('invitados');
+    });
 });
 
 
