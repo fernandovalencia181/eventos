@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('eventos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->text('descripcion');
+            $table->text('descripcion')->nullable();
             $table->dateTime('fecha');
             $table->integer('aforo_maximo'); // Requisito [cite: 42, 58]
             $table->string('lugar');
