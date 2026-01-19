@@ -12,7 +12,7 @@
     
     @livewireStyles
 </head>
-<body class="font-sans antialiased bg-secondary-50">
+<body class="font-sans antialiased bg-secondary-50 text-secondary-900">
     
     <div class="min-h-screen flex flex-col">
         @include('navigation-menu')
