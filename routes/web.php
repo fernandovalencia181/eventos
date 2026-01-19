@@ -35,6 +35,12 @@ Route::get('/dashboard', function () {
     return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// SISTEMA DE REGISTRO DE ENTRADAS (PÚBLICO)
+use App\Http\Controllers\RegistrationController;
+Route::get('/registro/{evento}', [RegistrationController::class, 'create'])->name('registro.create');
+Route::post('/registro/{evento}', [RegistrationController::class, 'store'])->name('registro.store');
+
+
 
 // --- 3. ZONA ADMINISTRADOR (Protegida por middleware 'admin') ---
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
