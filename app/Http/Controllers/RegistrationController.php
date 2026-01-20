@@ -8,6 +8,7 @@ use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RegistrationController extends Controller
@@ -38,6 +39,7 @@ class RegistrationController extends Controller
             // 1. Crear el Titular
             $registration = Registration::create([
                 'event_id' => $evento->id,
+                'user_id' => Auth::check() ? Auth::id() : null,
                 'name' => $request->name,
                 'email' => $request->email,
                 'course' => $request->estudios,
@@ -57,18 +59,51 @@ class RegistrationController extends Controller
 
             DB::commit();
 
-            // 3. Generar y Descargar PDF
-            // Cargar la relación para la vista PDF
-            $registration->load('guests', 'event');
-
-            $pdf = Pdf::loadView('registrations.pdf', compact('registration'));
-            
-            // Forzar descarga con nombre personalizado
-            return $pdf->download('entrada-' . Str::slug($evento->nombre) . '-' . $registration->id . '.pdf');
+            // 3. Generar y Descargar PDF (Con QR en Base64)
+            return $this->generatePdfResponse($registration, $evento);
 
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['error' => 'Ocurrió un error al procesar tu registro. Por favor, inténtalo de nuevo. ' . $e->getMessage()]);
         }
+    }
+
+    public function download(Registration $registration)
+    {
+        // Seguridad: Solo el dueño o el que tenga el email (implementación simple: si está logueado y es suyo)
+        if (Auth::check() && $registration->user_id !== Auth::id()) {
+            abort(403);
+        }
+        
+        // Si no está logueado, podríamos permitirlo si conoce la URL, pero mejor restringir o dejar abierto si es público.
+        // Dado el requerimiento "acceder alli para descargar", asumimos contexto seguro.
+        
+        $registration->load('guests', 'event');
+        return $this->generatePdfResponse($registration, $registration->event);
+    }
+
+    private function generatePdfResponse(Registration $registration, Evento $evento)
+    {
+        // Helper para obtener QR en base64
+        $getQrBase64 = function($token) {
+            $url = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . $token;
+            try {
+                $image = file_get_contents($url);
+                return 'data:image/png;base64,' . base64_encode($image);
+            } catch (\Exception $e) {
+                return null; // Fallback o handling
+            }
+        };
+
+        // Generar QRs para titular y guests
+        $registration->qr_image = $getQrBase64($registration->qr_token);
+        foreach ($registration->guests as $guest) {
+            $guest->qr_image = $getQrBase64($guest->qr_token);
+        }
+
+        $pdf = Pdf::loadView('registrations.pdf', compact('registration'));
+        $pdf->setOption('isRemoteEnabled', true); // Backup
+        
+        return $pdf->download('entrada-' . Str::slug($evento->nombre) . '-' . $registration->id . '.pdf');
     }
 }

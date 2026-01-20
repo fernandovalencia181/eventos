@@ -23,8 +23,7 @@
         <h2>{{ $registration->name }}</h2>
         <div class="course">Curso: {{ $registration->course }}</div>
         <div class="qr-code">
-            {{-- Usamos API externa para asegurar generación sin dependencias complejas de servidor --}}
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ $registration->qr_token }}" alt="QR Titular" width="200">
+            <img src="{{ $registration->qr_image ?? 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='.$registration->qr_token }}" alt="QR Titular" width="200">
         </div>
         
         <p>Fecha: {{ $registration->event->fecha }}</p>
@@ -44,7 +43,7 @@
             <div class="guest-info">Invitado por: {{ $registration->name }}</div>
             
             <div class="qr-code">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ $guest->qr_token }}" alt="QR Invitado" width="200">
+                <img src="{{ $guest->qr_image ?? 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='.$guest->qr_token }}" alt="QR Invitado" width="200">
             </div>
             
             <p>Fecha: {{ $registration->event->fecha }}</p>

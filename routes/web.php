@@ -39,6 +39,7 @@ Route::get('/dashboard', function () {
 use App\Http\Controllers\RegistrationController;
 Route::get('/registro/{evento}', [RegistrationController::class, 'create'])->name('registro.create');
 Route::post('/registro/{evento}', [RegistrationController::class, 'store'])->name('registro.store');
+Route::get('/registro/descargar/{registration}', [RegistrationController::class, 'download'])->name('registro.download');
 
 
 
