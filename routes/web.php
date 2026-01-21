@@ -106,4 +106,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 // ---> ZONA COMPAÑERO 3 (Staff y Scanner)
-// Ejemplo: Route::get('/scanner', [StaffController::class, 'index']);
+Route::middleware(['auth'])->prefix('staff')->name('staff.')->group(function () {
+    Route::get('/', [StaffController::class, 'index'])->name('index');
+    Route::get('/scanner', [StaffController::class, 'scanner'])->name('scanner');
+    Route::post('/validar', [StaffController::class, 'validar'])->name('validar');
+});

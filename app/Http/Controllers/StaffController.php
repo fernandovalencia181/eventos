@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\DB;
 
 class StaffController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (!auth()->user()->isStaff()) {
+                abort(403, 'Acceso denegado: solo para staff');
+            }
+            return $next($request);
+        });
+    }
+
     // Página principal de staff
     public function index()
     {
