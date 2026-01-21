@@ -21,10 +21,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             <div class="text-center mb-12">
-                <h1 class="text-4xl font-extrabold text-secondary-900 tracking-tight">
-                    Próximos <span class="text-primary-600">Eventos</span>
+                <h1 class="text-4xl font-extrabold text-secondary-900 dark:text-white tracking-tight">
+                    Próximos <span class="text-primary-600 dark:text-primary-400">Eventos</span>
                 </h1>
-                <p class="mt-4 text-xl text-secondary-500">Reserva tu entrada para las mejores conferencias y graduaciones.</p>
+                <p class="mt-4 text-xl text-secondary-500 dark:text-gray-400">Reserva tu entrada para las mejores conferencias y graduaciones.</p>
             </div>
 
        
@@ -32,7 +32,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             
             @forelse($eventos as $evento)
-                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-secondary-100">
+                <div class="bg-white dark:bg-primary-900 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-secondary-100 dark:border-primary-800">
                     @if($evento->imagen)
                         <img src="{{ Storage::url($evento->imagen) }}" alt="{{ $evento->nombre }}" class="h-48 w-full object-cover">
                     @else
@@ -42,33 +42,25 @@
                     @endif
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-semibold bg-primary-50 text-primary-700 px-2 py-1 rounded-full">
+                            <span class="text-xs font-semibold bg-primary-50 dark:bg-primary-800 text-primary-700 dark:text-primary-300 px-2 py-1 rounded-full">
                                 Aforo: {{ $evento->aforo_maximo }}
                             </span>
-                            <span class="text-xs text-secondary-500">
+                            <span class="text-xs text-secondary-500 dark:text-gray-400">
                                 {{ \Carbon\Carbon::parse($evento->fecha)->format('d M, Y') }}
                             </span>
                         </div>
-                        <h3 class="text-xl font-bold text-secondary-900 mb-2">{{ $evento->nombre }}</h3>
-                        <p class="text-secondary-500 text-sm mb-4">📍 {{ $evento->lugar }}</p>
+                        <h3 class="text-xl font-bold text-secondary-900 dark:text-white mb-2">{{ $evento->nombre }}</h3>
+                        <p class="text-secondary-500 dark:text-gray-400 text-sm mb-4">📍 {{ $evento->lugar }}</p>
                         
-                        @auth
-                            <form action="{{ route('eventos.reservar', $evento) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="w-full py-2.5 bg-secondary-900 text-white font-medium rounded-xl hover:bg-primary-600 transition-colors">
-                                    Obtener Ticket
-                                </button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="block text-center w-full py-2.5 bg-secondary-200 text-secondary-700 font-medium rounded-xl hover:bg-secondary-300 transition-colors">
-                                Inicia sesión para reservar
-                            </a>
-                        @endauth
+                        {{-- FLUJO DE REGISTRO PÚBLICO (SIN LOGIN REQUERIDO PARA ESCUELAS) --}}
+                        <a href="{{ route('registro.create', $evento->id) }}" class="block text-center w-full py-2.5 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-500 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            Obtener Entrada
+                        </a>
                     </div>
                 </div>
             @empty
                 <div class="col-span-3 text-center py-10">
-                    <p class="text-secondary-500 text-lg">Aún no hay eventos programados.</p>
+                    <p class="text-secondary-500 dark:text-gray-400 text-lg">Aún no hay eventos programados.</p>
                 </div>
             @endforelse
 

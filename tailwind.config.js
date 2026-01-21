@@ -2,6 +2,7 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './vendor/livewire/flux/resources/views/**/*.blade.php',
@@ -16,17 +17,19 @@ export default {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
             colors: {
+                // Paleta generada basada en el Azul La Salle Mollerussa
                 primary: {
-                    50: '#eef2ff',
-                    100: '#e0e7ff',
-                    200: '#c7d2fe',
-                    300: '#a5b4fc',
-                    400: '#818cf8',
-                    500: '#6366f1',
-                    600: '#4f46e5',
-                    700: '#4338ca',
-                    800: '#3730a3',
-                    900: '#312e81',
+                    50: '#f0f5fa',  // Fondo muy claro
+                    100: '#e1ebf5',
+                    200: '#c3d7eb',
+                    300: '#a5c3e1',
+                    400: '#699ccd',
+                    500: '#2d75b9', // Azul vibrante para botones/acciones
+                    600: '#245e94',
+                    700: '#1b466f',
+                    800: '#122f4a', // Tono cercano al logo
+                    900: '#0a1d30', // Tono más oscuro del fondo
+                    950: '#050f1a', // Extra oscuro
                 },
                 secondary: {
                     50: '#f8fafc',
