@@ -1,11 +1,9 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Illuminate\Support\Facades\Auth;
-
 // CONTROLADORES
-
+use App\Http\Controllers\EventoController;
 // LIVEWIRE
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -13,10 +11,11 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
 
 // IMPORTACIONES DE TU EQUIPO (NUEVO)
-use App\Http\Controllers\EventoController;
-// use App\Http\Controllers\TicketController; // Descomentar cuando tu compa cree el suyo
-// use App\Http\Controllers\StaffController;  // Descomentar cuando tu compa cree el suyo
-
+use App\Http\Controllers\TicketController; // Descomentar cuando tu compa cree el suyo
+use App\Http\Controllers\PdfController; // Descomentar cuando tu compa cree el suyo
+use App\Http\Controllers\StaffController; 
+use App\Livewire\MisEntradas;
+use App\Livewire\Calendario; 
 // =========================================================================
 // 🌍 ZONA PÚBLICA (Lo que ve todo el mundo sin loguearse)
 // =========================================================================
@@ -36,6 +35,13 @@ Route::get('/dashboard', function () {
     return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// SISTEMA DE REGISTRO DE ENTRADAS (PÚBLICO)
+use App\Http\Controllers\RegistrationController;
+Route::get('/registro/{evento}', [RegistrationController::class, 'create'])->name('registro.create');
+Route::post('/registro/{evento}', [RegistrationController::class, 'store'])->name('registro.store');
+Route::get('/registro/descargar/{registration}', [RegistrationController::class, 'download'])->name('registro.download');
+
+
 
 // --- 3. ZONA ADMINISTRADOR (Protegida por middleware 'admin') ---
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
@@ -46,7 +52,13 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     // Gestión de Eventos
     Route::get('/eventos/crear', [EventoController::class, 'create'])->name('eventos.create');
     Route::post('/eventos', [EventoController::class, 'store'])->name('eventos.store');
-    
+    Route::get('/eventos/{evento}/editar', [EventoController::class, 'edit'])->name('eventos.edit');
+    Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('eventos.update');
+    Route::delete('/eventos/{evento}', [EventoController::class, 'destroy'])->name('eventos.destroy');
+
+    // Calendario (Ahora solo para admins)
+    Route::get('/admin/calendario', Calendario::class)->name('calendario');
+
     // Aquí irán futuras rutas de admin (editar, borrar, escanear, etc.)
 });
 
@@ -76,15 +88,21 @@ Route::middleware(['auth'])->group(function () {
 // 👷 ZONA DE EQUIPO (Agreguen sus rutas aquí abajo para no pisarse)
 // =========================================================================
 
-// ZONA FERNANDO (Gestión de Eventos - Solo Admin/Auth)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/eventos/crear', [EventoController::class, 'create'])->name('eventos.create');
-    Route::post('/eventos', [EventoController::class, 'store'])->name('eventos.store');
-});
+// (La gestión de eventos ya está arriba en la Zona Admin, eliminamos duplicados aquí)
 
 
 // ---> ZONA COMPAÑERO 2 (Tickets y Registro - Público o Auth)
-// Ejemplo: Route::get('/registro/{id}', [TicketController::class, 'create']);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/mis-entradas', MisEntradas::class)->name('mis.entradas');
+    // Calendario movido a Admin
+    
+    // Reserva de entradas (POST desde el Lobby)
+    Route::post('/eventos/{evento}/reservar', [TicketController::class, 'store'])->name('eventos.reservar');
+    
+    // Descarga de PDF
+    Route::get('/ticket/{ticket}/descargar', [PdfController::class, 'descargar'])
+        ->name('ticket.descargar');
+});
 
 
 // ---> ZONA COMPAÑERO 3 (Staff y Scanner)

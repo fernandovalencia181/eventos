@@ -1,28 +1,33 @@
-<x-layouts.auth>
-    <div class="flex flex-col gap-6">
-        <x-auth-header
-            :title="__('Confirm password')"
-            :description="__('This is a secure area of the application. Please confirm your password before continuing.')"
-        />
-
-        <x-auth-session-status class="text-center" :status="session('status')" />
-
-        <form method="POST" action="{{ route('password.confirm.store') }}" class="flex flex-col gap-6">
-            @csrf
-
-            <flux:input
-                name="password"
-                :label="__('Password')"
-                type="password"
-                required
-                autocomplete="current-password"
-                :placeholder="__('Password')"
-                viewable
-            />
-
-            <flux:button variant="primary" type="submit" class="w-full" data-test="confirm-password-button">
-                {{ __('Confirm') }}
-            </flux:button>
-        </form>
+<x-guest-layout>
+    <div class="mb-6 text-center">
+        <h2 class="text-xl font-bold text-secondary-900">Área Segura</h2>
+        <p class="text-sm text-secondary-500 mt-2 text-justify">
+            Estás intentando acceder a una zona protegida. Por favor, confirma tu contraseña para continuar.
+        </p>
     </div>
-</x-layouts.auth>
+
+    @if ($errors->any())
+        <div class="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('password.confirm') }}">
+        @csrf
+
+        <div>
+            <label for="password" class="block text-sm font-medium text-secondary-700">Contraseña</label>
+            <input id="password" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="password" name="password" required autocomplete="current-password" autofocus />
+        </div>
+
+        <div class="flex justify-end mt-6">
+            <button type="submit" class="bg-primary-600 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:bg-primary-700 transition transform hover:-translate-y-0.5">
+                Confirmar
+            </button>
+        </div>
+    </form>
+</x-guest-layout>

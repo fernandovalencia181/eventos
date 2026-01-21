@@ -19,5 +19,7 @@
         <div class="mt-5 w-full max-w-lg">
             {{ $slot }}
         </div>
+
     </div>
+    
 </div>
