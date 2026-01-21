@@ -9,81 +9,57 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="bg-gray-100 dark:bg-gray-900">
-    <!-- Navegación -->
-    <nav class="bg-white dark:bg-gray-800 shadow-lg mb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center space-x-6">
-                    <a href="{{ route('staff.dashboard') }}" class="text-2xl font-bold text-gray-900 dark:text-white hover:text-blue-600">
-                        🎫 Panel Staff
-                    </a>
-                    <a href="{{ route('home') }}" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600">
-                        ← Volver al inicio
-                    </a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-600 dark:text-gray-400">
-                        👤 {{ auth()->user()->name }}
-                    </span>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="text-sm text-red-600 hover:text-red-800">
-                            Cerrar Sesión
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
+<body class="bg-white">
+    
+    @include('navigation-menu')
 
     <!-- Información del Evento -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg shadow-lg p-6 text-white">
-            <h2 class="text-3xl font-bold mb-2">{{ $evento->nombre }}</h2>
-            <p class="text-lg">📅 {{ $evento->fecha->format('d/m/Y H:i') }} | 📍 {{ $evento->lugar }}</p>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 mt-8">
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-secondary-100">
+            <h2 class="text-3xl font-bold mb-2 text-secondary-900">{{ $evento->nombre }}</h2>
+            <p class="text-lg text-secondary-600">📅 {{ $evento->fecha->format('d/m/Y H:i') }} | 📍 {{ $evento->lugar }}</p>
         </div>
     </div>
 
     <!-- Pestañas de Navegación -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2">
+        <div class="bg-white rounded-2xl shadow-lg p-2 border border-secondary-100">
             <div class="flex gap-2 overflow-x-auto">
                 <a 
                     href="{{ route('staff.evento.validacion', $evento->id) }}" 
-                    class="flex-1 px-6 py-3 text-center rounded-lg font-medium transition-colors
+                    class="flex-1 px-6 py-3 text-center rounded-xl font-medium transition-all
                         {{ request()->routeIs('staff.evento.validacion') 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200' }}"
+                            ? 'bg-primary-600 text-white shadow-md' 
+                            : 'bg-secondary-50 text-secondary-700 hover:bg-secondary-100' }}"
                 >
-                    ✅ Check-in
+                    Check-in
                 </a>
                 <a 
                     href="{{ route('staff.evento.aforo', $evento->id) }}" 
-                    class="flex-1 px-6 py-3 text-center rounded-lg font-medium transition-colors
+                    class="flex-1 px-6 py-3 text-center rounded-xl font-medium transition-all
                         {{ request()->routeIs('staff.evento.aforo') 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200' }}"
+                            ? 'bg-primary-600 text-white shadow-md' 
+                            : 'bg-secondary-50 text-secondary-700 hover:bg-secondary-100' }}"
                 >
-                    📊 Aforo
+                    Aforo
                 </a>
                 <a 
                     href="{{ route('staff.evento.incidencias', $evento->id) }}" 
-                    class="flex-1 px-6 py-3 text-center rounded-lg font-medium transition-colors
+                    class="flex-1 px-6 py-3 text-center rounded-xl font-medium transition-all
                         {{ request()->routeIs('staff.evento.incidencias') 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200' }}"
+                            ? 'bg-primary-600 text-white shadow-md' 
+                            : 'bg-secondary-50 text-secondary-700 hover:bg-secondary-100' }}"
                 >
-                    🚨 Incidencias
+                    Incidencias
                 </a>
                 <a 
                     href="{{ route('staff.evento.invitados', $evento->id) }}" 
-                    class="flex-1 px-6 py-3 text-center rounded-lg font-medium transition-colors
+                    class="flex-1 px-6 py-3 text-center rounded-xl font-medium transition-all
                         {{ request()->routeIs('staff.evento.invitados') 
-                            ? 'bg-blue-600 text-white' 
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200' }}"
+                            ? 'bg-primary-600 text-white shadow-md' 
+                            : 'bg-secondary-50 text-secondary-700 hover:bg-secondary-100' }}"
                 >
-                    🌟 Invitados
+                    Invitados
                 </a>
             </div>
         </div>

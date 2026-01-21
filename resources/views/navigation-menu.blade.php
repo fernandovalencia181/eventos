@@ -30,6 +30,10 @@
                             <x-nav-link :href="route('calendario')" :active="request()->routeIs('calendario')">
                                 Calendario
                             </x-nav-link>
+                        @elseif(Auth::user()->isStaff())
+                            <x-nav-link :href="route('staff.dashboard')" :active="request()->routeIs('staff.*')">
+                                Panel Staff
+                            </x-nav-link>
                         @else
                             <x-nav-link :href="route('mis.entradas')" :active="request()->routeIs('mis.entradas')">
                                 Mis Entradas
@@ -92,6 +96,8 @@
                     <a href="{{ route('eventos.create') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-secondary-600 hover:bg-secondary-50 hover:border-primary-500 hover:text-primary-700">Crear Evento</a>
                     <a href="{{ route('admin.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-secondary-600 hover:bg-secondary-50 hover:border-primary-500 hover:text-primary-700">Panel Admin</a>
                     <a href="{{ route('calendario') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-secondary-600 hover:bg-secondary-50 hover:border-primary-500 hover:text-primary-700">Calendario</a>
+                @elseif(Auth::user()->isStaff())
+                    <a href="{{ route('staff.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-secondary-600 hover:bg-secondary-50 hover:border-primary-500 hover:text-primary-700">Panel Staff</a>
                 @else
                     <a href="{{ route('mis.entradas') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-secondary-600 hover:bg-secondary-50 hover:border-primary-500 hover:text-primary-700">Mis Entradas</a>
                 @endif
