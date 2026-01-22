@@ -30,7 +30,15 @@
                             <x-nav-link :href="route('calendario')" :active="request()->routeIs('calendario')">
                                 Calendario
                             </x-nav-link>
-                        @else
+                        @endif
+                        
+                        @if(Auth::user()->isStaff())
+                            <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                                Panel Staff
+                            </x-nav-link>
+                        @endif
+                        
+                        @if(!Auth::user()->isAdmin() && !Auth::user()->isStaff())
                             <x-nav-link :href="route('mis.entradas')" :active="request()->routeIs('mis.entradas')">
                                 Mis Entradas
                             </x-nav-link>
@@ -157,7 +165,13 @@
                     <a href="{{ route('eventos.create') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Crear Evento</a>
                     <a href="{{ route('admin.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Panel Admin</a>
                     <a href="{{ route('calendario') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Calendario</a>
-                @else
+                @endif
+                
+                @if(Auth::user()->isStaff())
+                    <a href="{{ route('staff.index') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Panel Staff</a>
+                @endif
+                
+                @if(!Auth::user()->isAdmin() && !Auth::user()->isStaff())
                     <a href="{{ route('mis.entradas') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Mis Entradas</a>
                 @endif
             @endauth

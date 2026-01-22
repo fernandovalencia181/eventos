@@ -106,8 +106,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 // ---> ZONA COMPAÑERO 3 (Staff y Scanner)
-Route::middleware(['auth'])->prefix('staff')->name('staff.')->group(function () {
+Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(function () {
     Route::get('/', [StaffController::class, 'index'])->name('index');
     Route::get('/scanner', [StaffController::class, 'scanner'])->name('scanner');
+    Route::get('/validacion', [StaffController::class, 'validacion'])->name('validacion');
+    Route::get('/aforo', [StaffController::class, 'aforo'])->name('aforo');
+    Route::get('/invitados', [StaffController::class, 'invitados'])->name('invitados');
+    Route::get('/incidencias', [StaffController::class, 'incidencias'])->name('incidencias');
+    
+    // AJAX
     Route::post('/validar', [StaffController::class, 'validar'])->name('validar');
+    Route::post('/buscar', [StaffController::class, 'buscar'])->name('buscar');
+    Route::post('/validar-manual', [StaffController::class, 'validarManual'])->name('validar-manual');
 });

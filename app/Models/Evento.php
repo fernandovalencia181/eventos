@@ -17,6 +17,10 @@ class Evento extends Model
         'imagen',
     ];
 
+    protected $casts = [
+        'fecha' => 'datetime',
+    ];
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class, 'evento_id');
