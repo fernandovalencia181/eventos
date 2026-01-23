@@ -111,11 +111,18 @@ Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(fun
     Route::get('/scanner', [StaffController::class, 'scanner'])->name('scanner');
     Route::get('/validacion', [StaffController::class, 'validacion'])->name('validacion');
     Route::get('/aforo', [StaffController::class, 'aforo'])->name('aforo');
+    Route::get('/asistencia', [StaffController::class, 'asistencia'])->name('asistencia');
+    Route::get('/reportes', [StaffController::class, 'reportes'])->name('reportes');
     Route::get('/invitados', [StaffController::class, 'invitados'])->name('invitados');
     Route::get('/incidencias', [StaffController::class, 'incidencias'])->name('incidencias');
     
-    // AJAX
+    // AJAX y acciones
     Route::post('/validar', [StaffController::class, 'validar'])->name('validar');
     Route::post('/buscar', [StaffController::class, 'buscar'])->name('buscar');
     Route::post('/validar-manual', [StaffController::class, 'validarManual'])->name('validar-manual');
+    Route::post('/registrar-incidencia', [StaffController::class, 'registrarIncidencia'])->name('registrar-incidencia');
+    Route::post('/registrar-invitado', [StaffController::class, 'registrarInvitado'])->name('registrar-invitado');
+    Route::post('/emitir-constancia', [StaffController::class, 'emitirConstancia'])->name('emitir-constancia');
+    Route::get('/exportar', [StaffController::class, 'exportar'])->name('exportar');
+    Route::get('/exportar-aforo', [StaffController::class, 'exportarAforo'])->name('exportar-aforo');
 });
