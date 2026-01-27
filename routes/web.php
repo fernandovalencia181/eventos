@@ -110,9 +110,7 @@ Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(fun
     Route::get('/', [StaffController::class, 'index'])->name('index');
     Route::get('/scanner', [StaffController::class, 'scanner'])->name('scanner');
     Route::get('/validacion', [StaffController::class, 'validacion'])->name('validacion');
-    Route::get('/aforo', [StaffController::class, 'aforo'])->name('aforo');
     Route::get('/asistencia', [StaffController::class, 'asistencia'])->name('asistencia');
-    Route::get('/reportes', [StaffController::class, 'reportes'])->name('reportes');
     Route::get('/invitados', [StaffController::class, 'invitados'])->name('invitados');
     Route::get('/incidencias', [StaffController::class, 'incidencias'])->name('incidencias');
     
@@ -124,5 +122,4 @@ Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(fun
     Route::post('/registrar-invitado', [StaffController::class, 'registrarInvitado'])->name('registrar-invitado');
     Route::post('/emitir-constancia', [StaffController::class, 'emitirConstancia'])->name('emitir-constancia');
     Route::get('/exportar', [StaffController::class, 'exportar'])->name('exportar');
-    Route::get('/exportar-aforo', [StaffController::class, 'exportarAforo'])->name('exportar-aforo');
 });

@@ -249,6 +249,21 @@
             return;
         }
 
+        // ✅ VALIDAR FORMATO DEL QR (debe ser un token de 32 caracteres alfanuméricos)
+        const tokenRegex = /^[a-zA-Z0-9]{32}$/;
+        if (!tokenRegex.test(codigo.trim())) {
+            const resultado = document.getElementById('resultado');
+            resultado.classList.remove('hidden');
+            resultado.innerHTML = `
+                <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-400 px-6 py-4 rounded-lg mb-4">
+                    <h3 class="font-bold text-lg">❌ Codi QR invàlid</h3>
+                    <p class="text-sm mt-1">Aquest QR no correspon a una entrada del sistema.</p>
+                </div>
+            `;
+            setTimeout(() => resultado.classList.add('hidden'), 4000);
+            return;
+        }
+
         try {
             const response = await fetch('{{ route("staff.validar") }}', {
                 method: 'POST',
@@ -257,8 +272,9 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
                 body: JSON.stringify({
-                    codigo: codigo,
-                    evento_id: eventoId
+                    codigo: codigo.trim(),
+                    evento_id: eventoId,
+                    staff_id: {{ Auth::id() }} // ✅ Enviar ID del staff autenticado
                 })
             });
 

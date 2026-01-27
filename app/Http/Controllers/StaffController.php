@@ -350,12 +350,15 @@ class StaffController extends Controller
     public function validar(Request $request)
     {
         $request->validate([
-            'codigo' => 'required|string',
-            'staff_id' => 'required|exists:staff,id',
+            'codigo' => ['required', 'string', 'size:32', 'alpha_num'], // ✅ Validar formato exacto
+            'staff_id' => 'nullable|exists:staff,id', // ✅ Hacer nullable
             'evento_id' => 'required|exists:eventos,id',
         ]);
 
-        // Buscar ticket por token_seguridad_qr
+        // ✅ Usar staff_id del request o Auth::id() como fallback
+        $staffId = $request->staff_id ?? Auth::id();
+
+        // Buscar ticket por token_seguridad_qr EXACTO
         $ticket = Ticket::where('token_seguridad_qr', $request->codigo)
             ->where('evento_id', $request->evento_id)
             ->first();
@@ -363,7 +366,7 @@ class StaffController extends Controller
         if (!$ticket) {
             return response()->json([
                 'success' => false,
-                'mensaje' => '❌ Ticket no encontrado'
+                'mensaje' => '❌ Entrada no vàlida o no pertany a aquest esdeveniment'
             ], 404);
         }
 
@@ -379,7 +382,7 @@ class StaffController extends Controller
         // Registrar check-in
         Asistencia::create([
             'ticket_id' => $ticket->id,
-            'staff_id' => $request->staff_id,
+            'staff_id' => $staffId, // ✅ Usar la variable correcta
             'evento_id' => $request->evento_id,
             'fecha_checkin' => now(),
             'metodo' => 'qr',

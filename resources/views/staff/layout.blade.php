@@ -52,7 +52,7 @@
                                 </svg>
                             </button>
                             <div x-show="open" @click.away="open = false" class="absolute left-0 mt-2 w-48 bg-primary-800 rounded-md shadow-lg py-1 z-50">
-                                <a href="{{ route('staff.aforo') }}" class="block px-4 py-2 text-sm text-primary-200 hover:bg-primary-700 hover:text-white">Control de Aforo</a>
+                                <a href="{{ route('staff.asistencia') }}" class="block px-4 py-2 text-sm text-primary-200 hover:bg-primary-700 hover:text-white">Assistència</a>
                                 <a href="{{ route('staff.incidencias') }}" class="block px-4 py-2 text-sm text-primary-200 hover:bg-primary-700 hover:text-white">Incidencias</a>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                 <a href="{{ route('staff.validacion') }}" class="block text-primary-200 hover:text-white py-2 pl-4">Validación Manual</a>
                 <div class="border-t border-primary-700 my-2"></div>
                 <p class="text-xs text-primary-400 uppercase font-semibold">Gestión</p>
-                <a href="{{ route('staff.aforo') }}" class="block text-primary-200 hover:text-white py-2 pl-4">Control de Aforo</a>
+                <a href="{{ route('staff.asistencia') }}" class="block text-primary-200 hover:text-white py-2 pl-4">Assistència</a>
                 <a href="{{ route('staff.incidencias') }}" class="block text-primary-200 hover:text-white py-2 pl-4">Incidencias</a>
                 <div class="border-t border-primary-700 my-2"></div>
                 <a href="{{ route('staff.invitados') }}" class="block text-primary-200 hover:text-white py-2">Invitados</a>

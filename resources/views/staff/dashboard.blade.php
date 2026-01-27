@@ -276,21 +276,6 @@
             <h3 class="text-lg font-bold mb-2">Llista Assistència</h3>
             <p class="text-green-100 text-sm">Veure i cercar assistents</p>
         </a>
-
-        <a href="{{ route('staff.reportes') }}" class="bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg p-6 hover:from-purple-700 hover:to-purple-800 transition shadow-lg transform hover:scale-105">
-            <div class="mb-3">
-                <svg viewBox="0 0 48 48" class="w-12 h-12" fill="none">
-                    <rect x="10" y="28" width="8" height="14" rx="2" fill="white" opacity="0.9"/>
-                    <rect x="20" y="18" width="8" height="24" rx="2" fill="white" opacity="0.7"/>
-                    <rect x="30" y="10" width="8" height="32" rx="2" fill="white" opacity="0.9"/>
-                    <circle cx="14" cy="26" r="2" fill="#FFD700"/>
-                    <circle cx="24" cy="16" r="2" fill="#FFD700"/>
-                    <circle cx="34" cy="8" r="2" fill="#FFD700"/>
-                </svg>
-            </div>
-            <h3 class="text-lg font-bold mb-2">Informes</h3>
-            <p class="text-purple-100 text-sm">Estadístiques i exportar dades</p>
-        </a>
     </div>
 
 </div>
