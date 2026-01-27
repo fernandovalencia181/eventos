@@ -10,13 +10,15 @@ class Incidencia extends Model
 
     protected $fillable = [
         'evento_id',
-        'staff_id',
+        'user_id',
+        'ticket_id',
         'tipo',
         'descripcion',
-        'prioridad',
         'estado',
-        'resuelta_por',
+        'reportado_por',
+        'resuelto_por',
         'fecha_resolucion',
+        'solucion',
     ];
 
     protected $casts = [
@@ -28,13 +30,23 @@ class Incidencia extends Model
         return $this->belongsTo(Evento::class);
     }
 
-    public function staff()
+    public function reportadoPor()
     {
-        return $this->belongsTo(Staff::class, 'staff_id');
+        return $this->belongsTo(User::class, 'reportado_por');
     }
 
     public function resuelto()
     {
-        return $this->belongsTo(User::class, 'resuelta_por');
+        return $this->belongsTo(User::class, 'resuelto_por');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
     }
 }

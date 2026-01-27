@@ -57,7 +57,7 @@
                         <option value="">Tots els esdeveniments</option>
                         @foreach($eventos as $evento)
                             <option value="{{ $evento->id }}" {{ $evento_id == $evento->id ? 'selected' : '' }}>
-                                {{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }}
+                                {{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }} ({{ $evento->tickets_count }} entrades)
                             </option>
                         @endforeach
                     </select>
@@ -93,13 +93,18 @@
                         <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Matrícula</th>
                         <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Esdeveniment</th>
                         <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Mètode</th>
-                        <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Validat per</th>
                         <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Estat</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($asistencias as $index => $asistencia)
-                    <tr class="border-b border-secondary-100 dark:border-primary-800 hover:bg-secondary-50 dark:hover:bg-primary-800/50 transition" data-nombre="{{ strtolower($asistencia->ticket->user->name ?? '') }}" data-matricula="{{ strtolower($asistencia->ticket->user->matricula ?? '') }}" data-email="{{ strtolower($asistencia->ticket->user->email ?? '') }}">
+                    @php
+                        $user = $asistencia->ticket?->user ?? $asistencia->guest;
+                        $userName = $user?->name ?? $user?->nombre ?? '';
+                        $userMatricula = $asistencia->ticket?->user?->matricula ?? '';
+                        $userEmail = $user?->email ?? '';
+                    @endphp
+                    <tr class="border-b border-secondary-100 dark:border-primary-800 hover:bg-secondary-50 dark:hover:bg-primary-800/50 transition" data-nombre="{{ strtolower($userName) }}" data-matricula="{{ strtolower($userMatricula) }}" data-email="{{ strtolower($userEmail) }}">
                         <td class="py-4 px-6 text-sm text-secondary-600 dark:text-secondary-400">
                             {{ ($asistencias->currentPage() - 1) * $asistencias->perPage() + $index + 1 }}
                         </td>
@@ -109,24 +114,24 @@
                         </td>
                         <td class="py-4 px-6">
                             <div class="flex items-center gap-3">
-                                @if($asistencia->ticket->user->profile_photo_path ?? false)
-                                <img src="{{ asset('storage/' . $asistencia->ticket->user->profile_photo_path) }}" 
+                                @if($user && ($user->profile_photo_path ?? false))
+                                <img src="{{ asset('storage/' . $user->profile_photo_path) }}" 
                                      alt="Foto" 
                                      class="w-10 h-10 rounded-full object-cover border-2 border-primary-500">
                                 @else
                                 <div class="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold">
-                                    {{ substr($asistencia->ticket->user->name ?? 'N', 0, 1) }}
+                                    {{ substr($userName ?: 'N', 0, 1) }}
                                 </div>
                                 @endif
                                 <div>
-                                    <p class="text-sm font-medium text-secondary-900 dark:text-white">{{ $asistencia->ticket->user->name ?? 'N/A' }}</p>
-                                    <p class="text-xs text-secondary-600 dark:text-secondary-400">{{ $asistencia->ticket->user->email ?? 'N/A' }}</p>
+                                    <p class="text-sm font-medium text-secondary-900 dark:text-white">{{ $userName ?: 'N/A' }}</p>
+                                    <p class="text-xs text-secondary-600 dark:text-secondary-400">{{ $userEmail ?: 'N/A' }}</p>
                                 </div>
                             </div>
                         </td>
                         <td class="py-4 px-6">
                             <span class="px-3 py-1 text-sm font-mono bg-secondary-100 dark:bg-primary-800 text-secondary-900 dark:text-white rounded-full">
-                                {{ $asistencia->ticket->user->matricula ?? 'N/A' }}
+                                {{ $userMatricula ?: ($asistencia->guest ? 'INVITADO' : 'N/A') }}
                             </span>
                         </td>
                         <td class="py-4 px-6 text-sm text-secondary-900 dark:text-white">
@@ -150,9 +155,6 @@
                                 @endif
                             </span>
                         </td>
-                        <td class="py-4 px-6 text-sm text-secondary-600 dark:text-secondary-400">
-                            {{ $asistencia->staff->nombre ?? 'N/A' }}
-                        </td>
                         <td class="py-4 px-6">
                             <span class="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full inline-flex items-center gap-1">
                                 <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
@@ -165,7 +167,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="py-12 text-center">
+                        <td colspan="7" class="py-12 text-center">
                             <div class="inline-block">
                                 <svg viewBox="0 0 64 64" class="w-16 h-16 animate-pulse" fill="none">
                                     <circle cx="32" cy="32" r="28" stroke="#94a3b8" stroke-width="2" fill="none"/>

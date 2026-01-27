@@ -189,25 +189,15 @@
                 <div>
                     <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2">Tipo de Incidencia *</label>
                     <select name="tipo" required class="w-full bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
-                        <option value="qr_perdido">📱 QR Perdido</option>
-                        <option value="error_datos">❌ Error en Datos de Matrícula</option>
-                        <option value="acceso_denegado">🚫 Acceso Denegado</option>
-                        <option value="tecnico">🔧 Problema Técnico</option>
+                        <option value="perdida_qr">📱 QR Perdido</option>
+                        <option value="error_datos">❌ Error en Datos</option>
+                        <option value="doble_entrada">🔁 Doble Entrada</option>
                         <option value="otro">⚠️ Otro</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2">Descripción *</label>
                     <textarea name="descripcion" required rows="4" placeholder="Describe el problema con detalle..." class="w-full bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2">Prioridad *</label>
-                    <select name="prioridad" required class="w-full bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
-                        <option value="baja">🟢 Baja</option>
-                        <option value="media" selected>🟡 Media</option>
-                        <option value="alta">🔴 Alta</option>
-                        <option value="critica">⚫ Crítica</option>
-                    </select>
                 </div>
                 <div class="flex gap-3 pt-4">
                     <button type="button" onclick="document.getElementById('modal_incidencia').classList.add('hidden')" class="flex-1 bg-secondary-300 dark:bg-primary-800 text-secondary-900 dark:text-white py-3 rounded-lg hover:bg-secondary-400 dark:hover:bg-primary-700 transition font-medium">
@@ -224,7 +214,7 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     // Filtros en tiempo real
     const filtroEstado = document.getElementById('filtro_estado');
@@ -257,7 +247,4 @@
     filtroPrioridad.addEventListener('change', aplicarFiltros);
     filtroEvento.addEventListener('change', aplicarFiltros);
 </script>
-@endsection
-    </div>
-</div>
-@endsection
+@endpush

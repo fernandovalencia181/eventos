@@ -8,6 +8,7 @@ use App\Models\Asistencia;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class StaffController extends Controller
 {
@@ -96,7 +97,7 @@ class StaffController extends Controller
     public function incidencias()
     {
         $eventos = Evento::all();
-        $incidencias = \App\Models\Incidencia::with(['evento', 'staff', 'resuelto'])
+        $incidencias = \App\Models\Incidencia::with(['evento', 'resuelto'])
             ->latest()
             ->get();
         
@@ -114,9 +115,21 @@ class StaffController extends Controller
     {
         $evento_id = $request->get('evento_id');
         
-        $eventos = Evento::where('fecha', '>=', now()->subDays(1))->orderBy('fecha')->get();
+        // Només mostrar esdeveniments que tenen tickets/entrades creades
+        $eventos = Evento::whereHas('tickets')
+            ->where('fecha', '>=', now()->subDays(7))
+            ->withCount('tickets')
+            ->orderBy('fecha', 'desc')
+            ->get();
         
-        $query = Asistencia::with(['ticket.user', 'staff', 'evento']);
+        // Cargar todas las relaciones necesarias
+        $query = Asistencia::with([
+            'ticket' => function($q) {
+                $q->with('user'); // Cargar explícitamente la relación user
+            },
+            'guest', // Cargar invitados especiales
+            'evento'
+        ]);
         
         if ($evento_id) {
             $query->where('evento_id', $evento_id);
@@ -154,7 +167,13 @@ class StaffController extends Controller
     {
         $evento_id = $request->get('evento_id');
         
-        $query = Asistencia::with(['ticket.user', 'evento', 'staff']);
+        $query = Asistencia::with([
+            'ticket' => function($q) {
+                $q->with('user');
+            },
+            'guest',
+            'evento'
+        ]);
         
         if ($evento_id) {
             $query->where('evento_id', $evento_id);
@@ -190,26 +209,33 @@ class StaffController extends Controller
                 'Fecha Check-in',
                 'Hora Check-in',
                 'Método Validación',
-                'Validado por (Staff)',
+                'Tipo',
                 'Folio Ticket'
             ]);
             
             // Data
             foreach ($asistencias as $asistencia) {
-                $user = $asistencia->ticket->user ?? null;
+                // Obtener datos del usuario (ya sea de ticket o guest)
+                $user = $asistencia->ticket?->user ?? $asistencia->guest;
+                $userName = $user?->name ?? $user?->nombre ?? 'N/A';
+                $userEmail = $user?->email ?? 'N/A';
+                $userMatricula = $asistencia->ticket?->user?->matricula ?? ($asistencia->guest ? 'INVITADO' : 'N/A');
+                $userTelefono = $user?->telefono ?? $user?->phone ?? 'N/A';
+                $tipo = $asistencia->guest ? 'Invitado' : 'Ticket Regular';
+                
                 fputcsv($file, [
                     $asistencia->id,
                     $asistencia->evento->nombre ?? 'N/A',
                     $asistencia->evento->fecha ? $asistencia->evento->fecha->format('Y-m-d H:i') : 'N/A',
-                    $user ? $user->name : 'N/A',
-                    $user && isset($user->matricula) ? $user->matricula : 'N/A',
-                    $user ? $user->email : 'N/A',
-                    $user && isset($user->telefono) ? $user->telefono : 'N/A',
+                    $userName,
+                    $userMatricula,
+                    $userEmail,
+                    $userTelefono,
                     $asistencia->created_at->format('Y-m-d'),
                     $asistencia->created_at->format('H:i:s'),
                     ucfirst($asistencia->metodo),
-                    $asistencia->staff->nombre ?? 'N/A',
-                    $asistencia->ticket->folio ?? 'N/A'
+                    $tipo,
+                    $asistencia->ticket?->folio ?? $asistencia->guest_qr_token ?? 'N/A'
                 ]);
             }
             
@@ -226,15 +252,13 @@ class StaffController extends Controller
             'evento_id' => 'required|exists:eventos,id',
             'tipo' => 'required|string',
             'descripcion' => 'required|string',
-            'prioridad' => 'required|in:baja,media,alta,critica',
         ]);
 
         \App\Models\Incidencia::create([
             'evento_id' => $request->evento_id,
-            'staff_id' => Auth::id(),
             'tipo' => $request->tipo,
             'descripcion' => $request->descripcion,
-            'prioridad' => $request->prioridad,
+            'reportado_por' => Auth::id(),
             'estado' => 'pendiente',
         ]);
 
@@ -349,21 +373,40 @@ class StaffController extends Controller
     // Validar ticket escaneado (QR)
     public function validar(Request $request)
     {
-        $request->validate([
-            'codigo' => ['required', 'string', 'size:32', 'alpha_num'], // ✅ Validar formato exacto
-            'staff_id' => 'nullable|exists:staff,id', // ✅ Hacer nullable
-            'evento_id' => 'required|exists:eventos,id',
-        ]);
+        try {
+            $request->validate([
+                'codigo' => ['required', 'string', 'min:10'], // Validación flexible
+                'evento_id' => 'required|exists:eventos,id',
+            ]);
 
-        // ✅ Usar staff_id del request o Auth::id() como fallback
-        $staffId = $request->staff_id ?? Auth::id();
+            // ✅ Usar staff_id del request o Auth::id() como fallback
+            $staffId = $request->staff_id ?? Auth::id();
 
-        // Buscar ticket por token_seguridad_qr EXACTO
-        $ticket = Ticket::where('token_seguridad_qr', $request->codigo)
-            ->where('evento_id', $request->evento_id)
+        // 🔍 Buscar en ENTRADAS (tickets) - per token_seguridad_qr o per ID (UUID)
+        $ticket = Ticket::where('evento_id', $request->evento_id)
+            ->where(function($q) use ($request) {
+                $q->where('token_seguridad_qr', $request->codigo)
+                  ->orWhere('id', $request->codigo);
+            })
             ->first();
 
+        // 🔍 Si no se encuentra, buscar en GUESTS (convidados)
+        $guest = null;
+        $esGuest = false;
         if (!$ticket) {
+            $guest = \App\Models\Guest::where('qr_token', $request->codigo)
+                ->whereHas('registration', function($q) use ($request) {
+                    $q->where('event_id', $request->evento_id);
+                })
+                ->first();
+            
+            if ($guest) {
+                $esGuest = true;
+            }
+        }
+
+        // Si no se encuentra ni en tickets ni en guests
+        if (!$ticket && !$guest) {
             return response()->json([
                 'success' => false,
                 'mensaje' => '❌ Entrada no vàlida o no pertany a aquest esdeveniment'
@@ -371,28 +414,66 @@ class StaffController extends Controller
         }
 
         // Verificar si ya hizo check-in
-        $checkinPrevio = Asistencia::where('ticket_id', $ticket->id)->first();
-        if ($checkinPrevio) {
+        if ($esGuest) {
+            // Para guests, verificamos por qr_token directamente
+            $checkinPrevio = Asistencia::where('guest_qr_token', $request->codigo)->first();
+            if ($checkinPrevio) {
+                return response()->json([
+                    'success' => false,
+                    'mensaje' => '⚠️ Convidat ja va fer check-in a les ' . $checkinPrevio->created_at->format('H:i')
+                ], 400);
+            }
+
+            // Registrar check-in del guest
+            Asistencia::create([
+                'ticket_id' => null,
+                'guest_qr_token' => $request->codigo,
+                'staff_id' => $staffId,
+                'evento_id' => $request->evento_id,
+                'fecha_checkin' => now(),
+                'metodo' => 'qr',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'mensaje' => '✅ Check-in exitós - Convidat: ' . $guest->name,
+                'tipo' => 'guest',
+                'nombre' => $guest->name
+            ]);
+        } else {
+            // Para tickets normales
+            $checkinPrevio = Asistencia::where('ticket_id', $ticket->id)->first();
+            if ($checkinPrevio) {
+                return response()->json([
+                    'success' => false,
+                    'mensaje' => '⚠️ Ja va fer check-in a les ' . $checkinPrevio->created_at->format('H:i')
+                ], 400);
+            }
+
+            // Registrar check-in del ticket
+            Asistencia::create([
+                'ticket_id' => $ticket->id,
+                'guest_qr_token' => null,
+                'staff_id' => $staffId,
+                'evento_id' => $request->evento_id,
+                'fecha_checkin' => now(),
+                'metodo' => 'qr',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'mensaje' => '✅ Check-in exitós',
+                'tipo' => 'ticket',
+                'ticket' => $ticket
+            ]);
+        }
+        } catch (\Exception $e) {
+            Log::error('Error validant entrada: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'mensaje' => '⚠️ Ya hizo check-in a las ' . $checkinPrevio->fecha_checkin->format('H:i')
-            ], 400);
+                'mensaje' => '❌ Error del servidor: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Registrar check-in
-        Asistencia::create([
-            'ticket_id' => $ticket->id,
-            'staff_id' => $staffId, // ✅ Usar la variable correcta
-            'evento_id' => $request->evento_id,
-            'fecha_checkin' => now(),
-            'metodo' => 'qr',
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'mensaje' => '✅ Check-in exitoso',
-            'ticket' => $ticket
-        ]);
     }
 
     // Exportar datos de aforo

@@ -2,151 +2,100 @@
 
 @section('title', 'Escàner QR')
 
-@push('styles')
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<style>
-    .glass-card {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .dark .glass-card {
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-</style>
-@endpush
-
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    
-    <div class="mb-8">
-        <div class="flex items-center gap-4">
-            <div class="relative w-20 h-20 bg-gradient-to-br from-indigo-400 via-purple-500 to-pink-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:rotate-6 transition-all duration-300">
-                <div class="absolute inset-0 bg-white/20 rounded-3xl backdrop-blur-sm"></div>
-                <div class="relative z-10">
-                    <!-- Icono QR personalizado estético -->
-                    <svg viewBox="0 0 40 40" class="w-10 h-10" fill="none">
-                        <rect x="4" y="4" width="12" height="12" rx="2" stroke="white" stroke-width="2.5" fill="white" opacity="0.9"/>
-                        <rect x="24" y="4" width="12" height="12" rx="2" stroke="white" stroke-width="2.5" fill="white" opacity="0.9"/>
-                        <rect x="4" y="24" width="12" height="12" rx="2" stroke="white" stroke-width="2.5" fill="white" opacity="0.9"/>
-                        <circle cx="10" cy="10" r="3" fill="#6366f1"/>
-                        <circle cx="30" cy="10" r="3" fill="#a855f7"/>
-                        <circle cx="10" cy="30" r="3" fill="#ec4899"/>
-                        <rect x="24" y="24" width="4" height="4" rx="1" fill="white"/>
-                        <rect x="30" y="24" width="4" height="4" rx="1" fill="white"/>
-                        <rect x="24" y="30" width="4" height="4" rx="1" fill="white"/>
-                        <rect x="30" y="30" width="4" height="4" rx="1" fill="white"/>
-                    </svg>
-                </div>
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="md:flex md:items-center md:justify-between mb-8">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight">
+                    Escàner QR
+                </h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Validació ràpida d'entrades mitjançant codis QR.
+                </p>
             </div>
-            <div>
-                <h1 class="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Escàner QR</h1>
-                <p class="text-secondary-600 dark:text-secondary-400 mt-1">Validació ràpida d'entrades amb codi QR</p>
+            <div class="mt-4 flex md:ml-4 md:mt-0">
+                <span class="inline-flex rounded-md shadow-sm">
+                    <button type="button" onclick="location.reload()" class="inline-flex items-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h-2.433a.75.75 0 000 1.5h3.989a.75.75 0 00.53-.22l.5-.5a6.375 6.375 0 009.466-2.26.75.75 0 00-1.252-.756l-.868.513c-.235.138-.517.07-.674-.162l-.248-.42z" clip-rule="evenodd" />
+                        </svg>
+                        Refrescar
+                    </button>
+                </span>
             </div>
         </div>
-    </div>
 
-    <div class="glass-card rounded-2xl shadow-2xl p-8 mb-6">
-        <!-- Seleccionar Esdeveniment -->
-        <div class="mb-4">
-            <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2 inline-flex items-center gap-2">
-                <svg viewBox="0 0 16 16" class="w-4 h-4" fill="currentColor">
-                    <path d="M3 2a1 1 0 011-1h8a1 1 0 011 1v1h1a1 1 0 011 1v10a1 1 0 01-1 1H2a1 1 0 01-1-1V4a1 1 0 011-1h1V2z"/>
-                    <rect x="5" y="6" width="6" height="1.5" rx="0.5" fill="white"/>
-                    <rect x="5" y="9" width="4" height="1.5" rx="0.5" fill="white"/>
-                </svg>
-                Esdeveniment
-            </label>
-            <select id="evento_id" class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
+        <!-- Selector de Evento -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-6 p-4 border border-gray-200 dark:border-gray-700">
+            <label for="evento_id" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white mb-2">Esdeveniment Actiu</label>
+            <select id="evento_id" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-600 sm:text-sm sm:leading-6 dark:bg-gray-900">
                 <option value="">Selecciona un esdeveniment...</option>
                 @foreach($eventos as $evento)
                     <option value="{{ $evento->id }}">{{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }}</option>
                 @endforeach
             </select>
         </div>
-    </div>
 
-    <!-- Escàner -->
-    <div class="glass-card rounded-2xl shadow-2xl p-8 mb-6">
-        <button id="toggleCamera" onclick="toggleScanner()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-5 rounded-xl mb-6 hover:from-indigo-700 hover:to-purple-700 text-lg font-bold transition-all transform hover:scale-[1.02] shadow-lg">
-            <span class="flex items-center justify-center gap-3">
-                <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none">
-                    <rect x="3" y="6" width="18" height="14" rx="2" stroke="white" stroke-width="2"/>
-                    <circle cx="12" cy="13" r="3.5" stroke="white" stroke-width="2" fill="white" opacity="0.3"/>
-                    <circle cx="12" cy="13" r="2" fill="white"/>
-                    <path d="M8 6L9.5 3.5C9.5 3.5 10.5 2 12 2C13.5 2 14.5 3.5 14.5 3.5L16 6" stroke="white" stroke-width="2"/>
-                    <circle cx="18" cy="9" r="1.5" fill="#FFD700"/>
-                </svg>
-                Iniciar Càmera
-            </span>
-        </button>
-
-        <div id="reader" class="mb-6 rounded-xl overflow-hidden shadow-inner" style="display:none;"></div>
-
-        <div class="border-t border-white/10 pt-6">
-            <p class="text-sm font-medium text-secondary-700 dark:text-secondary-300 mb-3 inline-flex items-center gap-2">
-                <svg viewBox="0 0 16 16" class="w-4 h-4" fill="currentColor">
-                    <circle cx="8" cy="8" r="7" fill="#FFD700" opacity="0.3"/>
-                    <path d="M8 3v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                O introduïx el codi manualment:
-            </p>
-            <div class="flex gap-3">
-                <input type="text" 
-                       id="codigo_manual" 
-                       class="flex-1 bg-white/50 dark:bg-black/30 border border-indigo-300 dark:border-indigo-700 rounded-xl px-5 py-4 text-secondary-900 dark:text-white placeholder-secondary-400 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" 
-                       placeholder="Introdu\u00efx el codi del tiquet...">
-                <button onclick="validarManual()" class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-10 py-4 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all font-bold shadow-lg transform hover:scale-105 inline-flex items-center gap-2">
-                    <svg viewBox="0 0 16 16" class="w-5 h-5" fill="white">
-                        <circle cx="8" cy="8" r="7" stroke="white" stroke-width="2" fill="none"/>
-                        <path d="M5 8l2 2 4-4" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <div class="grid lg:grid-cols-2 gap-6">
+            <!-- Escáner -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
+                <div id="reader" class="w-full rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-900 mb-4 min-h-[300px]" style="display:none;"></div>
+                
+                <button id="toggleCamera" onclick="toggleScanner()" class="w-full flex items-center justify-center gap-2 rounded-md bg-primary-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
                     </svg>
-                    Validar
+                    <span>Iniciar Càmera</span>
                 </button>
+
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-gray-300 dark:border-gray-700"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                        <span class="bg-white dark:bg-gray-800 px-2 text-sm text-gray-500">o validació manual</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <input type="text" 
+                           id="codigo_manual" 
+                           class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6 dark:bg-gray-900" 
+                           placeholder="Codi de tiquet...">
+                    <button onclick="validarManual()" class="inline-flex items-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        Validar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resultados y Estadísticas -->
+            <div class="space-y-6">
+                <!-- Resultado Validación -->
+                <div id="resultado" class="hidden rounded-lg p-4 animate-fade-in-down transition-all duration-300"></div>
+
+                <!-- Contadores -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 py-5 border border-l-4 border-green-500 shadow sm:p-6">
+                        <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Validats</dt>
+                        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 dark:text-white" id="validados">0</dd>
+                    </div>
+                    <div class="overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 py-5 border border-l-4 border-red-500 shadow sm:p-6">
+                        <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Incidències</dt>
+                        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 dark:text-white" id="duplicados">0</dd>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Resultado -->
-    <div id="resultado" class="hidden"></div>
-
-    <!-- Comptador -->
-    <div class="grid grid-cols-2 gap-6">
-        <div class="relative overflow-hidden bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-2xl p-8 text-center transform hover:scale-105 transition-all">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-            <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
-            <div class="relative z-10">
-                <p class="text-sm text-green-100 font-medium mb-2 inline-flex items-center gap-2 mx-auto">
-                    <svg viewBox="0 0 16 16" class="w-4 h-4" fill="white">
-                        <circle cx="8" cy="8" r="7"/>
-                        <path d="M5 8l2 2 4-4" stroke="#10b981" stroke-width="2" fill="none" stroke-linecap="round"/>
-                    </svg>
-                    VALIDATS
-                </p>
-                <p class="text-6xl font-black text-white drop-shadow-lg" id="validados">0</p>
-            </div>
-        </div>
-        <div class="relative overflow-hidden bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl shadow-2xl p-8 text-center transform hover:scale-105 transition-all">
-            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-            <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
-            <div class="relative z-10">
-                <p class="text-sm text-red-100 font-medium mb-2 inline-flex items-center gap-2 mx-auto">
-                    <svg viewBox="0 0 16 16" class="w-4 h-4" fill="white">
-                        <circle cx="8" cy="8" r="7"/>
-                        <path d="M5 5l6 6M11 5l-6 6" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    DUPLICATS
-                </p>
-                <p class="text-6xl font-black text-white drop-shadow-lg" id="duplicados">0</p>
-            </div>
-        </div>
-    </div>
-
 </div>
 @endsection
 
-@push('scripts')
+@section('scripts')
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
     let html5QrCode = null;
     let scannerActivo = false;
@@ -163,7 +112,11 @@
 
     function iniciarScanner() {
         document.getElementById('reader').style.display = 'block';
-        html5QrCode = new Html5Qrcode("reader");
+        
+        // Si ya existe una instancia, la usamos
+        if (!html5QrCode) {
+            html5QrCode = new Html5Qrcode("reader");
+        }
         
         const config = { 
             fps: 10, 
@@ -175,47 +128,40 @@
             { facingMode: "environment" },
             config,
             (decodedText) => {
-                // Callback quan s'escaneja correctament
+                // Prevenir lecturas múltiples muy seguidas si se desea, por ahora validamos directo
                 validarCodigo(decodedText);
             }
         ).then(() => {
             scannerActivo = true;
             const btn = document.getElementById('toggleCamera');
             btn.innerHTML = `
-                <span class="flex items-center justify-center gap-3">
-                    <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none">
-                        <rect x="6" y="6" width="12" height="12" rx="2" stroke="white" stroke-width="2.5"/>
-                    </svg>
-                    Aturar Càmera
-                </span>
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>Aturar Càmera</span>
             `;
-            btn.className = 'w-full bg-gradient-to-r from-red-600 to-rose-600 text-white py-5 rounded-xl mb-6 hover:from-red-700 hover:to-rose-700 text-lg font-bold transition-all transform hover:scale-[1.02] shadow-lg';
+            btn.className = 'w-full flex items-center justify-center gap-2 rounded-md bg-red-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-red-500 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600';
         }).catch(err => {
-            alert('⚠️ Error en accedir a la càmera.\n\nAssegura\'t de:\n1. Donar permisos de càmera al navegador\n2. Utilitzar HTTPS o localhost\n3. Tenir una càmera connectada\n\nError: ' + err);
+            alert('⚠️ Error en accedir a la càmera.\n\nAssegura\'t de:\n1. Donar permisos de càmera al navegador\n2. Utilitzar HTTPS o localhost\n3. Tenir una càmera connectada');
             console.error('Error scanner:', err);
             document.getElementById('reader').style.display = 'none';
         });
     }
 
     function detenerScanner() {
-        if (html5QrCode) {
+        if (html5QrCode && scannerActivo) {
             html5QrCode.stop().then(() => {
                 scannerActivo = false;
                 document.getElementById('reader').style.display = 'none';
                 const btn = document.getElementById('toggleCamera');
                 btn.innerHTML = `
-                    <span class="flex items-center justify-center gap-3">
-                        <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none">
-                            <rect x="3" y="6" width="18" height="14" rx="2" stroke="white" stroke-width="2"/>
-                            <circle cx="12" cy="13" r="3.5" stroke="white" stroke-width="2" fill="white" opacity="0.3"/>
-                            <circle cx="12" cy="13" r="2" fill="white"/>
-                            <path d="M8 6L9.5 3.5C9.5 3.5 10.5 2 12 2C13.5 2 14.5 3.5 14.5 3.5L16 6" stroke="white" stroke-width="2"/>
-                            <circle cx="18" cy="9" r="1.5" fill="#FFD700"/>
-                        </svg>
-                        Iniciar Càmera
-                    </span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                    </svg>
+                    <span>Iniciar Càmera</span>
                 `;
-                btn.className = 'w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-5 rounded-xl mb-6 hover:from-indigo-700 hover:to-purple-700 text-lg font-bold transition-all transform hover:scale-[1.02] shadow-lg';
+                btn.className = 'w-full flex items-center justify-center gap-2 rounded-md bg-primary-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600';
             }).catch(err => {
                 console.error('Error aturant scanner:', err);
             });
@@ -238,29 +184,7 @@
         const eventoId = document.getElementById('evento_id').value;
 
         if (!eventoId) {
-            const resultado = document.getElementById('resultado');
-            resultado.classList.remove('hidden');
-            resultado.innerHTML = `
-                <div class="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-400 px-6 py-4 rounded-lg mb-4">
-                    <h3 class="font-bold text-lg">⚠️ Selecciona un esdeveniment</h3>
-                </div>
-            `;
-            setTimeout(() => resultado.classList.add('hidden'), 3000);
-            return;
-        }
-
-        // ✅ VALIDAR FORMATO DEL QR (debe ser un token de 32 caracteres alfanuméricos)
-        const tokenRegex = /^[a-zA-Z0-9]{32}$/;
-        if (!tokenRegex.test(codigo.trim())) {
-            const resultado = document.getElementById('resultado');
-            resultado.classList.remove('hidden');
-            resultado.innerHTML = `
-                <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-400 px-6 py-4 rounded-lg mb-4">
-                    <h3 class="font-bold text-lg">❌ Codi QR invàlid</h3>
-                    <p class="text-sm mt-1">Aquest QR no correspon a una entrada del sistema.</p>
-                </div>
-            `;
-            setTimeout(() => resultado.classList.add('hidden'), 4000);
+            mostrarError('⚠️ Selecciona un esdeveniment primer');
             return;
         }
 
@@ -273,70 +197,71 @@
                 },
                 body: JSON.stringify({
                     codigo: codigo.trim(),
-                    evento_id: eventoId,
-                    staff_id: {{ Auth::id() }} // ✅ Enviar ID del staff autenticado
+                    evento_id: eventoId
                 })
             });
 
             const data = await response.json();
 
-            const resultado = document.getElementById('resultado');
-            resultado.classList.remove('hidden');
-
             if (data.success) {
+                mostrarExito(data.mensaje, codigo);
                 validados++;
                 document.getElementById('validados').textContent = validados;
                 
-                // Efecto de sonido de éxito (opcional)
+                // So d'èxit
                 const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIE13s2N+Mxx8DRpvf8sFwIwUr');
                 audio.play().catch(() => {});
-                
-                resultado.innerHTML = `
-                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-8 py-6 rounded-2xl mb-6 shadow-2xl transform animate-bounce">
-                        <div class="flex items-center gap-4">
-                            <div class="text-5xl">✅</div>
-                            <div>
-                                <h3 class="font-black text-2xl mb-1">${data.mensaje}</h3>
-                                <p class="text-green-100 font-mono text-sm">Codi: ${codigo}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                setTimeout(() => {
-                    resultado.classList.add('hidden');
-                }, 3000);
             } else {
+                mostrarError(data.mensaje, codigo);
                 duplicados++;
                 document.getElementById('duplicados').textContent = duplicados;
-
-                resultado.innerHTML = `
-                    <div class="bg-gradient-to-r from-red-500 to-rose-500 text-white px-8 py-6 rounded-2xl mb-6 shadow-2xl transform animate-shake">
-                        <div class="flex items-center gap-4">
-                            <div class="text-5xl">❌</div>
-                            <div>
-                                <h3 class="font-black text-2xl mb-1">${data.mensaje}</h3>
-                                <p class="text-red-100 font-mono text-sm">Codi: ${codigo}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                setTimeout(() => {
-                    resultado.classList.add('hidden');
-                }, 5000);
             }
         } catch (error) {
             console.error('Error:', error);
-            const resultado = document.getElementById('resultado');
-            resultado.classList.remove('hidden');
-            resultado.innerHTML = `
-                <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-400 px-6 py-4 rounded-lg mb-4">
-                    <h3 class="font-bold text-lg">❌ Error de connexió</h3>
-                    <p class="text-sm mt-1">No s'ha pogut connectar amb el servidor. Comprova la connexió.</p>
-                </div>
-            `;
+            mostrarError('❌ Error de connexió');
         }
     }
+
+    function mostrarExito(mensaje, codigo) {
+        const resultado = document.getElementById('resultado');
+        resultado.className = 'rounded-lg p-4 bg-green-50 dark:bg-green-900/50 border border-green-200 dark:border-green-800 animate-fade-in-down mb-6';
+        resultado.innerHTML = `
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-green-800 dark:text-green-200">${mensaje}</h3>
+                    <div class="mt-2 text-sm text-green-700 dark:text-green-300">
+                        <p>Codi: ${codigo}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        resultado.classList.remove('hidden');
+        setTimeout(() => resultado.classList.add('hidden'), 3000);
+    }
+
+    function mostrarError(mensaje, codigo = '') {
+        const resultado = document.getElementById('resultado');
+        resultado.className = 'rounded-lg p-4 bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 animate-fade-in-down mb-6';
+        resultado.innerHTML = `
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800 dark:text-red-200">${mensaje}</h3>
+                    ${codigo ? `<div class="mt-2 text-sm text-red-700 dark:text-red-300"><p>Codi: ${codigo}</p></div>` : ''}
+                </div>
+            </div>
+        `;
+        resultado.classList.remove('hidden');
+        setTimeout(() => resultado.classList.add('hidden'), 5000);
+    }
 </script>
-@endpush
+@endsection

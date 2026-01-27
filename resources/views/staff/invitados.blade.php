@@ -3,21 +3,22 @@
 @section('title', 'Gestión de Invitados Especiales')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    
-    <div class="mb-8 flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-primary-900 dark:text-white">⭐ Gestión de Invitados Especiales</h1>
-            <p class="text-secondary-600 dark:text-secondary-400 mt-2">Registro de ponentes, personal externo y VIPs</p>
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        
+        <div class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">⭐ Gestión de Invitados Especiales</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-2">Registro de ponentes, personal externo y VIPs</p>
+            </div>
+            <button onclick="document.getElementById('modal_invitado').classList.remove('hidden')" 
+                    class="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition shadow-md inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                </svg>
+                Agregar Invitado
+            </button>
         </div>
-        <button onclick="document.getElementById('modal_invitado').classList.remove('hidden')" 
-                class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition shadow-md inline-flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-            </svg>
-            Agregar Invitado
-        </button>
-    </div>
 
     @if(session('success'))
     <div class="mb-6 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-400 px-4 py-3 rounded-lg">
@@ -91,22 +92,22 @@
     </div>
 
     <!-- Tabla de invitados -->
-    <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 overflow-hidden">
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg border border-secondary-200">
         <div class="overflow-x-auto">
-            <table class="w-full" id="tabla-invitados">
-                <thead class="bg-secondary-50 dark:bg-primary-800">
+            <table class="min-w-full divide-y divide-secondary-200" id="tabla-invitados">
+                <thead class="bg-secondary-50">
                     <tr>
-                        <th class="px-6 py-4 text-left text-sm font-bold text-secondary-900 dark:text-white">Invitado</th>
-                        <th class="px-6 py-4 text-left text-sm font-bold text-secondary-900 dark:text-white">Evento</th>
-                        <th class="px-6 py-4 text-left text-sm font-bold text-secondary-900 dark:text-white">Contacto</th>
-                        <th class="px-6 py-4 text-left text-sm font-bold text-secondary-900 dark:text-white">Cargo/Empresa</th>
-                        <th class="px-6 py-4 text-left text-sm font-bold text-secondary-900 dark:text-white">Estado</th>
-                        <th class="px-6 py-4 text-right text-sm font-bold text-secondary-900 dark:text-white">Acciones</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Invitado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Evento</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Contacto</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Cargo/Empresa</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Estado</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-secondary-500 uppercase tracking-wider">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white divide-y divide-secondary-200">
                     @forelse($invitados as $invitado)
-                    <tr class="border-b border-secondary-100 dark:border-primary-800 hover:bg-secondary-50 dark:hover:bg-primary-800/50 transition" 
+                    <tr class="hover:bg-secondary-50 transition" 
                         data-nombre="{{ strtolower($invitado->nombre) }}" 
                         data-email="{{ strtolower($invitado->email ?? '') }}" 
                         data-empresa="{{ strtolower($invitado->empresa ?? '') }}"

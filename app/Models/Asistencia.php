@@ -10,6 +10,7 @@ class Asistencia extends Model
 
     protected $fillable = [
         'ticket_id',
+        'guest_qr_token', // ✅ Per convidats (guests)
         'staff_id',
         'evento_id',
         'fecha_checkin',
@@ -25,9 +26,14 @@ class Asistencia extends Model
         return $this->belongsTo(Ticket::class);
     }
 
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class, 'guest_qr_token', 'qr_token');
+    }
+
     public function staff()
     {
-        return $this->belongsTo(Staff::class);
+        return $this->belongsTo(User::class, 'staff_id');
     }
 
     public function evento()
