@@ -1,6 +1,6 @@
 <section class="w-full">
 
-    <x-settings.layout :heading="_('Perfil')" :subheading="_('Actualiza tu nombre y correo electrónico')">
+    <x-settings.layout :heading="__('Perfil')" :subheading="__('Actualiza tu nombre y correo electrónico')">
         
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6 bg-white p-6 rounded-xl shadow-sm border border-secondary-200">
             
