@@ -45,39 +45,31 @@
                             Dashboard
                         </a>
                         
-                        <!-- Check-in y Validación -->
-                        <div class="relative inline-flex items-center px-1 pt-1 border-b-2 border-transparent" x-data="{ open: false }">
-                            <button @click="open = !open" 
-                                    class="inline-flex items-center text-sm font-medium leading-5 text-primary-300 hover:text-white focus:outline-none transition duration-150 ease-in-out gap-1">
-                                Check-in
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <div x-show="open" @click.away="open = false" class="absolute left-0 top-full mt-2 w-48 bg-primary-800 rounded-md shadow-lg py-1 z-50 border border-primary-700">
-                                <a href="{{ route('staff.scanner') }}" class="block px-4 py-2 text-sm text-primary-200 hover:bg-primary-700 hover:text-white">Escáner QR</a>
-                            </div>
-                        </div>
+                        <!-- Escàner -->
+                        <a href="{{ route('staff.scanner') }}" 
+                           class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out {{ request()->routeIs('staff.scanner') ? 'border-primary-500 text-white focus:outline-none focus:border-primary-400' : 'border-transparent text-primary-300 hover:text-white hover:border-primary-400 focus:outline-none focus:text-white focus:border-primary-400' }}">
+                            Escàner
+                        </a>
 
                         <!-- Gestión Operativa -->
                         <div class="relative inline-flex items-center px-1 pt-1 border-b-2 border-transparent" x-data="{ open: false }">
                             <button @click="open = !open" 
                                     class="inline-flex items-center text-sm font-medium leading-5 text-primary-300 hover:text-white focus:outline-none transition duration-150 ease-in-out gap-1">
-                                Gestión
+                                Gestió
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                             <div x-show="open" @click.away="open = false" class="absolute left-0 top-full mt-2 w-48 bg-primary-800 rounded-md shadow-lg py-1 z-50 border border-primary-700">
                                 <a href="{{ route('staff.asistencia') }}" class="block px-4 py-2 text-sm text-primary-200 hover:bg-primary-700 hover:text-white">Assistència</a>
-                                <a href="{{ route('staff.incidencias') }}" class="block px-4 py-2 text-sm text-primary-200 hover:bg-primary-700 hover:text-white">Incidencias</a>
+                                <a href="{{ route('staff.incidencias') }}" class="block px-4 py-2 text-sm text-primary-200 hover:bg-primary-700 hover:text-white">Incidències</a>
                             </div>
                         </div>
 
                         <!-- Logística -->
                         <a href="{{ route('staff.invitados') }}" 
                            class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out {{ request()->routeIs('staff.invitados') ? 'border-primary-500 text-white focus:outline-none focus:border-primary-400' : 'border-transparent text-primary-300 hover:text-white hover:border-primary-400 focus:outline-none focus:text-white focus:border-primary-400' }}">
-                            Invitados
+                            Invitats
                         </a>
                     </div>
                 </div>
@@ -143,14 +135,13 @@
             <div x-show="open" @click.away="open = false" class="bg-primary-800 px-4 py-2 space-y-1">
                 <a href="{{ route('staff.index') }}" class="block text-primary-200 hover:text-white py-2">Dashboard</a>
                 <div class="border-t border-primary-700 my-2"></div>
-                <p class="text-xs text-primary-400 uppercase font-semibold">Check-in</p>
-                <a href="{{ route('staff.scanner') }}" class="block text-primary-200 hover:text-white py-2 pl-4">Escáner QR</a>
+                <a href="{{ route('staff.scanner') }}" class="block text-primary-200 hover:text-white py-2 pl-4">Escàner QR</a>
                 <div class="border-t border-primary-700 my-2"></div>
-                <p class="text-xs text-primary-400 uppercase font-semibold">Gestión</p>
+                <p class="text-xs text-primary-400 uppercase font-semibold">Gestió</p>
                 <a href="{{ route('staff.asistencia') }}" class="block text-primary-200 hover:text-white py-2 pl-4">Assistència</a>
-                <a href="{{ route('staff.incidencias') }}" class="block text-primary-200 hover:text-white py-2 pl-4">Incidencias</a>
+                <a href="{{ route('staff.incidencias') }}" class="block text-primary-200 hover:text-white py-2 pl-4">Incidències</a>
                 <div class="border-t border-primary-700 my-2"></div>
-                <a href="{{ route('staff.invitados') }}" class="block text-primary-200 hover:text-white py-2">Invitados</a>
+                <a href="{{ route('staff.invitados') }}" class="block text-primary-200 hover:text-white py-2">Invitats</a>
             </div>
         </div>
     </nav>

@@ -6,8 +6,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
     <!-- Capçalera -->
-    <div class="mb-8 flex items-center justify-between">
-        <div class="flex items-center gap-4">
+    <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-center gap-4 w-full md:w-auto">
             <div class="relative w-16 h-16 bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:-rotate-3 transition-all duration-300">
                 <div class="absolute inset-0 bg-white/20 rounded-3xl backdrop-blur-sm"></div>
                 <div class="relative z-10">
@@ -27,7 +27,7 @@
             </div>
         </div>
         <a href="{{ route('staff.exportar', ['evento_id' => $evento_id]) }}" 
-           class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition shadow-lg transform hover:scale-105 inline-flex items-center gap-2">
+           class="w-full md:w-auto justify-center bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition shadow-lg transform hover:scale-105 inline-flex items-center gap-2">
             <svg viewBox="0 0 20 20" class="w-5 h-5" fill="white">
                 <path d="M10 2v10m0 0l-3-3m3 3l3-3" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/>
                 <rect x="3" y="14" width="14" height="4" rx="1" fill="white"/>
@@ -87,13 +87,13 @@
             <table class="w-full" id="tabla-asistencia">
                 <thead class="bg-secondary-50 dark:bg-primary-800">
                     <tr>
-                        <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">#</th>
+                        <th class="hidden md:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">#</th>
                         <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Hora</th>
                         <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Assistant</th>
-                        <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Matrícula</th>
-                        <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Esdeveniment</th>
-                        <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Mètode</th>
-                        <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Estat</th>
+                        <th class="hidden sm:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Matrícula</th>
+                        <th class="hidden lg:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Esdeveniment</th>
+                        <th class="hidden xl:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Mètode</th>
+                        <th class="hidden md:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Estat</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,7 +105,7 @@
                         $userEmail = $user?->email ?? '';
                     @endphp
                     <tr class="border-b border-secondary-100 dark:border-primary-800 hover:bg-secondary-50 dark:hover:bg-primary-800/50 transition" data-nombre="{{ strtolower($userName) }}" data-matricula="{{ strtolower($userMatricula) }}" data-email="{{ strtolower($userEmail) }}">
-                        <td class="py-4 px-6 text-sm text-secondary-600 dark:text-secondary-400">
+                        <td class="hidden md:table-cell py-4 px-6 text-sm text-secondary-600 dark:text-secondary-400">
                             {{ ($asistencias->currentPage() - 1) * $asistencias->perPage() + $index + 1 }}
                         </td>
                         <td class="py-4 px-6">
@@ -129,15 +129,15 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="py-4 px-6">
+                        <td class="hidden sm:table-cell py-4 px-6">
                             <span class="px-3 py-1 text-sm font-mono bg-secondary-100 dark:bg-primary-800 text-secondary-900 dark:text-white rounded-full">
                                 {{ $userMatricula ?: ($asistencia->guest ? 'INVITADO' : 'N/A') }}
                             </span>
                         </td>
-                        <td class="py-4 px-6 text-sm text-secondary-900 dark:text-white">
+                        <td class="hidden lg:table-cell py-4 px-6 text-sm text-secondary-900 dark:text-white">
                             {{ $asistencia->evento->nombre }}
                         </td>
-                        <td class="py-4 px-6">
+                        <td class="hidden xl:table-cell py-4 px-6">
                             <span class="px-3 py-1 text-xs font-medium rounded-full inline-flex items-center gap-1 {{ $asistencia->metodo === 'qr' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' }}">
                                 @if($asistencia->metodo === 'qr')
                                     <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
@@ -155,7 +155,7 @@
                                 @endif
                             </span>
                         </td>
-                        <td class="py-4 px-6">
+                        <td class="hidden md:table-cell py-4 px-6">
                             <span class="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 rounded-full inline-flex items-center gap-1">
                                 <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
                                     <circle cx="6" cy="6" r="5"/>

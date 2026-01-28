@@ -6,13 +6,13 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         
-        <div class="mb-8 flex justify-between items-center">
-            <div>
+        <div class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="w-full md:w-auto">
                 <h1 class="text-3xl font-bold text-gray-900 dark:text-white">⭐ Gestión de Invitados Especiales</h1>
                 <p class="text-gray-600 dark:text-gray-400 mt-2">Registro de ponentes, personal externo y VIPs</p>
             </div>
             <button onclick="document.getElementById('modal_invitado').classList.remove('hidden')" 
-                    class="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition shadow-md inline-flex items-center gap-2">
+                    class="w-full md:w-auto justify-center bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition shadow-md inline-flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                 </svg>
@@ -98,9 +98,9 @@
                 <thead class="bg-secondary-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Invitado</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Evento</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Contacto</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Cargo/Empresa</th>
+                        <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Evento</th>
+                        <th class="hidden xl:table-cell px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Contacto</th>
+                        <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Cargo/Empresa</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Estado</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-secondary-500 uppercase tracking-wider">Acciones</th>
                     </tr>
@@ -124,17 +124,17 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-sm text-secondary-900 dark:text-white">
+                        <td class="hidden lg:table-cell px-6 py-4 text-sm text-secondary-900 dark:text-white">
                             <p class="font-medium">{{ $invitado->evento->nombre ?? 'N/A' }}</p>
                             <p class="text-xs text-secondary-600 dark:text-secondary-400">
                                 {{ $invitado->evento->fecha->format('d/m/Y') ?? '' }}
                             </p>
                         </td>
-                        <td class="px-6 py-4 text-sm">
+                        <td class="hidden xl:table-cell px-6 py-4 text-sm">
                             <p class="text-secondary-900 dark:text-white">{{ $invitado->email ?? 'N/A' }}</p>
                             <p class="text-xs text-secondary-600 dark:text-secondary-400">{{ $invitado->telefono ?? 'Sin teléfono' }}</p>
                         </td>
-                        <td class="px-6 py-4 text-sm">
+                        <td class="hidden md:table-cell px-6 py-4 text-sm">
                             <p class="text-secondary-900 dark:text-white font-medium">{{ $invitado->cargo ?? 'N/A' }}</p>
                             <p class="text-xs text-secondary-600 dark:text-secondary-400">{{ $invitado->empresa ?? 'Sin empresa' }}</p>
                         </td>
