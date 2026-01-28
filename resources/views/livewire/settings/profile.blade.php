@@ -2,7 +2,7 @@
 
     <x-settings.layout :heading="__('Perfil')" :subheading="__('Actualiza tu nombre y correo electrónico')">
         
-        <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6 bg-white p-6 rounded-xl shadow-sm border border-secondary-200">
+        <form wire:submit="updateProfileInformation" class="space-y-6">
             
             <div>
                 <label for="name" class="block text-sm font-medium text-secondary-700">Nombre</label>
@@ -45,9 +45,12 @@
             </div>
         </form>
 
-        <div class="mt-10">
+        <div class="mt-10 pt-6 border-t border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">Borrar Cuenta</h3>
+            <p class="mt-1 text-sm text-gray-500 mb-4">
+                Una vez borrada tu cuenta, todos sus recursos y datos se eliminarán permanentemente.
+            </p>
             <livewire:settings.delete-user-form />
         </div>
-        
     </x-settings.layout>
 </section>

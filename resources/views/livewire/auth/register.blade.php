@@ -9,6 +9,23 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
+        {{-- Botón de Google --}}
+        <div class="mb-4">
+            <a href="{{ route('google.login') }}" class="flex items-center justify-center w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                <img class="h-5 w-5 mr-2" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google logo">
+                Registrarse con Google
+            </a>
+        </div>
+
+        <div class="relative mb-4">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-2 bg-white text-gray-500">O con correo</span>
+            </div>
+        </div>
+
         <div>
             <label for="name" class="block text-sm font-medium text-secondary-700">Nombre Completo</label>
             <input id="name" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
@@ -17,6 +34,11 @@
         <div class="mt-4">
             <label for="email" class="block text-sm font-medium text-secondary-700">Correo Electrónico</label>
             <input id="email" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="email" name="email" :value="old('email')" required autocomplete="username" />
+        </div>
+
+        <div class="mt-4">
+            <label for="phone" class="block text-sm font-medium text-secondary-700">Teléfono (Opcional)</label>
+            <input id="phone" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="text" name="phone" :value="old('phone')" autocomplete="tel" />
         </div>
 
         <div class="mt-4">

@@ -23,13 +23,13 @@
 <body class="font-sans antialiased bg-secondary-50 dark:bg-primary-950 text-secondary-900 dark:text-gray-100 transition-colors duration-300">
     
     <div class="min-h-screen flex flex-col">
-        @include('navigation-menu')
+        @include('partials.navigation-menu')
 
         <main class="flex-grow">
             {{ $slot }}
         </main>
         
-        @include('footer')
+        @include('partials.footer')
     </div>
 
     @livewireScripts

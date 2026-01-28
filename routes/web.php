@@ -14,11 +14,17 @@ use App\Livewire\Settings\TwoFactor;
 use App\Http\Controllers\TicketController; // Descomentar cuando tu compa cree el suyo
 use App\Http\Controllers\PdfController; // Descomentar cuando tu compa cree el suyo
 use App\Http\Controllers\StaffController; 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\GoogleController;
 use App\Livewire\MisEntradas;
 use App\Livewire\Calendario; 
 // =========================================================================
 // 🌍 ZONA PÚBLICA (Lo que ve todo el mundo sin loguearse)
 // =========================================================================
+
+// Rutas de Login con Google
+Route::get('auth/google', [GoogleController::class, 'redirect'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
 
 // Cambiamos la función anónima por TU controlador para mostrar los eventos reales
 Route::get('/', [EventoController::class, 'index'])->name('home');
@@ -55,9 +61,16 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/eventos/{evento}/editar', [EventoController::class, 'edit'])->name('eventos.edit');
     Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('eventos.update');
     Route::delete('/eventos/{evento}', [EventoController::class, 'destroy'])->name('eventos.destroy');
+    // Ver inscritos
+    Route::get('/eventos/{evento}/inscritos', [EventoController::class, 'users'])->name('eventos.users');
 
     // Calendario (Ahora solo para admins)
     Route::get('/admin/calendario', Calendario::class)->name('calendario');
+
+    // Gestión de Usuarios
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
     // Aquí irán futuras rutas de admin (editar, borrar, escanear, etc.)
 });
