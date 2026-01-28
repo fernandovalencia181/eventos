@@ -33,15 +33,7 @@
                             <x-nav-link :href="route('calendario')" :active="request()->routeIs('calendario')">
                                 Calendario
                             </x-nav-link>
-                        @endif
-                        
-                        @if(Auth::user()->isStaff())
-                            <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
-                                Panel Staff
-                            </x-nav-link>
-                        @endif
-                        
-                        @if(!Auth::user()->isAdmin() && !Auth::user()->isStaff())
+                        @else
                             <x-nav-link :href="route('mis.entradas')" :active="request()->routeIs('mis.entradas')">
                                 Mis Entradas
                             </x-nav-link>
@@ -138,19 +130,29 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div :class="{'block': open, 'hidden': !open}" class="hidden lg:hidden bg-primary-900 border-b border-primary-800">
-        <div class="pt-2 pb-3 space-y-1 px-2">
+    <div x-show="open" 
+         @click.away="open = false"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 translate-y-1"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 translate-y-1"
+         class="lg:hidden fixed top-16 left-0 w-full h-[calc(100vh-4rem)] overflow-y-auto bg-primary-900/95 backdrop-blur-xl border-t border-white/10 shadow-2xl z-50 pb-10"
+         style="display: none;">
+        
+        <div class="pt-2 pb-3 space-y-1 px-4">
             
-            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('home') ? 'bg-primary-800 text-white' : 'text-primary-300 hover:bg-primary-800 hover:text-white' }} transition">Inicio</a>
+            <a href="{{ route('home') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('home') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Inicio</a>
             
             @auth
                  @if(Auth::user()->isAdmin())
-                    <a href="{{ route('eventos.create') }}" class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('eventos.create') ? 'bg-primary-800 text-white' : 'text-primary-300 hover:bg-primary-800 hover:text-white' }} transition">Crear Evento</a>
-                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('admin.dashboard') ? 'bg-primary-800 text-white' : 'text-primary-300 hover:bg-primary-800 hover:text-white' }} transition">Panel Admin</a>
-                    <a href="{{ route('users.index') }}" class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('users.*') ? 'bg-primary-800 text-white' : 'text-primary-300 hover:bg-primary-800 hover:text-white' }} transition">Usuarios</a>
-                    <a href="{{ route('calendario') }}" class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('calendario') ? 'bg-primary-800 text-white' : 'text-primary-300 hover:bg-primary-800 hover:text-white' }} transition">Calendario</a>
+                    <a href="{{ route('eventos.create') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('eventos.create') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Crear Evento</a>
+                    <a href="{{ route('admin.dashboard') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Panel Admin</a>
+                    <a href="{{ route('users.index') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('users.*') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Usuarios</a>
+                    <a href="{{ route('calendario') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('calendario') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Calendario</a>
                 @else
-                    <a href="{{ route('mis.entradas') }}" class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('mis.entradas') ? 'bg-primary-800 text-white' : 'text-primary-300 hover:bg-primary-800 hover:text-white' }} transition">Mis Entradas</a>
+                    <a href="{{ route('mis.entradas') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('mis.entradas') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Mis Entradas</a>
                 @endif
             @endauth
             
@@ -169,53 +171,41 @@
                         }
                     }" 
                     @click="toggle()"
-                    class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-primary-300 hover:bg-primary-800 hover:text-white flex items-center gap-2 transition">
-                <div class="flex items-center gap-3">
-                    <div class="p-1 rounded bg-primary-800">
-                        <svg x-show="darkMode" style="display: none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                        </svg>
-                        <svg x-show="!darkMode" style="display: none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-                        </svg>
-                    </div>
-                    <span x-text="darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"></span>
+                    class="w-full text-left px-3 py-3 rounded-xl text-base font-bold text-primary-100 hover:bg-white/5 hover:text-white flex items-center gap-3 transition-all border border-white/5 bg-white/5 mt-2">
+                <div class="p-1.5 rounded-lg bg-black/20">
+                    <svg x-show="darkMode" style="display: none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                    </svg>
+                    <svg x-show="!darkMode" style="display: none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                    </svg>
                 </div>
+                <span x-text="darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"></span>
             </button>
-            <a href="{{ route('home') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Inicio</a>
-            @auth
-                 @if(Auth::user()->isAdmin())
-                    <a href="{{ route('eventos.create') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Crear Evento</a>
-                    <a href="{{ route('admin.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Panel Admin</a>
-                    <a href="{{ route('calendario') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Calendario</a>
-                @else
-                    <a href="{{ route('mis.entradas') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-primary-300 hover:bg-primary-800 hover:border-primary-500 hover:text-white">Mis Entradas</a>
-                @endif
-            @endauth
         </div>
         
-        <div class="pt-4 pb-4 border-t border-primary-800 bg-primary-800/30">
+        <div class="pt-4 pb-4 border-t border-white/10 bg-black/10 backdrop-contrast-75">
             @auth
-                <div class="flex items-center px-4 mb-3">
+                <div class="flex items-center px-6 mb-4">
                     <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full border-2 border-primary-500" src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=6366f1&background=eef2ff" alt="{{ Auth::user()->name }}" />
+                        <img class="h-12 w-12 rounded-full border-2 border-white/20 shadow-lg" src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=6366f1&background=eef2ff" alt="{{ Auth::user()->name }}" />
                     </div>
-                    <div class="ml-3">
-                        <div class="text-base font-bold text-white">{{ Auth::user()->name }}</div>
-                        <div class="text-sm font-medium text-primary-300">{{ Auth::user()->email }}</div>
+                    <div class="ml-4">
+                        <div class="text-lg font-black text-white tracking-wide">{{ Auth::user()->name }}</div>
+                        <div class="text-sm font-medium text-primary-200">{{ Auth::user()->email }}</div>
                     </div>
                 </div>
-                <div class="mt-2 space-y-1 px-2">
-                    <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-md text-base font-medium text-primary-300 hover:text-white hover:bg-primary-700 transition">Perfil</a>
+                <div class="mt-2 space-y-1 px-4">
+                    <a href="{{ route('profile.edit') }}" class="block px-3 py-2.5 rounded-lg text-base font-medium text-primary-100 hover:text-white hover:bg-white/10 transition">Perfil</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-400 hover:text-white hover:bg-red-600 transition">Cerrar Sesión</button>
+                        <button type="submit" class="w-full text-left block px-3 py-2.5 rounded-lg text-base font-bold text-red-300 hover:text-white hover:bg-red-500/80 transition">Cerrar Sesión</button>
                     </form>
                 </div>
             @else
-                <div class="mt-3 space-y-2 px-4 pb-2">
-                    <a href="{{ route('login') }}" class="block text-center w-full py-2.5 text-white border border-primary-600 rounded-lg font-semibold hover:bg-primary-800 transition">Iniciar Sesión</a>
-                    <a href="{{ route('register') }}" class="block text-center w-full py-2.5 bg-primary-600 text-white rounded-lg font-bold hover:bg-primary-500 shadow-md transition">Registrarse</a>
+                <div class="mt-3 space-y-3 px-6 pb-4">
+                    <a href="{{ route('login') }}" class="block text-center w-full py-3 text-white border border-white/20 rounded-xl font-bold hover:bg-white/10 transition backdrop-blur-sm">Iniciar Sesión</a>
+                    <a href="{{ route('register') }}" class="block text-center w-full py-3 bg-indigo-600/90 hover:bg-indigo-500 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition backdrop-blur-sm">Registrarse</a>
                 </div>
             @endauth
         </div>

@@ -115,11 +115,13 @@
                                     </div>
 
                                     <div class="p-2 border-t border-gray-50 bg-gray-50/50">
-                                        <button class="w-full flex items-center justify-center gap-2 text-sm text-indigo-600 hover:text-white hover:bg-indigo-600 font-medium py-2 px-4 rounded-lg transition-all duration-200">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                            Nuevo Evento
-                                        </button>
-                                    </div>
+    <a href="{{ route('eventos.create') }}" 
+       class="w-full flex items-center justify-center gap-2 text-sm text-indigo-600 hover:text-white hover:bg-indigo-600 font-medium py-2 px-4 rounded-lg transition-all duration-200">
+        
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Nuevo Evento
+    </a>
+</div>
                                 </div>
                                 
                                 <div class="hidden md:block absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white border-t border-l border-gray-100 rotate-45 z-10"></div>

@@ -47,7 +47,7 @@
                                 Aforo: {{ $evento->aforo_maximo }}
                             </span>
                             <span class="text-xs text-secondary-500 dark:text-gray-400">
-                                {{ \Carbon\Carbon::parse($evento->fecha)->format('d M, Y') }}
+                                {{ \Carbon\Carbon::parse($evento->fecha)->translatedFormat('d M, Y') }}
                             </span>
                         </div>
                         <h3 class="text-xl font-bold text-secondary-900 dark:text-white mb-2">{{ $evento->nombre }}</h3>

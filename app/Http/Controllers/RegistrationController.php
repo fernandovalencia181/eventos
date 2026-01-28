@@ -15,6 +15,17 @@ class RegistrationController extends Controller
 {
     public function create(Evento $evento)
     {
+        // 1. Verificar si el usuario ya tiene entrada
+        if (Auth::check()) {
+            if (Registration::where('event_id', $evento->id)->where('user_id', Auth::id())->exists()) {
+                return redirect()->route('mis.entradas')->with('info', '¡Ya tienes tu entrada! No necesitas registrarte de nuevo.');
+            }
+        }
+
+        // 2. Verificar aforo
+        if ($evento->lugares_disponibles <= 0) {
+            return redirect()->route('home')->with('error', 'Lo sentimos, este evento ya ha completado su aforo.');
+        }
         return view('registrations.create', compact('evento'));
     }
 
@@ -28,9 +39,24 @@ class RegistrationController extends Controller
             'guests.*.name' => 'required|string|max:255',
         ]);
 
+        // 0. Validar Aforo Disponible
+        $cantidadSolicitada = 1; // El titular cuenta como uno
+        if ($request->has('guests')) {
+            $cantidadSolicitada += count($request->guests);
+        }
+
+        if ($cantidadSolicitada > $evento->lugares_disponibles) {
+            return back()->withErrors(['error' => 'No hay suficiente espacio. Solo quedan ' . $evento->lugares_disponibles . ' lugares disponibles.']);
+        }
+
         // Verificar si ya existe registro con ese email para este evento
         if (Registration::where('event_id', $evento->id)->where('email', $request->email)->exists()) {
             return back()->withErrors(['email' => 'Ya existe una entrada registrada con este email para este evento.']);
+        }
+
+        // Verificar si el usuario autenticado ya tiene registro (doble seguridad)
+        if (Auth::check() && Registration::where('event_id', $evento->id)->where('user_id', Auth::id())->exists()) {
+            return redirect()->route('mis.entradas')->with('error', 'Ya tienes una entrada para este evento.');
         }
 
         try {
