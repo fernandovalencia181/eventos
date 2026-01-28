@@ -257,7 +257,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     // Búsqueda en tiempo real
     const buscar = document.getElementById('buscar_invitado');
@@ -308,4 +308,4 @@
         console.log('Ver detalles del invitado:', id);
     }
 </script>
-@endsection
+@endpush
