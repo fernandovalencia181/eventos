@@ -61,41 +61,22 @@
             <select id="estudios" name="estudios" required class="w-full bg-white border border-gray-300 text-gray-900 rounded-lg p-2.5 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                 <option value="" disabled selected>-- Selecciona una opción --</option>
                 
-                <optgroup label="ESO">
-                    <option value="1eso">1º ESO</option>
-                    <option value="2eso">2º ESO</option>
-                    <option value="3eso">3º ESO</option>
-                    <option value="4eso">4º ESO</option>
-                </optgroup>
-                
-                <optgroup label="Bachillerato">
-                    <option value="1bach">1º Bachillerato (Todas las modalidades)</option>
-                    <option value="2bach">2º Bachillerato (Todas las modalidades)</option>
-                </optgroup>
-                
                 <optgroup label="CFGM - Grado Medio">
-                    <option value="gm-gestion">Gestión Administrativa</option>
-                    <option value="gm-comercio">Actividades Comerciales</option>
-                    <option value="gm-smr">Sistemas Microinformáticos y Redes (SMR)</option>
-                    <option value="gm-teleco">Instalaciones de Telecomunicaciones</option>
-                    <option value="gm-electrica">Instalaciones Eléctricas y Automáticas</option>
-                    <option value="gm-video">Vídeo Disc-jockey y Sonido</option>
-                    <option value="gm-vehiculos">Electromecánica de Vehículos</option>
-                    <option value="gm-emergencias">Emergencias Sanitarias</option>
+                    <option value="CFGM Vídeo Discjòquei i so">CFGM Vídeo Discjòquei i so</option>
+                    <option value="CFGM Gestió Administrativa">CFGM Gestió Administrativa</option>
+                    <option value="CFGM Instal·lacions Elèctriques i Automàtiques">CFGM Instal·lacions Elèctriques i Automàtiques</option>
+                    <option value="CFGM Electromecànica de Vehicles Automòbils">CFGM Electromecànica de Vehicles Automòbils</option>
+                    <option value="CFGM Emergències Sanitàries">CFGM Emergències Sanitàries</option>
+                    <option value="CFGM Instal·lacions de Telecomunicacions">CFGM Instal·lacions de Telecomunicacions</option>
                 </optgroup>
                 
                 <optgroup label="CFGS - Grado Superior">
-                    <option value="gs-admin">Administración y Finanzas</option>
-                    <option value="gs-asir">Admin. de Sistemas Informáticos en Red (ASIR)</option>
-                    <option value="gs-dam">Desarrollo de Aplicaciones Multiplataforma (DAM)</option>
-                    <option value="gs-marketing">Marketing y Publicidad</option>
-                    <option value="gs-robotica">Automatización y Robótica Industrial</option>
-                    <option value="gs-automocion">Automoción</option>
-                </optgroup>
-
-                <optgroup label="PFI (Programas de Formación e Inserción)">
-                    <option value="pfi-informatica">Auxiliar de Informática</option>
-                    <option value="pfi-mecanica">Auxiliar de Mecánica</option>
+                    <option value="CFGS Automoció">CFGS Automoció</option>
+                    <option value="CFGS Administració i Finances">CFGS Administració i Finances</option>
+                    <option value="CFGS Comerç Internacional">CFGS Comerç Internacional</option>
+                    <option value="CFGS Desenvolupament d'Aplicacions Multiplataforma">CFGS Desenvolupament d'Aplicacions Multiplataforma</option>
+                    <option value="CFGS Prevenció de Riscos Professionals">CFGS Prevenció de Riscos Professionals</option>
+                    <option value="CFGS Automatització i Robòtica Industrial">CFGS Automatització i Robòtica Industrial</option>
                 </optgroup>
             </select>
         </div>
