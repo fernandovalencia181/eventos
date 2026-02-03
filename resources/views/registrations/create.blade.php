@@ -62,20 +62,21 @@
                 <option value="" disabled selected>-- Selecciona una opción --</option>
                 
                 <optgroup label="CFGM - Grado Medio">
-                    <option value="gm-gestion">CFGM Vídeo Discjòquei i so </option>
-                    <option value="gm-comercio">CFGM Gestió Administrativa</option>
-                    <option value="gm-smr">CFGM Instal·lacions Elèctriques i Automàtiques</option>
-                    <option value="gm-teleco">CFGM Electromecànica de Vehicles Automòbils</option>
-                    <option value="gm-electrica">CFGM Emergències Sanitàries </option>
-                    <option value="gm-video">CFGM Instal·lacions de Telecomunicacions</option>
+                    <option value="CFGM Vídeo Discjòquei i so">CFGM Vídeo Discjòquei i so</option>
+                    <option value="CFGM Gestió Administrativa">CFGM Gestió Administrativa</option>
+                    <option value="CFGM Instal·lacions Elèctriques i Automàtiques">CFGM Instal·lacions Elèctriques i Automàtiques</option>
+                    <option value="CFGM Electromecànica de Vehicles Automòbils">CFGM Electromecànica de Vehicles Automòbils</option>
+                    <option value="CFGM Emergències Sanitàries">CFGM Emergències Sanitàries</option>
+                    <option value="CFGM Instal·lacions de Telecomunicacions">CFGM Instal·lacions de Telecomunicacions</option>
                 </optgroup>
                 
                 <optgroup label="CFGS - Grado Superior">
-                    <option value="gs-admin">CFGS Automoció</option>
-                    <option value="gs-asir">CFGS Administració i Finances</option>
-                    <option value="gs-dam">CFGS Desenvolupament d'Aplicacions Multiplataforma</option>
-                    <option value="gs-marketing">CFGS Prevenció de Riscos Professionals</option>
-                    <option value="gs-robotica">CFGS Automatització i Robòtica Industrial</option>
+                    <option value="CFGS Automoció">CFGS Automoció</option>
+                    <option value="CFGS Administració i Finances">CFGS Administració i Finances</option>
+                    <option value="CFGS Comerç Internacional">CFGS Comerç Internacional</option>
+                    <option value="CFGS Desenvolupament d'Aplicacions Multiplataforma">CFGS Desenvolupament d'Aplicacions Multiplataforma</option>
+                    <option value="CFGS Prevenció de Riscos Professionals">CFGS Prevenció de Riscos Professionals</option>
+                    <option value="CFGS Automatització i Robòtica Industrial">CFGS Automatització i Robòtica Industrial</option>
                 </optgroup>
 
             </select>

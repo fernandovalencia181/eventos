@@ -104,10 +104,39 @@ class EventoController extends Controller
     }
 
     // --- FUNCIÓN 4: Ver Inscritos ---
-    public function users(Evento $evento)
+    public function users(Request $request, Evento $evento)
     {
-        // Traemos las registrations paginadas y con sus guests
-        $registrations = $evento->registrations()->with('guests')->latest()->paginate(20);
-        return view('admin.eventos.users', compact('evento', 'registrations'));
+        // Query base
+        $query = $evento->registrations()->with('guests', 'user');
+
+        // Búsqueda por texto (Nombre, Email, Teléfono del User, o Nombre de invitado)
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                // El titular
+                $q->where('name', 'like', "%$search%")
+                  ->orWhere('email', 'like', "%$search%")
+                  // Sus invitados
+                  ->orWhereHas('guests', function($q2) use ($search) {
+                      $q2->where('name', 'like', "%$search%");
+                  })
+                  // Su teléfono (si es usuario registrado)
+                  ->orWhereHas('user', function($q3) use ($search) {
+                      $q3->where('phone', 'like', "%$search%");
+                  });
+            });
+        }
+
+        // Filtro por Ciclo
+        if ($request->has('course') && $request->course != '') {
+            $query->where('course', $request->course);
+        }
+
+        $registrations = $query->latest()->paginate(20)->withQueryString();
+        
+        // Obtener lista de ciclos únicos para el dropdown
+        $cursos = $evento->registrations()->select('course')->distinct()->pluck('course');
+
+        return view('admin.eventos.users', compact('evento', 'registrations', 'cursos'));
     }
 }
