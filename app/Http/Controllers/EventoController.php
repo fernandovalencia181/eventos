@@ -16,8 +16,8 @@ class EventoController extends Controller
                          ->orderBy('fecha', 'asc')
                          ->get(); 
 
-        // 2. Retornamos la vista 'welcome' y le pasamos los datos
-        return view('welcome', compact('eventos'));
+        // 2. Retornamos la vista 'pages.welcome' y le pasamos los datos
+        return view('pages.welcome', compact('eventos'));
     }
     public function dashboard()
     {
@@ -26,7 +26,7 @@ class EventoController extends Controller
         $eventos = Evento::latest()->get(); 
 
         // 2. Retornamos la vista del admin pasando los datos
-        return view('admin.dashboard', compact('eventos'));
+        return view('admin.panel', compact('eventos'));
     }
     // Muestra el formulario
     public function create()
@@ -40,7 +40,7 @@ class EventoController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string',
-            'fecha' => 'required|date',
+            'fecha' => 'required|date|after:today',
             'lugar' => 'required|string',
             'aforo_maximo' => 'required|integer|min:1',
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de imagen (máx 2MB)
@@ -101,5 +101,13 @@ class EventoController extends Controller
     {
         $evento->delete();
         return redirect()->route('admin.dashboard')->with('success', 'Evento eliminado.');
+    }
+
+    // --- FUNCIÓN 4: Ver Inscritos ---
+    public function users(Evento $evento)
+    {
+        // Traemos las registrations paginadas y con sus guests
+        $registrations = $evento->registrations()->with('guests')->latest()->paginate(20);
+        return view('admin.eventos.users', compact('evento', 'registrations'));
     }
 }

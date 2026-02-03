@@ -12,4 +12,9 @@ class Guest extends Model
     {
         return $this->belongsTo(Registration::class);
     }
+
+    public function evento()
+    {
+        return $this->hasOneThrough(Evento::class, Registration::class, 'id', 'id', 'registration_id', 'event_id');
+    }
 }

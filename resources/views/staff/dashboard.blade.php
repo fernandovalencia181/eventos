@@ -1,0 +1,282 @@
+@extends('staff.layout')
+
+@section('title', 'Tauler Staff')
+
+@section('content')
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Capçalera -->
+    <div class="mb-8">
+        <div class="flex items-center gap-4">
+            <div class="relative w-16 h-16 bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:rotate-3 transition-all duration-300">
+                <div class="absolute inset-0 bg-white/20 rounded-3xl backdrop-blur-sm"></div>
+                <div class="relative z-10">
+                    <svg viewBox="0 0 32 32" class="w-8 h-8" fill="none">
+                        <rect x="4" y="4" width="10" height="10" rx="2" fill="white" opacity="0.9"/>
+                        <rect x="18" y="4" width="10" height="10" rx="2" fill="white" opacity="0.7"/>
+                        <rect x="4" y="18" width="10" height="10" rx="2" fill="white" opacity="0.7"/>
+                        <rect x="18" y="18" width="10" height="10" rx="2" fill="white" opacity="0.9"/>
+                    </svg>
+                </div>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Tauler de Control Staff</h1>
+                <p class="text-secondary-600 dark:text-secondary-400 mt-2">Vista general de les operacions de l'esdeveniment</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estadístiques Ràpides -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Validades Avui -->
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Validats Avui</h3>
+                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                    <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/>
+                        <path d="M8 12l2 2 5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-secondary-900 dark:text-white">{{ $stats['validadas_hoy'] }}</p>
+            <p class="text-sm text-green-600 dark:text-green-400 mt-2 inline-flex items-center gap-1">
+                <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
+                    <path d="M6 1l1 3h3l-2.5 2 1 3L6 7 3.5 9l1-3L2 4h3z"/>
+                </svg>
+                Accessos validats
+            </p>
+        </div>
+
+        <!-- Aforament Actual -->
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Aforament Actual</h3>
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                    <svg viewBox="0 0 24 24" class="w-6 h-6" fill="white">
+                        <circle cx="8" cy="6" r="3"/>
+                        <circle cx="16" cy="6" r="2.5" opacity="0.7"/>
+                        <path d="M2 18c0-2.8 2.2-5 5-5h2c2.8 0 5 2.2 5 5v1H2v-1z"/>
+                        <path d="M14 18c0-2 1.3-3.5 3-3.5h2c1.7 0 3 1.5 3 3.5v1h-8v-1z" opacity="0.7"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-secondary-900 dark:text-white">{{ $stats['aforo_actual'] }}</p>
+            <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 inline-flex items-center gap-1">
+                <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
+                    <circle cx="6" cy="4" r="2"/>
+                    <path d="M2 10c0-2 1.8-3.5 4-3.5s4 1.5 4 3.5v1H2v-1z"/>
+                </svg>
+                Persones dins
+            </p>
+        </div>
+
+        <!-- Convidats Especials -->
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Convidats Esp.</h3>
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                    <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
+                        <path d="M12 2l2.5 6.5L21 10l-5.5 4.5L17 21l-5-3.5L7 21l1.5-6.5L3 10l6.5-1.5L12 2z" fill="white"/>
+                        <circle cx="12" cy="10" r="2" fill="#FFD700"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-secondary-900 dark:text-white">{{ $stats['invitados'] }}</p>
+            <p class="text-sm text-purple-600 dark:text-purple-400 mt-2 inline-flex items-center gap-1">
+                <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
+                    <path d="M6 1l1.5 3h3l-2.5 2 1 3L6 7.5 3.5 9l1-3L2 4h3z"/>
+                </svg>
+                Registrats avui
+            </p>
+        </div>
+
+        <!-- Incidències Pendents -->
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Incidències</h3>
+                <div class="w-12 h-12 bg-gradient-to-br from-red-400 to-rose-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                    <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
+                        <path d="M12 2L2 20h20L12 2z" fill="white" stroke="white" stroke-width="2"/>
+                        <path d="M12 9v4" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="12" cy="16" r="1" fill="#ef4444"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-secondary-900 dark:text-white">{{ $stats['incidencias'] }}</p>
+            <p class="text-sm text-red-600 dark:text-red-400 mt-2 inline-flex items-center gap-1">
+                <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
+                    <circle cx="6" cy="6" r="5"/>
+                    <path d="M6 3v3" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="6" cy="8.5" r="0.5" fill="white"/>
+                </svg>
+                Pendents
+            </p>
+        </div>
+    </div>
+
+    <!-- Esdeveniments Propers i Pics d'Arribada -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Esdeveniments Propers -->
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+            <h3 class="text-lg font-bold text-secondary-900 dark:text-white mb-4 inline-flex items-center gap-2">
+                <svg viewBox="0 0 20 20" class="w-5 h-5" fill="currentColor">
+                    <rect x="3" y="4" width="14" height="13" rx="2" fill="currentColor" opacity="0.2"/>
+                    <rect x="3" y="2" width="14" height="4" rx="1" fill="currentColor"/>
+                    <circle cx="7" cy="9" r="1" fill="currentColor"/>
+                    <circle cx="10" cy="9" r="1" fill="currentColor"/>
+                    <circle cx="13" cy="9" r="1" fill="currentColor"/>
+                </svg>
+                Esdeveniments Propers
+            </h3>
+            <div class="space-y-3">
+                @forelse($eventos as $evento)
+                <div class="flex items-center justify-between p-3 bg-secondary-50 dark:bg-primary-800 rounded-lg">
+                    <div class="flex-1">
+                        <p class="font-medium text-secondary-900 dark:text-white">{{ $evento->nombre }}</p>
+                        <p class="text-sm text-secondary-600 dark:text-secondary-400">{{ $evento->fecha->format('d M Y - H:i') }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-bold text-primary-600 dark:text-primary-400">{{ $evento->checkins->count() }}</p>
+                        <p class="text-xs text-secondary-600 dark:text-secondary-400">/ {{ $evento->inscritos }}</p>
+                    </div>
+                </div>
+                @empty
+                <p class="text-center text-secondary-600 dark:text-secondary-400 py-8">No hi ha esdeveniments propers</p>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Pics d'Arribada -->
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+            <h3 class="text-lg font-bold text-secondary-900 dark:text-white mb-4 inline-flex items-center gap-2">
+                <svg viewBox="0 0 20 20" class="w-5 h-5" fill="currentColor">
+                    <path d="M2 16l3-4 3 3 4-6 4 4 2-3v6H2z" fill="currentColor" opacity="0.3"/>
+                    <path d="M2 16l3-4 3 3 4-6 4 4 2-3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Pics d'Arribada (Avui)
+            </h3>
+            <div class="space-y-3">
+                @forelse($picos_llegada as $pico)
+                <div class="flex items-center gap-4">
+                    <div class="w-16 text-sm font-medium text-secondary-900 dark:text-white">
+                        {{ str_pad($pico->hora, 2, '0', STR_PAD_LEFT) }}:00
+                    </div>
+                    <div class="flex-1">
+                        <div class="h-8 bg-secondary-200 dark:bg-primary-800 rounded-full overflow-hidden">
+                            @php
+                                $max = $picos_llegada->max('total');
+                                $width = $max > 0 ? ($pico->total / $max) * 100 : 0;
+                            @endphp
+                            <div class="h-full bg-gradient-to-r from-primary-500 to-primary-600 flex items-center justify-end px-3" style="width: {{ $width }}%;">
+                                <span class="text-xs font-bold text-white">{{ $pico->total }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @empty
+                <p class="text-center text-secondary-600 dark:text-secondary-400 py-8">No hi ha dades d'avui</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimes Validacions -->
+    <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+        <h3 class="text-lg font-bold text-secondary-900 dark:text-white mb-4 inline-flex items-center gap-2">
+            <svg viewBox="0 0 20 20" class="w-5 h-5" fill="currentColor">
+                <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
+                <path d="M10 5v5l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Últimes Validacions
+        </h3>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-secondary-200 dark:border-primary-800">
+                        <th class="text-left py-3 px-4 text-sm font-medium text-secondary-600 dark:text-secondary-400">Hora</th>
+                        <th class="text-left py-3 px-4 text-sm font-medium text-secondary-600 dark:text-secondary-400">Assistent</th>
+                        <th class="text-left py-3 px-4 text-sm font-medium text-secondary-600 dark:text-secondary-400">Esdeveniment</th>
+                        <th class="text-left py-3 px-4 text-sm font-medium text-secondary-600 dark:text-secondary-400">Mètode</th>
+                        <th class="text-left py-3 px-4 text-sm font-medium text-secondary-600 dark:text-secondary-400">Validat per</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($ultimas_validaciones as $validacion)
+                    <tr class="border-b border-secondary-100 dark:border-primary-800 hover:bg-secondary-50 dark:hover:bg-primary-800/50">
+                        <td class="py-3 px-4 text-sm text-secondary-900 dark:text-white">
+                            {{ $validacion->created_at->format('H:i:s') }}
+                        </td>
+                        <td class="py-3 px-4">
+                            <p class="text-sm font-medium text-secondary-900 dark:text-white">{{ $validacion->ticket->user->name ?? 'N/A' }}</p>
+                            <p class="text-xs text-secondary-600 dark:text-secondary-400">{{ $validacion->ticket->user->matricula ?? 'N/A' }}</p>
+                        </td>
+                        <td class="py-3 px-4 text-sm text-secondary-900 dark:text-white">
+                            {{ $validacion->evento->nombre }}
+                        </td>
+                        <td class="py-3 px-4">
+                            <span class="px-3 py-1 text-xs rounded-full font-medium inline-flex items-center gap-1 {{ $validacion->metodo === 'qr' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' }}">
+                                @if($validacion->metodo === 'qr')
+                                    <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
+                                        <rect x="1" y="1" width="4" height="4" rx="0.5"/>
+                                        <rect x="7" y="1" width="4" height="4" rx="0.5"/>
+                                        <rect x="1" y="7" width="4" height="4" rx="0.5"/>
+                                    </svg>
+                                    QR
+                                @else
+                                    <svg viewBox="0 0 12 12" class="w-3 h-3" fill="none">
+                                        <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    </svg>
+                                    Manual
+                                @endif
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-sm text-secondary-600 dark:text-secondary-400">
+                            {{ $validacion->staff->nombre ?? 'N/A' }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-secondary-600 dark:text-secondary-400">
+                            No hi ha validacions recents
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Accessos Ràpids -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <a href="{{ route('staff.scanner') }}" class="bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-lg p-6 hover:from-primary-700 hover:to-primary-800 transition shadow-lg transform hover:scale-105">
+            <div class="mb-3">
+                <svg viewBox="0 0 48 48" class="w-12 h-12" fill="none">
+                    <rect x="6" y="6" width="14" height="14" rx="2" stroke="white" stroke-width="3" fill="white" opacity="0.3"/>
+                    <rect x="28" y="6" width="14" height="14" rx="2" stroke="white" stroke-width="3" fill="white" opacity="0.3"/>
+                    <rect x="6" y="28" width="14" height="14" rx="2" stroke="white" stroke-width="3" fill="white" opacity="0.3"/>
+                    <circle cx="13" cy="13" r="3" fill="white"/>
+                    <circle cx="35" cy="13" r="3" fill="white"/>
+                    <circle cx="13" cy="35" r="3" fill="white"/>
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold mb-2">Escàner QR</h3>
+            <p class="text-primary-100 text-sm">Validar entrades amb codi QR</p>
+        </a>
+
+        <a href="{{ route('staff.asistencia') }}" class="bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg p-6 hover:from-green-700 hover:to-green-800 transition shadow-lg transform hover:scale-105">
+            <div class="mb-3">
+                <svg viewBox="0 0 48 48" class="w-12 h-12" fill="none">
+                    <rect x="8" y="6" width="32" height="36" rx="2" stroke="white" stroke-width="3" fill="white" opacity="0.2"/>
+                    <line x1="16" y1="16" x2="32" y2="16" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="16" y1="24" x2="32" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="16" y1="32" x2="26" y2="32" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold mb-2">Llista Assistència</h3>
+            <p class="text-green-100 text-sm">Veure i cercar assistents</p>
+        </a>
+    </div>
+
+</div>
+@endsection

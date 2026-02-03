@@ -1,9 +1,7 @@
 <section class="w-full">
-    @include('partials.settings-heading')
-
-    <x-settings.layout :heading="_('Contraseña')" :subheading="_('Asegúrate de que tu cuenta esté protegida con una contraseña larga y segura.')">
+    <x-settings.layout :heading="__('Contraseña')" :subheading="__('Asegúrate de que tu cuenta esté protegida con una contraseña larga y segura.')">
         
-        <form wire:submit="updatePassword" class="my-6 w-full space-y-6 bg-white p-6 rounded-xl shadow-sm border border-secondary-200">
+        <form wire:submit="updatePassword" class="space-y-6">
             
             <div>
                 <label for="current_password" class="block text-sm font-medium text-secondary-700">Contraseña Actual</label>

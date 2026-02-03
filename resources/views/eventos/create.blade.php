@@ -35,7 +35,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Fecha y Hora</label>
-                                <input type="datetime-local" name="fecha" value="{{ old('fecha') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="datetime-local" name="fecha" min="{{ date('Y-m-d\TH:i') }}" value="{{ old('fecha') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 @error('fecha') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             </div>
                             <div>

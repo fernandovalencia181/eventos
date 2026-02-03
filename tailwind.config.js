@@ -17,36 +17,36 @@ export default {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                // Paleta generada basada en el Azul La Salle Mollerussa
+                // Paleta basada en #033473 (blau fosc) i #F2E205 (groc)
                 primary: {
-                    50: '#f0f5fa',  // Fondo muy claro
-                    100: '#e1ebf5',
-                    200: '#c3d7eb',
-                    300: '#a5c3e1',
-                    400: '#699ccd',
-                    500: '#2d75b9', // Azul vibrante para botones/acciones
-                    600: '#245e94',
-                    700: '#1b466f',
-                    800: '#122f4a', // Tono cercano al logo
-                    900: '#0a1d30', // Tono más oscuro del fondo
-                    950: '#050f1a', // Extra oscuro
+                    50: '#e6eef5',
+                    100: '#ccdde9',
+                    200: '#99bbd3',
+                    300: '#6699bd',
+                    400: '#3377a7',
+                    500: '#035591', // Variació més clara del blau principal
+                    600: '#033473', // Color principal
+                    700: '#022857',
+                    800: '#021c3b',
+                    900: '#01101f',
+                    950: '#00080f',
                 },
                 secondary: {
-                    50: '#f8fafc',
-                    100: '#f1f5f9',
-                    200: '#e2e8f0',
-                    300: '#cbd5e1',
-                    400: '#94a3b8',
-                    500: '#64748b',
-                    600: '#475569',
-                    700: '#334155',
-                    800: '#1e293b',
-                    900: '#0f172a',
+                    50: '#fefce8',
+                    100: '#fef9c3',
+                    200: '#fef08a',
+                    300: '#fde047',
+                    400: '#facc15',
+                    500: '#F2E205', // Groc principal
+                    600: '#ca8a04',
+                    700: '#a16207',
+                    800: '#854d0e',
+                    900: '#713f12',
                 },
                 success: '#10b981',
                 danger: '#ef4444',
-                warning: '#f59e0b',
-                info: '#3b82f6',
+                warning: '#F2E205', // Mateix groc per warnings
+                info: '#033473', // Blau per info
             },
         },
     },
