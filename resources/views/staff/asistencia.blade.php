@@ -1,6 +1,6 @@
 @extends('staff.layout')
 
-@section('title', 'Llista d\'Assistència')
+@section('title', 'Lista de Asistencia')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,8 +22,8 @@
                 </div>
             </div>
             <div>
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Llista d'Assistència en Viu</h1>
-                <p class="text-secondary-600 dark:text-secondary-400 mt-2">Cerca manual per nom o matrícula</p>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Lista de Asistencia en Vivo</h1>
+                <p class="text-secondary-600 dark:text-secondary-400 mt-2">Búsqueda manual por nombre o matrícula</p>
             </div>
         </div>
         <a href="{{ route('staff.exportar', ['evento_id' => $evento_id]) }}" 
@@ -49,15 +49,15 @@
                             <circle cx="5" cy="7" r="0.8" fill="currentColor"/>
                             <circle cx="8" cy="7" r="0.8" fill="currentColor"/>
                         </svg>
-                        Esdeveniment
+                        Evento
                     </label>
                     <select name="evento_id" 
                             onchange="this.form.submit()"
                             class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
-                        <option value="">Tots els esdeveniments</option>
+                        <option value="">Todos los eventos</option>
                         @foreach($eventos as $evento)
                             <option value="{{ $evento->id }}" {{ $evento_id == $evento->id ? 'selected' : '' }}>
-                                {{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }} ({{ $evento->tickets_count }} entrades)
+                                {{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }} ({{ $evento->tickets_count }} entradas)
                             </option>
                         @endforeach
                     </select>
@@ -70,11 +70,11 @@
                             <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
                             <path d="M11 11l4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
-                        Cercar
+                        Buscar
                     </label>
                     <input type="text" 
                            id="buscar" 
-                           placeholder="Nom, matrícula o email..."
+                           placeholder="Nombre, matrícula o email..."
                            class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
                 </div>
             </div>

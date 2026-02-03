@@ -10,10 +10,10 @@
         <div class="md:flex md:items-center md:justify-between mb-8 gap-4">
             <div class="min-w-0 flex-1">
                 <h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight">
-                    Escàner QR
+                    Escáner QR
                 </h2>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Validació ràpida d'entrades mitjançant codis QR.
+                    Validación rápida de entradas mediante códigos QR.
                 </p>
             </div>
             <div class="mt-4 flex md:ml-4 md:mt-0 w-full md:w-auto">
@@ -30,9 +30,9 @@
 
         <!-- Selector de Evento -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-6 p-4 border border-gray-200 dark:border-gray-700">
-            <label for="evento_id" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white mb-2">Esdeveniment Actiu</label>
+            <label for="evento_id" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white mb-2">Evento Activo</label>
             <select id="evento_id" class="block w-full rounded-md border-0 py-3 pl-3 pr-10 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-600 sm:text-sm sm:leading-6 dark:bg-gray-900 text-base">
-                <option value="">Selecciona un esdeveniment...</option>
+                <option value="">Selecciona un evento...</option>
                 @foreach($eventos as $evento)
                     <option value="{{ $evento->id }}">{{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }}</option>
                 @endforeach
@@ -49,7 +49,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
                     </svg>
-                    <span>Iniciar Càmera</span>
+                    <span>Iniciar Cámara</span>
                 </button>
 
                 <div class="relative my-6">
@@ -57,7 +57,7 @@
                         <div class="w-full border-t border-gray-300 dark:border-gray-700"></div>
                     </div>
                     <div class="relative flex justify-center">
-                        <span class="bg-white dark:bg-gray-800 px-2 text-sm text-gray-500">o validació manual</span>
+                        <span class="bg-white dark:bg-gray-800 px-2 text-sm text-gray-500">o validación manual</span>
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
                     <input type="text" 
                            id="codigo_manual" 
                            class="block w-full rounded-md border-0 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6 dark:bg-gray-900 text-base" 
-                           placeholder="Codi de tiquet...">
+                           placeholder="Código de ticket...">
                     <button onclick="validarManual()" class="w-full sm:w-auto justify-center inline-flex items-center rounded-md bg-white dark:bg-gray-700 px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
                         Validar
                     </button>
@@ -80,11 +80,11 @@
                 <!-- Contadores -->
                 <div class="grid grid-cols-2 gap-4">
                     <div class="overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 py-5 border border-l-4 border-green-500 shadow sm:p-6">
-                        <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Validats</dt>
+                        <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Validados</dt>
                         <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 dark:text-white" id="validados">0</dd>
                     </div>
                     <div class="overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 py-5 border border-l-4 border-red-500 shadow sm:p-6">
-                        <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Incidències</dt>
+                        <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Incidencias</dt>
                         <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 dark:text-white" id="duplicados">0</dd>
                     </div>
                 </div>
@@ -102,6 +102,7 @@
     var scannerActivo = false;
     var validados = 0;
     var duplicados = 0;
+    var isProcessing = false; // Prevents double submissions
 
     // Función para iniciar/detener escáner
     function toggleScanner() {
@@ -152,11 +153,11 @@
             console.log('Scanner iniciado correctamente');
             scannerActivo = true;
             var btn = document.getElementById('toggleCamera');
-            btn.innerHTML = '<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg><span>Aturar Càmera</span>';
+            btn.innerHTML = '<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg><span>Detener Cámara</span>';
             btn.className = 'w-full flex items-center justify-center gap-2 rounded-md bg-red-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-red-500 transition-colors';
         }).catch(function(err) {
             console.error('Error iniciando scanner:', err);
-            alert('Error en accedir a la càmera: ' + err);
+            alert('Error al acceder a la cámara: ' + err);
             reader.style.display = 'none';
         });
     }
@@ -169,7 +170,7 @@
                 scannerActivo = false;
                 document.getElementById('reader').style.display = 'none';
                 var btn = document.getElementById('toggleCamera');
-                btn.innerHTML = '<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" /></svg><span>Iniciar Càmera</span>';
+                btn.innerHTML = '<svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" /></svg><span>Iniciar Cámara</span>';
                 btn.className = 'w-full flex items-center justify-center gap-2 rounded-md bg-primary-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 transition-colors';
             }).catch(function(err) {
                 console.error('Error deteniendo scanner:', err);
@@ -178,11 +179,13 @@
     }
 
     function validarCodigo(codigo) {
+        if (isProcessing) return; // Prevent spamming
+        
         var eventoId = document.getElementById('evento_id').value;
         console.log('Validando codigo:', codigo, 'evento:', eventoId);
 
         if (!eventoId) {
-            mostrarError('⚠️ Selecciona un esdeveniment primer');
+            mostrarError('⚠️ Selecciona un evento primero');
             return;
         }
 
@@ -193,10 +196,17 @@
             return;
         }
 
+        isProcessing = true;
+        // Pause scanner momentarily if active to prevent multiple reads
+        if(scannerActivo && html5QrCode) {
+            html5QrCode.pause();
+        }
+
         fetch('{{ route("staff.validar") }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json', // Force JSON response expectation
                 'X-CSRF-TOKEN': csrfToken.content
             },
             body: JSON.stringify({
@@ -205,6 +215,19 @@
             })
         })
         .then(function(response) {
+            // Check if response is OK (200-299)
+            if (!response.ok) {
+                return response.text().then(text => {
+                    try {
+                        const json = JSON.parse(text);
+                        throw new Error(json.mensaje || 'Error del servidor (' + response.status + ')');
+                    } catch (e) {
+                         // If not JSON, it's likely an HTML error page
+                        console.error('Error HTML:', text);
+                        throw new Error('Error del servidor (' + response.status + '). Revisa la consola.');
+                    }
+                });
+            }
             return response.json();
         })
         .then(function(data) {
@@ -221,7 +244,26 @@
         })
         .catch(function(error) {
             console.error('Error fetch:', error);
-            mostrarError('Error de connexió');
+            mostrarError(error.message || 'Error de conexión');
+        })
+        .finally(function() {
+            // Retrasar la reactivación del escáner para evitar lecturas múltiples y dar tiempo a ver el mensaje
+            if(scannerActivo && html5QrCode) {
+                setTimeout(() => {
+                    isProcessing = false;
+                    try {
+                        // Verificar que sigue activo antes de reanudar
+                        if(scannerActivo) { 
+                            html5QrCode.resume(); 
+                            console.log('Scanner reanudado');
+                        }
+                    } catch (e) {
+                        console.log('El scanner ya no estaba pausado o activo');
+                    }
+                }, 2500); // 2.5 segundos de pausa entre escaneos
+            } else {
+                isProcessing = false;
+            }
         });
     }
 

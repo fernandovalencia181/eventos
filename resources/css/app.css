@@ -26,6 +26,24 @@
     .btn-download {
         @apply flex items-center justify-center w-full px-4 py-2 bg-primary-600 text-white rounded-lg font-medium transition-colors hover:bg-primary-700 focus:ring-2 focus:ring-primary-500;
     }
+
+    /* Botones Modernos */
+    .btn-primary {
+        @apply inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 rounded-xl shadow-md bg-gradient-to-r from-primary-700 to-primary-600 hover:from-primary-600 hover:to-primary-500 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 active:scale-95;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-secondary-700 transition-all duration-200 bg-white border border-secondary-200 rounded-xl shadow-sm hover:bg-secondary-50 hover:text-secondary-900 hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-200 active:scale-95;
+    }
+
+    .btn-danger {
+        @apply inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 rounded-xl shadow-md bg-gradient-to-r from-danger to-red-600 hover:from-red-500 hover:to-red-600 hover:shadow-lg hover:-translate-y-0.5 box-border border-transparentfocus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger active:scale-95;
+    }
+
+    /* Inputs Modernos */
+    .input-modern {
+        @apply block w-full rounded-xl border-secondary-200 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm bg-white/50 backdrop-blur-sm transition-all duration-200;
+    }
 }
 
 @layer utilities {

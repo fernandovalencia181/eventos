@@ -73,7 +73,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-secondary-600 dark:text-secondary-400 mb-1">Validaciones Hoy</p>
-                    <p class="text-3xl font-bold text-primary-600 dark:text-primary-400">0</p>
+                    <p class="text-3xl font-bold text-primary-600 dark:text-primary-400">{{ $stats['validadas_hoy'] ?? 0 }}</p>
                 </div>
                 <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-blue-600 dark:text-blue-400">
@@ -87,7 +87,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-secondary-600 dark:text-secondary-400 mb-1">Eventos Activos</p>
-                    <p class="text-3xl font-bold text-green-600 dark:text-green-400">0</p>
+                    <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ $stats['eventos_activos'] ?? 0 }}</p>
                 </div>
                 <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-green-600 dark:text-green-400">
@@ -101,7 +101,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-secondary-600 dark:text-secondary-400 mb-1">Incidencias Abiertas</p>
-                    <p class="text-3xl font-bold text-red-600 dark:text-red-400">0</p>
+                    <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ $stats['incidencias'] ?? 0 }}</p>
                 </div>
                 <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-red-600 dark:text-red-400">
@@ -116,8 +116,28 @@
     <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md p-6 border border-secondary-200 dark:border-primary-800">
         <h2 class="text-xl font-bold text-secondary-900 dark:text-white mb-4">Actividad Reciente</h2>
         
-        <div class="text-center text-secondary-600 dark:text-secondary-400 py-8">
-            No hay actividad reciente
+        <div class="space-y-4">
+            @forelse($ultimas_validaciones as $val)
+                <div class="flex items-center justify-between border-b border-secondary-200 dark:border-primary-800 pb-2 last:border-0 last:pb-0">
+                    <div>
+                        <p class="font-medium text-secondary-900 dark:text-white">
+                            {{ $val->ticket->user->name ?? 'Invitado' }}
+                        </p>
+                        <p class="text-sm text-secondary-500 dark:text-secondary-400">
+                            {{ $val->evento->nombre ?? 'Evento' }}
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                            {{ $val->created_at->format('H:i') }}
+                        </span>
+                    </div>
+                </div>
+            @empty
+                <div class="text-center text-secondary-600 dark:text-secondary-400 py-8">
+                    No hay actividad reciente
+                </div>
+            @endforelse
         </div>
     </div>
 

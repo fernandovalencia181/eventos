@@ -9,6 +9,7 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class StaffController extends Controller
 {
@@ -50,12 +51,18 @@ class StaffController extends Controller
         return view('staff.dashboard', compact('stats', 'eventos', 'ultimas_validaciones', 'picos_llegada'));
     }
 
-    // Vista del scanner QR
+    // Vista del scanner QR (Dashboard version)
     public function scanner()
     {
         $eventos = Evento::all();
         $staff = Staff::where('activo', true)->get();
         return view('staff.scanner', compact('eventos', 'staff'));
+    }
+    
+    // Vista del scanner QR (Access Control Version)
+    public function scanView()
+    {
+        return view('staff.scan');
     }
 
     // Vista de validación manual
@@ -370,7 +377,7 @@ class StaffController extends Controller
         ]);
     }
 
-    // Validar ticket escaneado (QR)
+    // Validar ticket escaneado (QR) - Método del Dashboard existente
     public function validar(Request $request)
     {
         try {
@@ -405,23 +412,33 @@ class StaffController extends Controller
             }
         }
 
-        // Si no se encuentra ni en tickets ni en guests
+            // Si no se encuentra ni en tickets ni en guests
         if (!$ticket && !$guest) {
             return response()->json([
                 'success' => false,
-                'mensaje' => '❌ Entrada no vàlida o no pertany a aquest esdeveniment'
+                'mensaje' => '❌ Entrada no válida o no pertenece a este evento'
             ], 404);
         }
 
-        // Verificar si ya hizo check-in
+        // --- GESTIÓN DE INVITADOS (GUESTS) ---
         if ($esGuest) {
             // Para guests, verificamos por qr_token directamente
             $checkinPrevio = Asistencia::where('guest_qr_token', $request->codigo)->first();
             if ($checkinPrevio) {
+                // Si hace menos de 2 minutos, mostramos advertencia pero no error 400
+                if ($checkinPrevio->created_at->diffInMinutes(now()) < 2) {
+                    return response()->json([
+                        'success' => true, // True para mostrar en verde/amarillo
+                        'mensaje' => '⚠️ Invitado ya validado hace un momento (' . $checkinPrevio->created_at->format('H:i:s') . ')',
+                        'tipo' => 'guest',
+                        'nombre' => $guest->name
+                    ]);
+                }
+                
                 return response()->json([
                     'success' => false,
-                    'mensaje' => '⚠️ Convidat ja va fer check-in a les ' . $checkinPrevio->created_at->format('H:i')
-                ], 400);
+                    'mensaje' => '⚠️ Invitado ya accedió a las ' . $checkinPrevio->created_at->format('H:i')
+                ]); 
             }
 
             // Registrar check-in del guest
@@ -436,20 +453,53 @@ class StaffController extends Controller
 
             return response()->json([
                 'success' => true,
-                'mensaje' => '✅ Check-in exitós - Convidat: ' . $guest->name,
+                'mensaje' => '✅ Check-in exitoso - Invitado: ' . $guest->name,
                 'tipo' => 'guest',
                 'nombre' => $guest->name
             ]);
-        } else {
-            // Para tickets normales
-            $checkinPrevio = Asistencia::where('ticket_id', $ticket->id)->first();
-            if ($checkinPrevio) {
+        } 
+        
+        // --- GESTIÓN DE TICKETS REGULARES ---
+        else {
+            // Verificar estado y tiempos
+            if ($ticket->estado === 'adentro') {
+                // Buscamos el último movimiento
+                $ultimoCheckin = Asistencia::where('ticket_id', $ticket->id)
+                    ->latest('created_at')
+                    ->first();
+
+                // 1. Protección Anti-Passback Temporal (Rebote)
+                // Si hace menos de 1 minuto que entró, es un doble escaneo accidental.
+                if ($ultimoCheckin && $ultimoCheckin->created_at->diffInMinutes(now()) < 1) {
+                    return response()->json([
+                        'success' => true, // Success para no mostrar alerta roja
+                        'mensaje' => '✅ Entrada ya registrada hace unos segundos (Pase adelante)',
+                        'tipo' => 'ticket',
+                        'ticket' => $ticket
+                    ]);
+                }
+
+                // 2. Proceso de SALIDA (Cambio de estado)
+                // Si ha pasado el tiempo de rebote, asumimos que está saliendo
+                $ticket->update(['estado' => 'afuera']);
+                
                 return response()->json([
-                    'success' => false,
-                    'mensaje' => '⚠️ Ja va fer check-in a les ' . $checkinPrevio->created_at->format('H:i')
-                ], 400);
+                    'success' => true,
+                    'mensaje' => '👋 Salida registrada. Estado cambiado a "Afuera".',
+                    'tipo' => 'ticket',
+                    'ticket' => $ticket
+                ]);
             }
 
+            if ($ticket->estado === 'afuera') {
+                return response()->json([
+                    'success' => false,
+                    'mensaje' => '⚠️ Usuario marcado como FUERA. Debe usar el QR Dinámico de reingreso (Mi Pase).',
+                ]);
+            }
+
+            // Si el estado es 'generada' (O cualquier otro inicial), procedemos al Check-in
+            
             // Registrar check-in del ticket
             Asistencia::create([
                 'ticket_id' => $ticket->id,
@@ -460,9 +510,12 @@ class StaffController extends Controller
                 'metodo' => 'qr',
             ]);
 
+            // Actualizar estado del ticket
+            $ticket->update(['estado' => 'adentro']);
+
             return response()->json([
                 'success' => true,
-                'mensaje' => '✅ Check-in exitós',
+                'mensaje' => '✅ Entrada Válida - Bienvenido/a',
                 'tipo' => 'ticket',
                 'ticket' => $ticket
             ]);
@@ -559,30 +612,10 @@ class StaffController extends Controller
         
         return response()->stream($callback, 200, $headers);
     }
-}
-
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use App\Models\Ticket;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
-
-class StaffController extends Controller
-{
-    /**
-     * Muestra la vista de escaneo para el staff.
-     */
-    public function index()
-    {
-        // Retorna la vista donde estará el lector QR (JS)
-        return view('staff.scan');
-    }
 
     /**
      * Procesa el escaneo de un código QR.
+     * (Integrado para gestión de Re-entradas y Check-in/Check-out con estados)
      */
     public function scan(Request $request)
     {
@@ -601,6 +634,31 @@ class StaffController extends Controller
                               ->where('token_reentrada_expira', '>', now());
                     })
                     ->first();
+
+        // Soporte para Guests en el método scan (nuevo)
+        if (!$ticket) {
+            $guest = \App\Models\Guest::where('qr_token', $qrCode)->first();
+            if ($guest) {
+                if ($mode === 'checkout') {
+                     return response()->json(['success' => false, 'message' => 'Guest Checkout no implementado aún.'], 400);
+                }
+                
+                $checkin = Asistencia::where('guest_qr_token', $qrCode)->first();
+                if ($checkin) {
+                    return response()->json(['success' => false, 'message' => 'El invitado ya ha ingresado.'], 400);
+                }
+                
+                Asistencia::create([
+                    'guest_qr_token' => $qrCode,
+                    'staff_id' => Auth::id(),
+                    'evento_id' => $guest->registration->event_id,
+                    'fecha_checkin' => now(),
+                    'metodo' => 'qr',
+                ]);
+                
+                return response()->json(['success' => true, 'message' => 'Bienvenido Invitado: ' . $guest->name]);
+            }
+        }
 
         if (!$ticket) {
             return response()->json(['success' => false, 'message' => 'Código QR no válido o expirado.'], 404);
@@ -626,23 +684,30 @@ class StaffController extends Controller
 
         // Si es estado 'generada' (Entrada Inicial)
         if ($ticket->estado === 'generada') {
-             // Validar que NO use un token de re-entrada si todavía no entró nunca?
-             // Si el invitado usa QR dinámico desde el principio, caerá aquí.
-             
              $ticket->update(['estado' => 'adentro']);
+             // Aquí podríamos registrar tambien en Asistencia (modelo del compañero) para compatibilidad
+             try {
+                 Asistencia::create([
+                     'ticket_id' => $ticket->id,
+                     'evento_id' => $ticket->evento_id,
+                     'staff_id' => Auth::id(), // Si es staff
+                     'tipo' => 'entrada',
+                     'metodo' => 'qr'
+                 ]);
+             } catch(\Exception $e) {}
+
              return response()->json(['success' => true, 'message' => 'Bienvenido (Check-in Inicial)', 'ticket' => $ticket]);
         }
 
         // Si es estado 'afuera' (Re-entrada)
         if ($ticket->estado === 'afuera') {
-            // Para re-entrar, DEBE ser un QR dinámico válido (que ya comprobamos en la query inicial)
-            // Verificar si el código usado es el estatico.
+            // Verificar si el código usado es el estatico (NO PERMITIDO)
             if ($usedQr === $ticket->token_seguridad_qr) {
-                return response()->json(['success' => false, 'message' => 'QR Estático anulado. Use QR Dinámico.'], 400);
+                return response()->json(['success' => false, 'message' => 'QR Estático anulado para re-entrada. Use Mi Pase QR Dinámico.'], 400);
             }
 
             $ticket->update(['estado' => 'adentro']);
-            // Invalidar el token dinámico usado inmediatamente para evitar doble uso rapido
+            // Invalidar el token dinámico usado
             $ticket->update(['token_reentrada' => null, 'token_reentrada_expira' => null]);
             
             return response()->json(['success' => true, 'message' => 'Bienvenido de nuevo (Re-Check-in)', 'ticket' => $ticket]);

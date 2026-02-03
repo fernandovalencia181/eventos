@@ -38,6 +38,10 @@ Route::get('/dashboard', function () {
         return redirect()->route('admin.dashboard');
     }
     
+    if ($user->rol === 'staff') {
+        return redirect()->route('staff.index');
+    }
+    
     return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
