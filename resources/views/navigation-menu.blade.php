@@ -34,6 +34,9 @@
                             <x-nav-link :href="route('mis.entradas')" :active="request()->routeIs('mis.entradas')">
                                 Mis Entradas
                             </x-nav-link>
+                            <x-nav-link :href="route('mi.pase')" :active="request()->routeIs('mi.pase')">
+                                Mi Pase (QR)
+                            </x-nav-link>
                         @endif
                     @endauth
                 </div>

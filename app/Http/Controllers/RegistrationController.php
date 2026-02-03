@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Evento;
 use App\Models\Registration;
 use App\Models\Guest;
+use App\Models\Ticket; // Importante
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -26,6 +27,7 @@ class RegistrationController extends Controller
             'estudios' => 'required|string',
             'guests' => 'nullable|array|max:3',
             'guests.*.name' => 'required|string|max:255',
+            'guests.*.phone' => 'nullable|string|max:20', // Validar telefono
         ]);
 
         // Verificar si ya existe registro con ese email para este evento
@@ -46,13 +48,32 @@ class RegistrationController extends Controller
                 'qr_token' => (string) Str::uuid(),
             ]);
 
+            // Sincronizar con tabla ENTRADAS (Ticket) para control de acceso
+            Ticket::create([
+                'evento_id' => $evento->id,
+                'user_id' => Auth::check() ? Auth::id() : null,
+                'nombre_asistente' => $request->name,
+                'estado' => 'generada',
+                'token_seguridad_qr' => $registration->qr_token,
+            ]);
+
             // 2. Crear Acompañantes
             if ($request->has('guests')) {
                 foreach ($request->guests as $guestData) {
-                    Guest::create([
+                    $guest = Guest::create([
                         'registration_id' => $registration->id,
                         'name' => $guestData['name'],
+                        'phone' => $guestData['phone'] ?? null,
                         'qr_token' => (string) Str::uuid(),
+                    ]);
+
+                    // Crear Ticket para el acompañante también
+                    Ticket::create([
+                        'evento_id' => $evento->id,
+                        'user_id' => null, // Guest no tiene usuario propio aun
+                        'nombre_asistente' => $guestData['name'],
+                        'estado' => 'generada',
+                        'token_seguridad_qr' => $guest->qr_token,
                     ]);
                 }
             }
