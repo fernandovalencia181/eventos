@@ -1,4 +1,4 @@
-<footer class="bg-primary-900 border-t border-primary-800 mt-auto">
+<footer class="bg-gradient-to-r from-primary-950/95 to-primary-800/90 backdrop-blur-md border-t border-primary-700/30 mt-auto shadow-inner-lg">
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             

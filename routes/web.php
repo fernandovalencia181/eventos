@@ -38,6 +38,10 @@ Route::get('/dashboard', function () {
         return redirect()->route('admin.dashboard');
     }
     
+    if ($user->rol === 'staff') {
+        return redirect()->route('staff.index');
+    }
+    
     return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -107,6 +111,8 @@ Route::middleware(['auth'])->group(function () {
 // ---> ZONA COMPAÑERO 2 (Tickets y Registro - Público o Auth)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mis-entradas', MisEntradas::class)->name('mis.entradas');
+    Route::get('/mi-pase', \App\Livewire\MiPase::class)->name('mi.pase'); // Nueva ruta para el pase dinámico
+
     // Calendario movido a Admin
     
     // Reserva de entradas (POST desde el Lobby)
@@ -115,12 +121,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Descarga de PDF
     Route::get('/ticket/{ticket}/descargar', [PdfController::class, 'descargar'])
         ->name('ticket.descargar');
+
+    // Rutas para el Usuario Propietario (Sistema Invitados y Dinámico)
+    Route::post('/tickets/{ticket}/share', [TicketController::class, 'createGuestLink'])->name('tickets.share');
+    Route::post('/tickets/{ticket}/dynamic-qr', [TicketController::class, 'getDynamicQr'])->name('tickets.dynamic_qr');
 });
 
 
 // ---> ZONA COMPAÑERO 3 (Staff y Scanner)
-Route::middleware(['auth'])->prefix('staff')->name('staff.')->group(function () {
+Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(function () {
     Route::get('/', [StaffController::class, 'index'])->name('index');
     Route::get('/scanner', [StaffController::class, 'scanner'])->name('scanner');
+    Route::get('/validacion', [StaffController::class, 'validacion'])->name('validacion');
+    Route::get('/asistencia', [StaffController::class, 'asistencia'])->name('asistencia');
+    Route::get('/invitados', [StaffController::class, 'invitados'])->name('invitados');
+    Route::get('/incidencias', [StaffController::class, 'incidencias'])->name('incidencias');
+    
+    // AJAX y acciones
     Route::post('/validar', [StaffController::class, 'validar'])->name('validar');
+    Route::post('/buscar', [StaffController::class, 'buscar'])->name('buscar');
+    Route::post('/validar-manual', [StaffController::class, 'validarManual'])->name('validar-manual');
+    Route::post('/registrar-incidencia', [StaffController::class, 'registrarIncidencia'])->name('registrar-incidencia');
+    Route::post('/registrar-invitado', [StaffController::class, 'registrarInvitado'])->name('registrar-invitado');
+    Route::post('/emitir-constancia', [StaffController::class, 'emitirConstancia'])->name('emitir-constancia');
+    Route::get('/exportar', [StaffController::class, 'exportar'])->name('exportar');
 });
+
+// ZONA INVITADOS (Público pero con Token)
+Route::get('/pase', [TicketController::class, 'guestView'])->name('guest.pass');
+Route::get('/api/guest/qr/{token}', [TicketController::class, 'guestDynamicQr'])->name('guest.qr_api');

@@ -20,8 +20,8 @@
         @csrf
 
         <div>
-            <label for="password" class="block text-sm font-medium text-secondary-700">Contraseña</label>
-            <input id="password" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="password" name="password" required autocomplete="current-password" autofocus />
+            <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input id="password" class="block mt-1 w-full rounded-lg border-indigo-200 bg-gray-50 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" type="password" name="password" required autocomplete="current-password" autofocus />
         </div>
 
         <div class="flex justify-end mt-6">

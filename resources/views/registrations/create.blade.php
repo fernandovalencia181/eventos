@@ -78,6 +78,7 @@
                     <option value="CFGS Prevenció de Riscos Professionals">CFGS Prevenció de Riscos Professionals</option>
                     <option value="CFGS Automatització i Robòtica Industrial">CFGS Automatització i Robòtica Industrial</option>
                 </optgroup>
+
             </select>
         </div>
 
@@ -86,20 +87,25 @@
             <h3 class="text-lg font-medium text-gray-900 mb-2">Acompañantes</h3>
             
             <template x-for="(guest, index) in guests" :key="index">
-                <div class="mb-3 flex gap-2">
-                    <input type="text" x-model="guest.name" :name="'guests['+index+'][name]'" placeholder="Nombre del Acompañante" required class="flex-1 bg-white border border-gray-300 text-gray-900 rounded-lg p-2.5 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                    <button type="button" @click="guests.splice(index, 1)" class="text-red-600 hover:text-red-800 p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <div class="mb-3 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm space-y-3 relative">
+                     <button type="button" @click="guests.splice(index, 1)" class="absolute top-2 right-2 text-red-600 hover:text-red-800 p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input type="text" x-model="guest.name" :name="'guests['+index+'][name]'" placeholder="Nombre del Acompañante" required class="block w-full mt-1 bg-white border border-gray-300 text-gray-900 rounded-lg p-2.5 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Teléfono (WhatsApp)</label>
+                        <input type="text" x-model="guest.phone" :name="'guests['+index+'][phone]'" placeholder="+34 600..." class="block w-full mt-1 bg-white border border-gray-300 text-gray-900 rounded-lg p-2.5 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+                         <p class="text-xs text-gray-500 mt-1">Necesario para enviarle su entrada por WhatsApp.</p>
+                    </div>
                 </div>
             </template>
 
-            <button type="button" 
-                @click="if(guests.length < limit) guests.push({name: ''})" 
-                x-show="guests.length < limit" 
-                class="mt-2 text-sm text-indigo-600 hover:text-indigo-800 flex items-center font-medium">
+            <button type="button" @click="if(guests.length < 3) guests.push({name: ''})" x-show="guests.length < 3" class="mt-2 text-sm text-indigo-600 hover:text-indigo-800 flex items-center font-medium">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>

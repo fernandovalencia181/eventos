@@ -17,6 +17,10 @@ class Evento extends Model
         'imagen',
     ];
 
+    protected $casts = [
+        'fecha' => 'datetime',
+    ];
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class, 'evento_id');
@@ -25,6 +29,11 @@ class Evento extends Model
     public function registrations()
     {
         return $this->hasMany(Registration::class, 'event_id');
+    }
+
+    public function checkins()
+    {
+        return $this->hasMany(Asistencia::class, 'evento_id');
     }
 
     // Calcular cuánta gente hay registrada (Titulares + Acompañantes)

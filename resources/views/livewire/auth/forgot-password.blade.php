@@ -26,8 +26,8 @@
         @csrf
 
         <div class="block">
-            <label for="email" class="block text-sm font-medium text-secondary-700">Correo Electrónico</label>
-            <input id="email" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="email" name="email" :value="old('email')" required autofocus />
+            <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+            <input id="email" class="block mt-1 w-full rounded-lg border-indigo-200 bg-gray-50 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" type="email" name="email" :value="old('email')" required autofocus />
         </div>
 
         <div class="flex items-center justify-end mt-6">

@@ -26,13 +26,13 @@
             @csrf
 
             <div class="mt-4" x-show="!recovery">
-                <label for="code" class="block text-sm font-medium text-secondary-700">Código de Autenticación</label>
-                <input id="code" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-center tracking-widest text-lg" type="text" inputmode="numeric" name="code" autofocus x-ref="code" autocomplete="one-time-code" />
+                <label for="code" class="block text-sm font-medium text-gray-700">Código de Autenticación</label>
+                <input id="code" class="block mt-1 w-full rounded-lg border-indigo-200 bg-gray-50 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 text-center tracking-widest text-lg shadow-sm" type="text" inputmode="numeric" name="code" autofocus x-ref="code" autocomplete="one-time-code" />
             </div>
 
             <div class="mt-4" x-show="recovery" style="display: none;">
-                <label for="recovery_code" class="block text-sm font-medium text-secondary-700">Código de Recuperación</label>
-                <input id="recovery_code" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="text" name="recovery_code" x-ref="recovery_code" autocomplete="one-time-code" />
+                <label for="recovery_code" class="block text-sm font-medium text-gray-700">Código de Recuperación</label>
+                <input id="recovery_code" class="block mt-1 w-full rounded-lg border-indigo-200 bg-gray-50 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" type="text" name="recovery_code" x-ref="recovery_code" autocomplete="one-time-code" />
             </div>
 
             <div class="flex items-center justify-end mt-6">
