@@ -22,8 +22,8 @@ class EventoController extends Controller
     public function dashboard()
     {
         // 1. Obtenemos todos los eventos de la base de datos
-        // Usamos latest() para que salgan los nuevos primero
-        $eventos = Evento::latest()->get(); 
+        // Usamos latest() para que salgan los nuevos primero y paginamos
+        $eventos = Evento::latest()->paginate(10); 
 
         // 2. Retornamos la vista del admin pasando los datos
         return view('admin.panel', compact('eventos'));

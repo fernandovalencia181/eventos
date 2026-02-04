@@ -89,6 +89,9 @@
                         @endforelse
                     </tbody>
                 </table>
+                <div class="px-6 py-4 border-t border-gray-200">
+                    {{ $eventos->links() }}
+                </div>
             </div>
 
             <!-- VISTA DE MÓVIL (Tarjetas) -->
@@ -164,6 +167,10 @@
                         <p class="text-secondary-500">No hay eventos visibles.</p>
                     </div>
                 @endforelse
+                
+                <div class="mt-4">
+                    {{ $eventos->links() }}
+                </div>
             </div>
 
         </div>

@@ -14,6 +14,35 @@
                 </div>
             @endif
 
+            <!-- FILTROS -->
+            <div class="mb-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <form method="GET" action="{{ route('users.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Buscador -->
+                    <div class="md:col-span-3">
+                        <label for="search" class="block text-xs font-bold text-gray-500 uppercase mb-1">Buscar</label>
+                        <div class="relative">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Nombre, email o teléfono..." class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtro Rol -->
+                    <div>
+                        <label for="rol" class="block text-xs font-bold text-gray-500 uppercase mb-1">Rol</label>
+                        <select name="rol" class="w-full border border-gray-300 rounded-lg text-sm py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500" onchange="this.form.submit()">
+                            <option value="">Todos</option>
+                            <option value="admin" {{ request('rol') == 'admin' ? 'selected' : '' }}>Administrador</option>
+                            <option value="staff" {{ request('rol') == 'staff' ? 'selected' : '' }}>Staff</option>
+                            <option value="user" {{ request('rol') == 'user' ? 'selected' : '' }}>Usuario</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
             <!-- VISTA DE ESCRITORIO (Tabla) -->
             <div class="hidden md:block bg-white overflow-hidden shadow-xl sm:rounded-lg border border-secondary-200">
                 <table class="min-w-full divide-y divide-secondary-200">
