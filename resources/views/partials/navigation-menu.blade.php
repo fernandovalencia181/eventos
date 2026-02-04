@@ -65,6 +65,32 @@
 
             <div class="hidden lg:flex lg:items-center lg:ml-6 space-x-4">
                 
+                {{-- Switch Idioma ES/CA --}}
+                <div x-data="{ lang: localStorage.getItem('selectedLang') || 'es' }" class="flex items-center gap-2 notranslate">
+                    <span class="text-xs font-medium" :class="lang === 'es' ? 'text-white' : 'text-primary-400'">ES</span>
+                    <button 
+                        @click="
+                            lang = lang === 'es' ? 'ca' : 'es';
+                            localStorage.setItem('selectedLang', lang);
+                            if (lang === 'ca') {
+                                document.cookie = 'googtrans=/es/ca; path=/';
+                                location.reload();
+                            } else {
+                                document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+                                location.reload();
+                            }
+                        "
+                        class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-primary-900"
+                        :class="lang === 'ca' ? 'bg-indigo-500' : 'bg-primary-700'"
+                    >
+                        <span 
+                            class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+                            :class="lang === 'ca' ? 'translate-x-6' : 'translate-x-1'"
+                        ></span>
+                    </button>
+                    <span class="text-xs font-medium" :class="lang === 'ca' ? 'text-white' : 'text-primary-400'">CA</span>
+                </div>
+                
                 <!-- Dark Mode Toggle -->
                 <button x-data="{ 
                             darkMode: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),

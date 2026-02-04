@@ -76,8 +76,8 @@
             <p class="text-sm text-primary-400">
                 &copy; {{ date('Y') }} EventosU. Todos los derechos reservados.
             </p>
-            <div class="flex space-x-4 mt-4 md:mt-0">
-                <span class="text-xs text-primary-500">LA SALLE MOLLERUSSA</span>
+            <div class="flex items-center mt-4 md:mt-0">
+                <img src="{{ asset('images/logo-lasalle.jpg') }}" alt="La Salle Mollerussa" class="h-16 object-contain rounded-2xl">
             </div>
         </div>
     </div>
