@@ -3,11 +3,11 @@
 @section('title', 'Escàner QR')
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<div class="py-6 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
-        <div class="md:flex md:items-center md:justify-between mb-8 gap-4">
+        <div class="md:flex md:items-center md:justify-between mb-6 sm:mb-8 gap-4">
             <div class="min-w-0 flex-1">
                 <h2 class="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight">
                     Escáner QR
@@ -18,7 +18,7 @@
             </div>
             <div class="mt-4 flex md:ml-4 md:mt-0 w-full md:w-auto">
                 <span class="inline-flex rounded-md shadow-sm w-full md:w-auto">
-                    <button type="button" onclick="location.reload()" class="w-full md:w-auto justify-center inline-flex items-center rounded-md bg-white dark:bg-gray-700 px-4 py-3 md:py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <button type="button" onclick="location.reload()" class="w-full md:w-auto justify-center inline-flex items-center rounded-md bg-white dark:bg-gray-700 px-4 py-3 md:py-2 text-sm font-semibold text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                         <svg class="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h-2.433a.75.75 0 000 1.5h3.989a.75.75 0 00.53-.22l.5-.5a6.375 6.375 0 009.466-2.26.75.75 0 00-1.252-.756l-.868.513c-.235.138-.517.07-.674-.162l-.248-.42z" clip-rule="evenodd" />
                         </svg>
@@ -39,12 +39,12 @@
             </select>
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-6">
+        <div class="grid lg:grid-cols-2 gap-4 sm:gap-6">
             <!-- Escáner -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
-                <div id="reader" class="w-full rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-900 mb-4 min-h-[300px]" style="display:none;"></div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+                <div id="reader" class="w-full rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-900 mb-4 min-h-[250px] sm:min-h-[300px]" style="display:none;"></div>
                 
-                <button id="toggleCamera" onclick="toggleScanner()" class="w-full flex items-center justify-center gap-2 rounded-md bg-primary-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+                <button id="toggleCamera" onclick="toggleScanner()" class="w-full flex items-center justify-center gap-2 rounded-md bg-primary-600 px-3 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 active:bg-primary-700">
                     <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />

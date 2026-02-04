@@ -33,13 +33,13 @@
         </div>
 
         <div>
-            <label for="email" class="block text-sm font-medium text-secondary-700">Correo Electrónico</label>
-            <input id="email" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <label for="email" class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+            <input id="email" class="block mt-1 w-full rounded-lg border-indigo-200 bg-gray-50 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
         </div>
 
         <div class="mt-4">
-            <label for="password" class="block text-sm font-medium text-secondary-700">Contraseña</label>
-            <input id="password" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="password" name="password" required autocomplete="current-password" />
+            <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input id="password" class="block mt-1 w-full rounded-lg border-indigo-200 bg-gray-50 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" type="password" name="password" required autocomplete="current-password" />
         </div>
 
         <div class="flex items-center justify-between mt-4">
@@ -49,18 +49,18 @@
             </label>
 
             @if (Route::has('password.request'))
-                <a class="text-sm text-secondary-600 hover:text-primary-600 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" href="{{ route('password.request') }}">
+                <a class="text-xs sm:text-sm text-gray-500 hover:text-indigo-600 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors" href="{{ route('password.request') }}">
                     ¿Olvidaste tu contraseña?
                 </a>
             @endif
         </div>
 
-        <div class="flex items-center justify-end mt-6">
-            <a href="{{ route('register') }}" class="text-sm text-secondary-600 hover:text-primary-600 underline mr-4">
+        <div class="flex flex-col gap-4 mt-6 sm:flex-row sm:items-center sm:justify-between">
+            <a href="{{ route('register') }}" class="text-sm text-gray-500 hover:text-indigo-600 underline text-center sm:text-left transition-colors order-2 sm:order-1">
                 ¿No tienes cuenta?
             </a>
 
-            <button type="submit" class="bg-primary-600 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:bg-primary-700 transition transform hover:-translate-y-0.5">
+            <button type="submit" class="w-full sm:w-auto bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-md hover:bg-indigo-700 transition-all transform hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 order-1 sm:order-2">
                 Iniciar Sesión
             </button>
         </div>
