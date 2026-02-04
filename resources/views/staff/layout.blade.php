@@ -19,6 +19,23 @@
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    {{-- Google Translate --}}
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'es',
+                includedLanguages: 'ca,es',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+        .goog-te-banner-frame, .skiptranslate, .goog-te-spinner-pos { display: none !important; }
+        body { top: 0 !important; }
+    </style>
+    
     @stack('styles')
 </head>
 <body class="font-sans antialiased bg-secondary-50 dark:bg-primary-950 text-secondary-900 dark:text-gray-100 min-h-screen transition-colors duration-300 flex flex-col">

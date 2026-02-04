@@ -11,6 +11,22 @@
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
+        {{-- Google Translate --}}
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({
+                    pageLanguage: 'es',
+                    includedLanguages: 'ca,es',
+                    autoDisplay: false
+                }, 'google_translate_element');
+            }
+        </script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        <style>
+            .goog-te-banner-frame, .skiptranslate, .goog-te-spinner-pos { display: none !important; }
+            body { top: 0 !important; }
+        </style>
     </head>
     <body class="font-sans text-gray-900 antialiased bg-[#010d1e]" style="background-color: #010d1e;">
         {{-- Background Gradient Wrapper --}}

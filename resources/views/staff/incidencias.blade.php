@@ -4,14 +4,14 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    
+
     <div class="mb-8 flex justify-between items-center">
         <div>
             <h1 class="text-3xl font-bold text-primary-900 dark:text-white">⚠️ Gestión de Incidencias</h1>
             <p class="text-secondary-600 dark:text-secondary-400 mt-2">Reportar y gestionar problemas durante los eventos</p>
         </div>
-        <button onclick="document.getElementById('modal_incidencia').classList.remove('hidden')" 
-                class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition shadow-md inline-flex items-center gap-2">
+        <button onclick="document.getElementById('modal_incidencia').classList.remove('hidden')"
+            class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition shadow-md inline-flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
@@ -86,7 +86,7 @@
             <select id="filtro_evento" class="bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
                 <option value="">Evento: Todos</option>
                 @foreach($eventos as $evento)
-                    <option value="{{ $evento->id }}">{{ $evento->nombre }}</option>
+                <option value="{{ $evento->id }}">{{ $evento->nombre }}</option>
                 @endforeach
             </select>
         </div>
@@ -101,15 +101,15 @@
                     <div class="flex items-center gap-3 mb-3">
                         <span class="text-2xl">
                             @if($incidencia->tipo === 'qr_perdido')
-                                📱
+                            📱
                             @elseif($incidencia->tipo === 'error_datos')
-                                ❌
+                            ❌
                             @elseif($incidencia->tipo === 'acceso_denegado')
-                                🚫
+                            🚫
                             @elseif($incidencia->tipo === 'tecnico')
-                                🔧
+                            🔧
                             @else
-                                ⚠️
+                            ⚠️
                             @endif
                         </span>
                         <h3 class="text-lg font-bold text-secondary-900 dark:text-white">{{ ucfirst(str_replace('_', ' ', $incidencia->tipo)) }}</h3>
@@ -182,7 +182,7 @@
                     <select name="evento_id" required class="w-full bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
                         <option value="">Seleccionar evento...</option>
                         @foreach($eventos as $evento)
-                            <option value="{{ $evento->id }}">{{ $evento->nombre }}</option>
+                        <option value="{{ $evento->id }}">{{ $evento->nombre }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -220,29 +220,29 @@
     const filtroEstado = document.getElementById('filtro_estado');
     const filtroPrioridad = document.getElementById('filtro_prioridad');
     const filtroEvento = document.getElementById('filtro_evento');
-    
+
     function aplicarFiltros() {
         const estado = filtroEstado.value;
         const prioridad = filtroPrioridad.value;
         const evento = filtroEvento.value;
-        
+
         const incidencias = document.querySelectorAll('#lista-incidencias > div');
-        
+
         incidencias.forEach(inc => {
             const incEstado = inc.getAttribute('data-estado');
             const incPrioridad = inc.getAttribute('data-prioridad');
             const incEvento = inc.getAttribute('data-evento');
-            
+
             let mostrar = true;
-            
+
             if (estado && incEstado !== estado) mostrar = false;
             if (prioridad && incPrioridad !== prioridad) mostrar = false;
             if (evento && incEvento !== evento) mostrar = false;
-            
+
             inc.style.display = mostrar ? '' : 'none';
         });
     }
-    
+
     filtroEstado.addEventListener('change', aplicarFiltros);
     filtroPrioridad.addEventListener('change', aplicarFiltros);
     filtroEvento.addEventListener('change', aplicarFiltros);
