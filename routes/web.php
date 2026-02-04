@@ -111,6 +111,8 @@ Route::middleware(['auth'])->group(function () {
 // ---> ZONA COMPAÑERO 2 (Tickets y Registro - Público o Auth)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mis-entradas', MisEntradas::class)->name('mis.entradas');
+    Route::get('/mi-pase', \App\Livewire\MiPase::class)->name('mi.pase'); // Nueva ruta para el pase dinámico
+
     // Calendario movido a Admin
     
     // Reserva de entradas (POST desde el Lobby)
@@ -119,6 +121,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Descarga de PDF
     Route::get('/ticket/{ticket}/descargar', [PdfController::class, 'descargar'])
         ->name('ticket.descargar');
+
+    // Rutas para el Usuario Propietario (Sistema Invitados y Dinámico)
+    Route::post('/tickets/{ticket}/share', [TicketController::class, 'createGuestLink'])->name('tickets.share');
+    Route::post('/tickets/{ticket}/dynamic-qr', [TicketController::class, 'getDynamicQr'])->name('tickets.dynamic_qr');
 });
 
 
@@ -140,3 +146,7 @@ Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(fun
     Route::post('/emitir-constancia', [StaffController::class, 'emitirConstancia'])->name('emitir-constancia');
     Route::get('/exportar', [StaffController::class, 'exportar'])->name('exportar');
 });
+
+// ZONA INVITADOS (Público pero con Token)
+Route::get('/pase', [TicketController::class, 'guestView'])->name('guest.pass');
+Route::get('/api/guest/qr/{token}', [TicketController::class, 'guestDynamicQr'])->name('guest.qr_api');

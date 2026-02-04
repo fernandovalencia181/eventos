@@ -16,7 +16,15 @@ class Ticket extends Model
         'user_id',
         'nombre_asistente',
         'estado',
-        'token_seguridad_qr'
+        'token_seguridad_qr',
+        'token_reentrada',
+        'token_reentrada_expira',
+        'token_invitado',
+        'dispositivo_invitado',
+    ];
+
+    protected $casts = [
+        'token_reentrada_expira' => 'datetime',
     ];
 
     public function evento()

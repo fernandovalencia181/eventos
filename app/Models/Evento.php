@@ -31,6 +31,11 @@ class Evento extends Model
         return $this->hasMany(Registration::class, 'event_id');
     }
 
+    public function checkins()
+    {
+        return $this->hasMany(Asistencia::class, 'evento_id');
+    }
+
     // Calcular cuánta gente hay registrada (Titulares + Acompañantes)
     public function getOcupacionAttribute()
     {
