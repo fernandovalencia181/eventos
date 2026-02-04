@@ -30,6 +30,9 @@
                             <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                                 Usuarios
                             </x-nav-link>
+                            <x-nav-link :href="route('admin.staff.index')" :active="request()->routeIs('admin.staff.*')">
+                                Equipo Staff
+                            </x-nav-link>
                             <x-nav-link :href="route('calendario')" :active="request()->routeIs('calendario')">
                                 Calendario
                             </x-nav-link>
@@ -40,14 +43,13 @@
                                 Panel Staff
                             </x-nav-link>
                             
-                            <!-- Links adicionales Staff (solo visibles si estamos en rutas de staff o se prefiere siempre) -->
-                            @if(request()->routeIs('staff.*'))
-                                <x-nav-link :href="route('staff.scanner')" :active="request()->routeIs('staff.scanner')">
-                                    Escáner
-                                </x-nav-link>
-                                <x-nav-link :href="route('staff.asistencia')" :active="request()->routeIs('staff.asistencia')">
-                                    Asistencia
-                                </x-nav-link>
+                            <x-nav-link :href="route('staff.scanner')" :active="request()->routeIs('staff.scanner')">
+                                Escáner
+                            </x-nav-link>
+                            <x-nav-link :href="route('staff.asistencia')" :active="request()->routeIs('staff.asistencia')">
+                                Asistencia
+                            </x-nav-link>
+                            @if(Auth::user()->hasPermission('access_guests'))
                                 <x-nav-link :href="route('staff.invitados')" :active="request()->routeIs('staff.invitados')">
                                     Invitados
                                 </x-nav-link>
@@ -171,18 +173,19 @@
                     <a href="{{ route('eventos.create') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('eventos.create') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Crear Evento</a>
                     <a href="{{ route('admin.dashboard') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Panel Admin</a>
                     <a href="{{ route('users.index') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('users.*') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Usuarios</a>
+                    <a href="{{ route('admin.staff.index') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('admin.staff.*') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Equipo Staff</a>
                     <a href="{{ route('calendario') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('calendario') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Calendario</a>
                 @endif
                 
                 @if(Auth::user()->isStaff())
                     <a href="{{ route('staff.index') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('staff.index') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Panel Staff</a>
-                    @if(request()->routeIs('staff.*'))
-                        <div class="pl-4 space-y-1 mt-1 border-l-2 border-white/20">
-                            <a href="{{ route('staff.scanner') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.scanner') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Escáner</a>
-                            <a href="{{ route('staff.asistencia') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.asistencia') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Asistencia</a>
+                    <div class="pl-4 space-y-1 mt-1 border-l-2 border-white/20">
+                        <a href="{{ route('staff.scanner') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.scanner') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Escáner</a>
+                        <a href="{{ route('staff.asistencia') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.asistencia') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Asistencia</a>
+                        @if(Auth::user()->hasPermission('access_guests'))
                             <a href="{{ route('staff.invitados') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.invitados') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Invitados</a>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 @endif
 
                 @if(!Auth::user()->isAdmin() && !Auth::user()->isStaff())
@@ -239,7 +242,7 @@
             @else
                 <div class="mt-3 space-y-3 px-6 pb-4">
                     <a href="{{ route('login') }}" class="block text-center w-full py-3 text-white border border-white/20 rounded-xl font-bold hover:bg-white/10 transition backdrop-blur-sm">Iniciar Sesión</a>
-                    <a href="{{ route('register') }}" class="block text-center w-full py-3 bg-indigo-600/90 hover:bg-indigo-500 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition backdrop-blur-sm">Registrarse</a>
+                    <a href="{{ route('register') }}" class="block text-center w-full py-3 bg-blue-600/90 hover:bg-blue-500 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 transition backdrop-blur-sm">Registrarse</a>
                 </div>
             @endauth
         </div>

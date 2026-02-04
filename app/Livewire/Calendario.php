@@ -37,8 +37,8 @@ class Calendario extends Component
                 'title' => $evento->nombre,
                 'date' => Carbon::parse($evento->fecha),
                 'type' => 'evento',
-                // Puedes agregar más colores o lógica aquí
-                'color' => 'bg-indigo-100 text-indigo-700' 
+                // Estilo Cyan/Blue por defecto
+                'color' => 'bg-cyan-100 text-cyan-800 border-cyan-500 dark:bg-cyan-900/40 dark:text-cyan-300 dark:border-cyan-400' 
             ];
         });
 
