@@ -49,12 +49,12 @@
                             <x-nav-link :href="route('staff.asistencia')" :active="request()->routeIs('staff.asistencia')">
                                 Asistencia
                             </x-nav-link>
+                            <x-nav-link :href="route('staff.incidencias')" :active="request()->routeIs('staff.incidencias')">
+                                Incidencias
+                            </x-nav-link>
                             @if(Auth::user()->hasPermission('access_guests'))
                                 <x-nav-link :href="route('staff.invitados')" :active="request()->routeIs('staff.invitados')">
                                     Invitados
-                                </x-nav-link>
-                                <x-nav-link :href="route('staff.incidencias')" :active="request()->routeIs('staff.incidencias')">
-                                    Incidencias
                                 </x-nav-link>
                             @endif
                         @endif
@@ -211,11 +211,11 @@
                     <div class="pl-4 space-y-1 mt-1 border-l-2 border-white/20">
                         <a href="{{ route('staff.scanner') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.scanner') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Escáner</a>
                         <a href="{{ route('staff.asistencia') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.asistencia') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Asistencia</a>
+                        <a href="{{ route('staff.incidencias') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.incidencias') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Incidencias</a>
                         @if(Auth::user()->hasPermission('access_guests'))
                             <a href="{{ route('staff.invitados') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.invitados') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Invitados</a>
-                            <a href="{{ route('staff.incidencias') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.incidencias') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Incidencias</a>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 @endif
 
                 @if(!Auth::user()->isAdmin() && !Auth::user()->isStaff())
