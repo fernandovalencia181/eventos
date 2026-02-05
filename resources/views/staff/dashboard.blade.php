@@ -8,7 +8,7 @@
     <!-- Cabecera -->
     <div class="mb-8">
         <div class="flex items-center gap-4">
-            <div class="relative w-16 h-16 bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:rotate-3 transition-all duration-300">
+            <div class="relative w-16 h-16 bg-gradient-to-br from-cyan-400 via-blue-500 to-blue-700 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:rotate-3 transition-all duration-300">
                 <div class="absolute inset-0 bg-white/20 rounded-3xl backdrop-blur-sm"></div>
                 <div class="relative z-10">
                     <svg viewBox="0 0 32 32" class="w-8 h-8" fill="none">
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div>
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Panel de Control de Staff</h1>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-blue-700 bg-clip-text text-transparent">Panel de Control de Staff</h1>
                 <p class="text-secondary-600 dark:text-secondary-400 mt-2">Vista general de las operaciones del evento</p>
             </div>
         </div>
@@ -52,7 +52,7 @@
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Aforo Actual</h3>
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
                     <svg viewBox="0 0 24 24" class="w-6 h-6" fill="white">
                         <circle cx="8" cy="6" r="3"/>
                         <circle cx="16" cy="6" r="2.5" opacity="0.7"/>

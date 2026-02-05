@@ -76,6 +76,13 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/users/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
+    // Gestión de Roles
+    Route::resource('roles', \App\Http\Controllers\RoleController::class);
+
+    // Gestión de Equipo Staff (Cuentas)
+    Route::post('admin/staff/{staff}/toggle-permission', [\App\Http\Controllers\AdminStaffController::class, 'togglePermission'])->name('admin.staff.toggle-permission');
+    Route::resource('admin/staff', \App\Http\Controllers\AdminStaffController::class, ['as' => 'admin']);
+
     // Aquí irán futuras rutas de admin (editar, borrar, escanear, etc.)
 });
 

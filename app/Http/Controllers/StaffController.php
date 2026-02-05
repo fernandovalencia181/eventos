@@ -54,14 +54,35 @@ class StaffController extends Controller
     // Vista del scanner QR (Dashboard version)
     public function scanner()
     {
+        $user = Auth::user();
+        
+        // Si tiene evento asignado, usar ese directamente
+        if ($user->evento_id) {
+            $evento = Evento::find($user->evento_id);
+            // Renderizamos la vista de escaneo directo (nueva vista o adaptamos scanView)
+            return view('staff.scan', compact('evento'));
+        }
+
         $eventos = Evento::all();
         $staff = Staff::where('activo', true)->get();
         return view('staff.scanner', compact('eventos', 'staff'));
     }
     
     // Vista del scanner QR (Access Control Version)
-    public function scanView()
+    public function scanView(Request $request)
     {
+        // Si llega por parámetro
+        if ($request->has('evento_id')) {
+            $evento = Evento::find($request->evento_id);
+            return view('staff.scan', compact('evento'));
+        }
+        
+        // Si el usuario tiene evento asignado
+        if (Auth::user()->evento_id) {
+            $evento = Evento::find(Auth::user()->evento_id);
+            return view('staff.scan', compact('evento'));
+        }
+
         return view('staff.scan');
     }
 
@@ -94,6 +115,10 @@ class StaffController extends Controller
     // Vista de invitados
     public function invitados()
     {
+        if (!Auth::user()->hasPermission('access_guests')) {
+            abort(403, 'No tienes permiso para acceder a la gestión de invitados.');
+        }
+
         $eventos = Evento::where('fecha', '>=', now())->orderBy('fecha')->get();
         $invitados = \App\Models\InvitadoEspecial::with('evento')->latest()->get();
         
@@ -275,6 +300,10 @@ class StaffController extends Controller
     // Registrar invitado especial
     public function registrarInvitado(Request $request)
     {
+        if (!Auth::user()->hasPermission('access_guests')) {
+            abort(403);
+        }
+
         $request->validate([
             'evento_id' => 'required|exists:eventos,id',
             'nombre' => 'required|string|max:255',

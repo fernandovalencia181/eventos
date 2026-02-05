@@ -209,7 +209,7 @@
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
             <div class="flex items-center justify-between mb-2">
                 <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Última Hora</h3>
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                     <svg viewBox="0 0 20 20" class="w-5 h-5" fill="white">
                         <circle cx="10" cy="10" r="8" stroke="white" stroke-width="2" fill="none"/>
                         <path d="M10 5v5l3 3" stroke="white" stroke-width="2" stroke-linecap="round"/>

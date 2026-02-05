@@ -91,23 +91,23 @@
         </div>
     </div>
 
-    <!-- Tabla de invitados -->
-    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg border border-secondary-200">
+    <!-- Tabla de invitados (Desktop) -->
+    <div class="hidden md:block bg-white dark:bg-primary-900 overflow-hidden shadow-xl sm:rounded-lg border border-secondary-200 dark:border-primary-800">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-secondary-200" id="tabla-invitados">
-                <thead class="bg-secondary-50">
+            <table class="min-w-full divide-y divide-secondary-200 dark:divide-primary-800" id="tabla-invitados">
+                <thead class="bg-secondary-50 dark:bg-primary-800">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Invitado</th>
-                        <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Evento</th>
-                        <th class="hidden xl:table-cell px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Contacto</th>
-                        <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Cargo/Empresa</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">Estado</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-secondary-500 uppercase tracking-wider">Acciones</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-secondary-400 uppercase tracking-wider">Invitado</th>
+                        <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-secondary-400 uppercase tracking-wider">Evento</th>
+                        <th class="hidden xl:table-cell px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-secondary-400 uppercase tracking-wider">Contacto</th>
+                        <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-secondary-400 uppercase tracking-wider">Cargo/Empresa</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-secondary-500 dark:text-secondary-400 uppercase tracking-wider">Estado</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-secondary-500 dark:text-secondary-400 uppercase tracking-wider">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-secondary-200">
+                <tbody class="bg-white dark:bg-primary-900 divide-y divide-secondary-200 dark:divide-primary-800">
                     @forelse($invitados as $invitado)
-                    <tr class="hover:bg-secondary-50 transition" 
+                    <tr class="hover:bg-secondary-50 dark:hover:bg-primary-800 transition" 
                         data-nombre="{{ strtolower($invitado->nombre) }}" 
                         data-email="{{ strtolower($invitado->email ?? '') }}" 
                         data-empresa="{{ strtolower($invitado->empresa ?? '') }}"
@@ -127,7 +127,7 @@
                         <td class="hidden lg:table-cell px-6 py-4 text-sm text-secondary-900 dark:text-white">
                             <p class="font-medium">{{ $invitado->evento->nombre ?? 'N/A' }}</p>
                             <p class="text-xs text-secondary-600 dark:text-secondary-400">
-                                {{ $invitado->evento->fecha->format('d/m/Y') ?? '' }}
+                                {{ $invitado->evento->fecha ? $invitado->evento->fecha->format('d/m/Y') : '' }}
                             </p>
                         </td>
                         <td class="hidden xl:table-cell px-6 py-4 text-sm">
@@ -167,16 +167,82 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center">
-                            <div class="text-6xl mb-4">👥</div>
-                            <p class="text-lg font-medium text-secondary-900 dark:text-white mb-2">No hay invitados registrados</p>
-                            <p class="text-secondary-600 dark:text-secondary-400">Agrega ponentes, personal externo o VIPs</p>
+                        <td colspan="6" class="px-6 py-12 text-center text-secondary-500 dark:text-secondary-400">
+                            <div class="flex flex-col items-center justify-center">
+                                <svg class="w-12 h-12 mb-4 text-secondary-300 dark:text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                <p class="text-lg font-medium">No hay invitados registrados</p>
+                                <p class="text-sm">Comienza agregando uno nuevo.</p>
+                            </div>
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Vista Móvil (Cards) -->
+    <div class="md:hidden space-y-4" id="cards-invitados">
+        @forelse($invitados as $invitado)
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-4 transition-all hover:shadow-lg"
+             data-nombre="{{ strtolower($invitado->nombre) }}" 
+             data-email="{{ strtolower($invitado->email ?? '') }}" 
+             data-empresa="{{ strtolower($invitado->empresa ?? '') }}"
+             data-evento="{{ $invitado->evento_id }}"
+             data-estado="{{ $invitado->estado }}">
+            
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                        {{ substr($invitado->nombre, 0, 1) }}
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-secondary-900 dark:text-white">{{ $invitado->nombre }}</h3>
+                        <p class="text-xs text-secondary-500 dark:text-secondary-400">{{ $invitado->cargo ?? 'Invitado' }}</p>
+                    </div>
+                </div>
+                <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                    {{ $invitado->estado === 'validado' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                       ($invitado->estado === 'confirmado' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 
+                       'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400') }}">
+                    {{ ucfirst($invitado->estado ?? 'pendiente') }}
+                </span>
+            </div>
+            
+            <div class="space-y-2 text-sm text-secondary-600 dark:text-secondary-300 mb-4">
+                @if($invitado->empresa)
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    {{ $invitado->empresa }}
+                </div>
+                @endif
+                
+                @if($invitado->evento)
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-secondary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {{ $invitado->evento->nombre }}
+                </div>
+                @endif
+            </div>
+
+            <div class="pt-3 border-t border-secondary-100 dark:border-primary-800 flex justify-between items-center">
+                <span class="text-xs text-secondary-400">ID: {{ $invitado->id }}</span>
+                <button onclick="verDetalles({{ $invitado->id }})" class="text-sm text-blue-600 dark:text-blue-400 font-medium hover:underline">
+                    Ver Detalles →
+                </button>
+            </div>
+        </div>
+        @empty
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow p-6 text-center">
+            <p class="text-secondary-500 dark:text-secondary-400">No hay invitados registrados</p>
+        </div>
+        @endforelse
     </div>
 
 </div>
@@ -269,9 +335,13 @@
         const evento = filtroEvento.value;
         const estado = filtroEstado.value;
         
-        const rows = document.querySelectorAll('#tabla-invitados tbody tr');
+        // Seleccionar filas de tabla y tarjetas móviles
+        const rows = document.querySelectorAll('#tabla-invitados tbody tr, #cards-invitados > div');
         
         rows.forEach(row => {
+            // Ignorar elementos sin datos (mensajes de "no hay registros")
+            if (!row.getAttribute('data-nombre') && !row.hasAttribute('data-nombre')) return;
+
             const nombre = row.getAttribute('data-nombre') || '';
             const email = row.getAttribute('data-email') || '';
             const empresa = row.getAttribute('data-empresa') || '';
