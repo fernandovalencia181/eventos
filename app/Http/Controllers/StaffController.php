@@ -16,18 +16,30 @@ class StaffController extends Controller
     // Página principal de staff (Dashboard)
     public function index()
     {
+        $user = Auth::user();
+        $eventoId = $user->evento_id;
+
         $stats = [
-            'validadas_hoy' => Asistencia::whereDate('created_at', today())->count(),
-            'aforo_actual' => Asistencia::whereDate('created_at', today())->distinct('ticket_id')->count(),
-            'invitados' => \App\Models\InvitadoEspecial::whereDate('created_at', today())->count(),
-            'incidencias' => \App\Models\Incidencia::where('estado', 'pendiente')->count(),
-            'eventos_activos' => Evento::where('fecha', '>=', now())->count(),
-            'total_inscritos' => Ticket::where('estado', '!=', 'cancelada')->count(),
+            'validadas_hoy' => Asistencia::when($eventoId, fn($q) => $q->where('evento_id', $eventoId))
+                ->whereDate('created_at', today())->count(),
+            'aforo_actual' => Asistencia::when($eventoId, fn($q) => $q->where('evento_id', $eventoId))
+                ->whereDate('created_at', today())->distinct('ticket_id')->count(),
+            'invitados' => \App\Models\InvitadoEspecial::when($eventoId, fn($q) => $q->where('evento_id', $eventoId))
+                ->whereDate('created_at', today())->count(),
+            'incidencias' => \App\Models\Incidencia::when($eventoId, fn($q) => $q->where('evento_id', $eventoId))
+                ->where('estado', 'pendiente')->count(),
+            'eventos_activos' => Evento::when($eventoId, fn($q) => $q->where('id', $eventoId))
+                ->where('fecha', '>=', now())->count(),
+            'total_inscritos' => Ticket::when($eventoId, fn($q) => $q->where('evento_id', $eventoId))
+                ->where('estado', '!=', 'cancelada')->count(),
         ];
 
-        // Eventos próximos
-        $eventos = Evento::where('fecha', '>=', now())
-            ->orderBy('fecha')
+        // Evento Actual (Asignado) o Próximos
+        $eventosQuery = Evento::where('fecha', '>=', now());
+        if ($eventoId) {
+            $eventosQuery->where('id', $eventoId);
+        }
+        $eventos = $eventosQuery->orderBy('fecha')
             ->take(5)
             ->withCount(['tickets as inscritos'])
             ->with(['checkins' => function($q) {
@@ -36,14 +48,20 @@ class StaffController extends Controller
             ->get();
 
         // Últimas validaciones
-        $ultimas_validaciones = Asistencia::with(['ticket.user', 'evento', 'staff'])
-            ->latest()
+        $validacionesQuery = Asistencia::with(['ticket.user', 'evento', 'staff']);
+        if ($eventoId) {
+            $validacionesQuery->where('evento_id', $eventoId);
+        }
+        $ultimas_validaciones = $validacionesQuery->latest()
             ->take(10)
             ->get();
 
         // Picos de llegada (por hora)
-        $picos_llegada = Asistencia::whereDate('created_at', today())
-            ->selectRaw('HOUR(created_at) as hora, COUNT(*) as total')
+        $picosQuery = Asistencia::whereDate('created_at', today());
+        if ($eventoId) {
+            $picosQuery->where('evento_id', $eventoId);
+        }
+        $picos_llegada = $picosQuery->selectRaw('HOUR(created_at) as hora, COUNT(*) as total')
             ->groupBy('hora')
             ->orderBy('hora')
             ->get();

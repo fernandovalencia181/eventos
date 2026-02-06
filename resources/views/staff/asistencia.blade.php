@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
-    <!-- Capçalera -->
+    <!-- Cabecera -->
     <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="flex items-center gap-4 w-full md:w-auto">
             <div class="relative w-16 h-16 bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:-rotate-3 transition-all duration-300">
@@ -23,7 +23,7 @@
             </div>
             <div>
                 <h1 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Lista de Asistencia en Vivo</h1>
-                <p class="text-secondary-600 dark:text-secondary-400 mt-2">Búsqueda manual por nombre o matrícula</p>
+                <p class="text-secondary-600 dark:text-secondary-400 mt-2">Búsqueda manual por nombre o email</p>
             </div>
         </div>
         <a href="{{ route('staff.exportar', ['evento_id' => $evento_id]) }}" 
@@ -36,11 +36,11 @@
         </a>
     </div>
 
-    <!-- Filtres -->
+    <!-- Filtros -->
     <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6 mb-6">
         <form method="GET" action="{{ route('staff.asistencia') }}" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Filtre per Esdeveniment -->
+                <!-- Filtro por Evento -->
                 <div>
                     <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2 inline-flex items-center gap-2">
                         <svg viewBox="0 0 16 16" class="w-4 h-4" fill="currentColor">
@@ -70,7 +70,7 @@
                     @endif
                 </div>
 
-                <!-- Cerca -->
+                <!-- Búsqueda -->
                 <div>
                     <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2 inline-flex items-center gap-2">
                         <svg viewBox="0 0 16 16" class="w-4 h-4" fill="currentColor">
@@ -81,14 +81,14 @@
                     </label>
                     <input type="text" 
                            id="buscar" 
-                           placeholder="Nombre, matrícula o email..."
+                           placeholder="Nombre o email..."
                            class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
                 </div>
             </div>
         </form>
     </div>
 
-    <!-- Taula d'Assistències (Desktop) -->
+    <!-- Tabla de Asistencias (Desktop) -->
     <div class="hidden md:block bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full" id="tabla-asistencia">
@@ -96,11 +96,9 @@
                     <tr>
                         <th class="hidden md:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">#</th>
                         <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Hora</th>
-                        <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Assistant</th>
-                        <th class="hidden sm:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Matrícula</th>
-                        <th class="hidden lg:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Esdeveniment</th>
-                        <th class="hidden xl:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Mètode</th>
-                        <th class="hidden md:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Estat</th>
+                        <th class="text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Asistente</th>
+                        <th class="hidden xl:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Método</th>
+                        <th class="hidden md:table-cell text-left py-4 px-6 text-sm font-bold text-secondary-900 dark:text-white">Estado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,10 +106,9 @@
                     @php
                         $user = $asistencia->ticket?->user ?? $asistencia->guest;
                         $userName = $user?->name ?? $user?->nombre ?? '';
-                        $userMatricula = $asistencia->ticket?->user?->matricula ?? '';
                         $userEmail = $user?->email ?? '';
                     @endphp
-                    <tr class="border-b border-secondary-100 dark:border-primary-800 hover:bg-secondary-50 dark:hover:bg-primary-800/50 transition" data-nombre="{{ strtolower($userName) }}" data-matricula="{{ strtolower($userMatricula) }}" data-email="{{ strtolower($userEmail) }}">
+                    <tr class="border-b border-secondary-100 dark:border-primary-800 hover:bg-secondary-50 dark:hover:bg-primary-800/50 transition" data-nombre="{{ strtolower($userName) }}" data-email="{{ strtolower($userEmail) }}">
                         <td class="hidden md:table-cell py-4 px-6 text-sm text-secondary-600 dark:text-secondary-400">
                             {{ ($asistencias->currentPage() - 1) * $asistencias->perPage() + $index + 1 }}
                         </td>
@@ -135,14 +132,6 @@
                                     <p class="text-xs text-secondary-600 dark:text-secondary-400">{{ $userEmail ?: 'N/A' }}</p>
                                 </div>
                             </div>
-                        </td>
-                        <td class="hidden sm:table-cell py-4 px-6">
-                            <span class="px-3 py-1 text-sm font-mono bg-secondary-100 dark:bg-primary-800 text-secondary-900 dark:text-white rounded-full">
-                                {{ $userMatricula ?: ($asistencia->guest ? 'INVITADO' : 'N/A') }}
-                            </span>
-                        </td>
-                        <td class="hidden lg:table-cell py-4 px-6 text-sm text-secondary-900 dark:text-white">
-                            {{ $asistencia->evento->nombre }}
                         </td>
                         <td class="hidden xl:table-cell py-4 px-6">
                             <span class="px-3 py-1 text-xs font-medium rounded-full inline-flex items-center gap-1 {{ $asistencia->metodo === 'qr' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' }}">
@@ -168,13 +157,13 @@
                                     <circle cx="6" cy="6" r="5"/>
                                     <path d="M4 6l1.5 1.5L9 4" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
                                 </svg>
-                                Validat
+                                Validado
                             </span>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="py-12 text-center">
+                        <td colspan="5" class="py-12 text-center">
                             <div class="inline-block">
                                 <svg viewBox="0 0 64 64" class="w-16 h-16 animate-pulse" fill="none">
                                     <circle cx="32" cy="32" r="28" stroke="#94a3b8" stroke-width="2" fill="none"/>
@@ -182,7 +171,7 @@
                                     <path d="M32 16v16l8 8" stroke="#64748b" stroke-width="2.5" stroke-linecap="round"/>
                                 </svg>
                             </div>
-                            <p class="text-secondary-600 dark:text-secondary-400 mt-4">No hi ha assistències registrades</p>
+                            <p class="text-secondary-600 dark:text-secondary-400 mt-4">No hay asistencias registradas</p>
                         </td>
                     </tr>
                     @endforelse
@@ -190,7 +179,7 @@
             </table>
         </div>
 
-        <!-- Paginació Desktop -->
+        <!-- Paginación Desktop -->
         @if($asistencias->hasPages())
         <div class="bg-secondary-50 dark:bg-primary-800 px-6 py-4 border-t border-secondary-200 dark:border-primary-700">
             {{ $asistencias->links() }}
@@ -204,12 +193,10 @@
         @php
             $user = $asistencia->ticket?->user ?? $asistencia->guest;
             $userName = $user?->name ?? $user?->nombre ?? '';
-            $userMatricula = $asistencia->ticket?->user?->matricula ?? '';
             $userEmail = $user?->email ?? '';
         @endphp
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-4 transition-all hover:shadow-lg"
              data-nombre="{{ strtolower($userName) }}" 
-             data-matricula="{{ strtolower($userMatricula) }}" 
              data-email="{{ strtolower($userEmail) }}">
             
             <div class="flex justify-between items-start mb-3">
@@ -234,20 +221,7 @@
                 </div>
             </div>
             
-            <div class="space-y-2 text-sm text-secondary-600 dark:text-secondary-300 mb-4 border-t border-secondary-100 dark:border-primary-800 pt-2">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-secondary-400">Evento:</span>
-                    <span class="font-medium text-right truncate w-2/3">{{ $asistencia->evento->nombre }}</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-xs text-secondary-400">ID/Matrícula:</span>
-                    <span class="font-mono bg-secondary-100 dark:bg-primary-800 px-2 py-0.5 rounded text-xs">
-                        {{ $userMatricula ?: ($asistencia->guest ? 'INVITADO' : 'N/A') }}
-                    </span>
-                </div>
-            </div>
-
-            <div class="flex justify-between items-center pt-2">
+            <div class="flex justify-between items-center pt-2 border-t border-secondary-100 dark:border-primary-800 mt-2">
                 <span class="px-2 py-1 text-xs font-medium rounded-full inline-flex items-center gap-1 {{ $asistencia->metodo === 'qr' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' }}">
                     @if($asistencia->metodo === 'qr')
                         <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor"><rect x="1" y="1" width="4" height="4" rx="0.5"/><rect x="7" y="1" width="4" height="4" rx="0.5"/><rect x="1" y="7" width="4" height="4" rx="0.5"/></svg> QR
@@ -276,11 +250,11 @@
         @endif
     </div>
 
-    <!-- Estadístiques Ràpides -->
+    <!-- Estadísticas Rápidas -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Total Validats</h3>
+                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Total Validado</h3>
                 <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
                     <svg viewBox="0 0 20 20" class="w-5 h-5" fill="white">
                         <circle cx="10" cy="10" r="8" stroke="white" stroke-width="2" fill="none"/>
@@ -308,7 +282,7 @@
 
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Mitjana/Hora</h3>
+                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Promedio/Hora</h3>
                 <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
                     <svg viewBox="0 0 20 20" class="w-5 h-5" fill="white">
                         <rect x="3" y="10" width="3" height="7" rx="1" fill="white"/>
@@ -339,10 +313,9 @@
             if (!row.hasAttribute('data-nombre')) return;
 
             const nombre = row.getAttribute('data-nombre') || '';
-            const matricula = row.getAttribute('data-matricula') || '';
             const email = row.getAttribute('data-email') || '';
             
-            if (nombre.includes(search) || matricula.includes(search) || email.includes(search)) {
+            if (nombre.includes(search) || email.includes(search)) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';
