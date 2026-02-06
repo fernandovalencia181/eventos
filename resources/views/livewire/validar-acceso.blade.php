@@ -22,13 +22,22 @@
         <!-- Selector de Evento (Si no está predefinido) -->
         <div class="mb-6 bg-white dark:bg-primary-900 rounded-xl shadow-lg border border-secondary-200 dark:border-primary-800 p-4">
             <label class="block text-sm font-bold text-secondary-700 dark:text-secondary-300 mb-2">Evento Activo</label>
-            <select wire:model.live="evento_id" class="w-full rounded-xl border-secondary-300 dark:border-primary-600 dark:bg-primary-800 dark:text-white focus:border-green-500 focus:ring-green-500">
-                <option value="">-- Seleccionar Evento para Validar --</option>
-                @foreach($eventos as $evento)
-                    <option value="{{ $evento->id }}">{{ $evento->nombre }} ({{ \Carbon\Carbon::parse($evento->fecha)->format('d/m H:i') }})</option>
-                @endforeach
-            </select>
-            @error('evento_id') <span class="text-red-500 text-xs mt-1 block">Selecciona un evento</span> @enderror
+            @if(auth()->user()->evento_id)
+                <div class="w-full rounded-xl border border-secondary-300 dark:border-primary-600 bg-secondary-100 dark:bg-primary-800 text-secondary-700 dark:text-secondary-300 px-4 py-2 cursor-not-allowed">
+                     {{ $eventos->firstWhere('id', auth()->user()->evento_id)->nombre }} ({{ \Carbon\Carbon::parse($eventos->firstWhere('id', auth()->user()->evento_id)->fecha)->format('d/m H:i') }})
+                     <span class="text-xs ml-2 text-secondary-500">(Asignado Automáticamente)</span>
+                </div>
+                <!-- Input hidden para que Livewire siga teniendo el valor aunque no haya select -->
+                <input type="hidden" wire:model="evento_id" value="{{ auth()->user()->evento_id }}">
+            @else
+                <select wire:model.live="evento_id" class="w-full rounded-xl border-secondary-300 dark:border-primary-600 dark:bg-primary-800 dark:text-white focus:border-green-500 focus:ring-green-500">
+                    <option value="">-- Seleccionar Evento para Validar --</option>
+                    @foreach($eventos as $evento)
+                        <option value="{{ $evento->id }}">{{ $evento->nombre }} ({{ \Carbon\Carbon::parse($evento->fecha)->format('d/m H:i') }})</option>
+                    @endforeach
+                </select>
+                @error('evento_id') <span class="text-red-500 text-xs mt-1 block">Selecciona un evento</span> @enderror
+            @endif
         </div>
 
         <div class="grid lg:grid-cols-2 gap-6">

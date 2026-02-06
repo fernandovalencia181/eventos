@@ -99,7 +99,17 @@ class ValidarAcceso extends Component
 
     public function render()
     {
-        $eventos = Evento::where('fecha', '>=', now())->orderBy('fecha')->get();
+        $user = auth()->user();
+
+        if ($user->evento_id) {
+            $eventos = Evento::where('id', $user->evento_id)->get();
+            // Si el evento_id no está establecido en el componente, establecerlo automáticamente
+            if (!$this->evento_id) {
+                $this->evento_id = $user->evento_id;
+            }
+        } else {
+            $eventos = Evento::where('fecha', '>=', now())->orderBy('fecha')->get();
+        }
         
         return view('livewire.validar-acceso', compact('eventos'));
     }

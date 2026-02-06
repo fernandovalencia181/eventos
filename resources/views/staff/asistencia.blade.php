@@ -51,16 +51,23 @@
                         </svg>
                         Evento
                     </label>
-                    <select name="evento_id" 
-                            onchange="this.form.submit()"
-                            class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
-                        <option value="">Todos los eventos</option>
-                        @foreach($eventos as $evento)
-                            <option value="{{ $evento->id }}" {{ $evento_id == $evento->id ? 'selected' : '' }}>
-                                {{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }} ({{ $evento->tickets_count }} entradas)
-                            </option>
-                        @endforeach
-                    </select>
+                    @if(auth()->user()->evento_id)
+                        <div class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-500 dark:text-secondary-400 cursor-not-allowed">
+                             {{ $eventos->first()->nombre ?? 'Evento Asignado' }}
+                             <input type="hidden" name="evento_id" value="{{ auth()->user()->evento_id }}">
+                        </div>
+                    @else
+                        <select name="evento_id" 
+                                onchange="this.form.submit()"
+                                class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
+                            <option value="">Todos los eventos</option>
+                            @foreach($eventos as $evento)
+                                <option value="{{ $evento->id }}" {{ $evento_id == $evento->id ? 'selected' : '' }}>
+                                    {{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }} ({{ $evento->tickets_count }} entradas)
+                                </option>
+                            @endforeach
+                        </select>
+                    @endif
                 </div>
 
                 <!-- Cerca -->
@@ -81,8 +88,8 @@
         </form>
     </div>
 
-    <!-- Taula d'Assistències -->
-    <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 overflow-hidden">
+    <!-- Taula d'Assistències (Desktop) -->
+    <div class="hidden md:block bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full" id="tabla-asistencia">
                 <thead class="bg-secondary-50 dark:bg-primary-800">
@@ -183,9 +190,87 @@
             </table>
         </div>
 
-        <!-- Paginació -->
+        <!-- Paginació Desktop -->
         @if($asistencias->hasPages())
         <div class="bg-secondary-50 dark:bg-primary-800 px-6 py-4 border-t border-secondary-200 dark:border-primary-700">
+            {{ $asistencias->links() }}
+        </div>
+        @endif
+    </div>
+
+     <!-- Vista Móvil (Cards) -->
+     <div class="md:hidden space-y-4" id="cards-asistencia">
+        @forelse($asistencias as $asistencia)
+        @php
+            $user = $asistencia->ticket?->user ?? $asistencia->guest;
+            $userName = $user?->name ?? $user?->nombre ?? '';
+            $userMatricula = $asistencia->ticket?->user?->matricula ?? '';
+            $userEmail = $user?->email ?? '';
+        @endphp
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-4 transition-all hover:shadow-lg"
+             data-nombre="{{ strtolower($userName) }}" 
+             data-matricula="{{ strtolower($userMatricula) }}" 
+             data-email="{{ strtolower($userEmail) }}">
+            
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex items-center gap-3">
+                    @if($user && ($user->profile_photo_path ?? false))
+                    <img src="{{ asset('storage/' . $user->profile_photo_path) }}" 
+                         alt="Foto" 
+                         class="w-10 h-10 rounded-full object-cover border-2 border-primary-500">
+                    @else
+                    <div class="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold text-sm">
+                        {{ substr($userName ?: 'N', 0, 1) }}
+                    </div>
+                    @endif
+                    <div>
+                        <h3 class="font-bold text-secondary-900 dark:text-white text-sm line-clamp-1">{{ $userName ?: 'N/A' }}</h3>
+                        <p class="text-xs text-secondary-500 dark:text-secondary-400">{{ $userEmail ?: 'N/A' }}</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-bold text-secondary-900 dark:text-white">{{ $asistencia->created_at->format('H:i') }}</p>
+                    <p class="text-xs text-secondary-500">{{ $asistencia->created_at->format('d/m') }}</p>
+                </div>
+            </div>
+            
+            <div class="space-y-2 text-sm text-secondary-600 dark:text-secondary-300 mb-4 border-t border-secondary-100 dark:border-primary-800 pt-2">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-secondary-400">Evento:</span>
+                    <span class="font-medium text-right truncate w-2/3">{{ $asistencia->evento->nombre }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-secondary-400">ID/Matrícula:</span>
+                    <span class="font-mono bg-secondary-100 dark:bg-primary-800 px-2 py-0.5 rounded text-xs">
+                        {{ $userMatricula ?: ($asistencia->guest ? 'INVITADO' : 'N/A') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-2">
+                <span class="px-2 py-1 text-xs font-medium rounded-full inline-flex items-center gap-1 {{ $asistencia->metodo === 'qr' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' }}">
+                    @if($asistencia->metodo === 'qr')
+                        <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor"><rect x="1" y="1" width="4" height="4" rx="0.5"/><rect x="7" y="1" width="4" height="4" rx="0.5"/><rect x="1" y="7" width="4" height="4" rx="0.5"/></svg> QR
+                    @else
+                        <svg viewBox="0 0 12 12" class="w-3 h-3" fill="none"><path d="M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Manual
+                    @endif
+                </span>
+                
+                <span class="text-green-600 dark:text-green-400 text-xs font-bold flex items-center gap-1">
+                    <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor"><circle cx="6" cy="6" r="5"/><path d="M4 6l1.5 1.5L9 4" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                    Validado
+                </span>
+            </div>
+        </div>
+        @empty
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow p-6 text-center">
+            <p class="text-secondary-500 dark:text-secondary-400">No hay asistencias registradas</p>
+        </div>
+        @endforelse
+
+        <!-- Paginación Móvil -->
+        @if($asistencias->hasPages())
+        <div class="mt-4">
             {{ $asistencias->links() }}
         </div>
         @endif
@@ -246,9 +331,13 @@
     // Búsqueda en tiempo real
     document.getElementById('buscar').addEventListener('input', function(e) {
         const search = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('#tabla-asistencia tbody tr');
+        // Seleccionar filas de tabla y tarjetas móviles
+        const rows = document.querySelectorAll('#tabla-asistencia tbody tr, #cards-asistencia > div');
         
         rows.forEach(row => {
+            // Ignorar si no tiene datos (mensajes de vacío, etc)
+            if (!row.hasAttribute('data-nombre')) return;
+
             const nombre = row.getAttribute('data-nombre') || '';
             const matricula = row.getAttribute('data-matricula') || '';
             const email = row.getAttribute('data-email') || '';

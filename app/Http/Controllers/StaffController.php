@@ -119,8 +119,18 @@ class StaffController extends Controller
             abort(403, 'No tienes permiso para acceder a la gestión de invitados.');
         }
 
-        $eventos = Evento::where('fecha', '>=', now())->orderBy('fecha')->get();
-        $invitados = \App\Models\InvitadoEspecial::with('evento')->latest()->get();
+        $user = Auth::user();
+
+        if ($user->evento_id) {
+            $eventos = Evento::where('id', $user->evento_id)->get();
+            $invitados = \App\Models\InvitadoEspecial::with('evento')
+                ->where('evento_id', $user->evento_id)
+                ->latest()
+                ->get();
+        } else {
+            $eventos = Evento::where('fecha', '>=', now())->orderBy('fecha')->get();
+            $invitados = \App\Models\InvitadoEspecial::with('evento')->latest()->get();
+        }
         
         return view('staff.invitados', compact('eventos', 'invitados'));
     }
@@ -145,14 +155,26 @@ class StaffController extends Controller
     // Lista de asistencia en vivo
     public function asistencia(Request $request)
     {
-        $evento_id = $request->get('evento_id');
+        $user = Auth::user();
         
-        // Només mostrar esdeveniments que tenen tickets/entrades creades
-        $eventos = Evento::whereHas('tickets')
-            ->where('fecha', '>=', now()->subDays(7))
-            ->withCount('tickets')
-            ->orderBy('fecha', 'desc')
-            ->get();
+        // Si el staff tiene evento asignado, forzar ese evento
+        if ($user->evento_id) {
+            $evento_id = $user->evento_id;
+            
+            // Solo traer el evento asignado
+            $eventos = Evento::where('id', $user->evento_id)
+                ->withCount('tickets')
+                ->get();
+        } else {
+            // Si es admin, permitir filtro y mostrar lista completa
+            $evento_id = $request->get('evento_id');
+            
+            $eventos = Evento::whereHas('tickets')
+                ->where('fecha', '>=', now()->subDays(7))
+                ->withCount('tickets')
+                ->orderBy('fecha', 'desc')
+                ->get();
+        }
         
         // Cargar todas las relaciones necesarias
         $query = Asistencia::with([

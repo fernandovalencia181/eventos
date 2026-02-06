@@ -179,13 +179,14 @@
                 
                 @if(Auth::user()->isStaff())
                     <a href="{{ route('staff.index') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('staff.index') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Panel Staff</a>
-                    <div class="pl-4 space-y-1 mt-1 border-l-2 border-white/20">
-                        <a href="{{ route('staff.scanner') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.scanner') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Escáner</a>
-                        <a href="{{ route('staff.asistencia') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.asistencia') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Asistencia</a>
-                        @if(Auth::user()->hasPermission('access_guests'))
-                            <a href="{{ route('staff.invitados') }}" class="block px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('staff.invitados') ? 'text-white' : 'text-primary-200 hover:text-white' }}">Invitados</a>
-                        @endif
-                    </div>
+                    
+                    <a href="{{ route('staff.scanner') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('staff.scanner') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Escáner</a>
+                    
+                    <a href="{{ route('staff.asistencia') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('staff.asistencia') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Asistencia</a>
+                    
+                    @if(Auth::user()->hasPermission('access_guests'))
+                        <a href="{{ route('staff.invitados') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('staff.invitados') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Invitados</a>
+                    @endif
                 @endif
 
                 @if(!Auth::user()->isAdmin() && !Auth::user()->isStaff())

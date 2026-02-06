@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="w-full md:w-auto">
@@ -76,10 +76,18 @@
                    id="buscar_invitado" 
                    placeholder="Buscar por nombre, email o empresa..." 
                    class="bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-3 text-secondary-900 dark:text-white">
-            <select id="filtro_evento" class="bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-3 text-secondary-900 dark:text-white">
-                <option value="">Todos los eventos</option>
+            <select id="filtro_evento" 
+                class="bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-3 text-secondary-900 dark:text-white {{ auth()->user()->evento_id ? 'bg-gray-100 cursor-not-allowed opacity-75 pointer-events-none' : '' }}"
+                {{ auth()->user()->evento_id ? 'disabled' : '' }}>
+                
+                @if(!auth()->user()->evento_id)
+                    <option value="">Todos los eventos</option>
+                @endif
+                
                 @foreach($eventos as $evento)
-                    <option value="{{ $evento->id }}">{{ $evento->nombre }}</option>
+                    <option value="{{ $evento->id }}" {{ auth()->user()->evento_id == $evento->id ? 'selected' : '' }}>
+                        {{ $evento->nombre }}
+                    </option>
                 @endforeach
             </select>
             <select id="filtro_estado" class="bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-3 text-secondary-900 dark:text-white">
@@ -292,12 +300,19 @@
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2">Evento *</label>
-                    <select name="evento_id" required class="w-full bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
-                        <option value="">Seleccionar evento...</option>
-                        @foreach($eventos as $evento)
-                            <option value="{{ $evento->id }}">{{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }}</option>
-                        @endforeach
-                    </select>
+                    @if(auth()->user()->evento_id)
+                         <div class="w-full bg-secondary-100 dark:bg-primary-800/50 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-700 dark:text-secondary-300 cursor-not-allowed">
+                            {{ $eventos->firstWhere('id', auth()->user()->evento_id)->nombre }} - {{ $eventos->firstWhere('id', auth()->user()->evento_id)->fecha->format('d/m/Y') }}
+                            <input type="hidden" name="evento_id" value="{{ auth()->user()->evento_id }}">
+                        </div>
+                    @else
+                        <select name="evento_id" required class="w-full bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
+                            <option value="">Seleccionar evento...</option>
+                            @foreach($eventos as $evento)
+                                <option value="{{ $evento->id }}">{{ $evento->nombre }} - {{ $evento->fecha->format('d/m/Y') }}</option>
+                            @endforeach
+                        </select>
+                    @endif
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2">Notas adicionales</label>
