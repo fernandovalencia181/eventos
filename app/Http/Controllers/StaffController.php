@@ -65,7 +65,7 @@ class StaffController extends Controller
 
         $eventos = Evento::all();
         $staff = Staff::where('activo', true)->get();
-        return view('staff.scanner', compact('eventos', 'staff'));
+        return view('staff.scan', compact('eventos', 'staff'));
     }
     
     // Vista del scanner QR (Access Control Version)
@@ -444,7 +444,8 @@ class StaffController extends Controller
         $ticket = Ticket::where('evento_id', $request->evento_id)
             ->where(function($q) use ($request) {
                 $q->where('token_seguridad_qr', $request->codigo)
-                  ->orWhere('id', $request->codigo);
+                  ->orWhere('id', $request->codigo)
+                  ->orWhere('token_reentrada', $request->codigo);
             })
             ->first();
 
@@ -543,9 +544,41 @@ class StaffController extends Controller
             }
 
             if ($ticket->estado === 'afuera') {
+                // 3. Proceso de RE-INGRESO (Solo con QR Dinámico)
+                if ($request->codigo === $ticket->token_reentrada) {
+                    
+                     // Validar expiración
+                     if ($ticket->token_reentrada_expira && $ticket->token_reentrada_expira < now()) {
+                        return response()->json([
+                            'success' => false,
+                            'mensaje' => '❌ El código dinámico ha expirado. Regenéralo en Mi Pase.',
+                        ]);
+                     }
+
+                     // Registrar el re-ingreso en Asistencia
+                     Asistencia::create([
+                        'ticket_id' => $ticket->id,
+                        'guest_qr_token' => null,
+                        'staff_id' => $staffId,
+                        'evento_id' => $request->evento_id,
+                        'fecha_checkin' => now(),
+                        'metodo' => 'qr_dinamico',
+                    ]);
+
+                    // Actualizar estado a ADENTRO
+                    $ticket->update(['estado' => 'adentro']);
+                    
+                    return response()->json([
+                        'success' => true,
+                        'mensaje' => '✅ Re-ingreso AUTORIZADO. Bienvenido/a de nuevo.',
+                        'tipo' => 'ticket',
+                        'ticket' => $ticket
+                    ]);
+                }
+
                 return response()->json([
                     'success' => false,
-                    'mensaje' => '⚠️ Usuario marcado como FUERA. Debe usar el QR Dinámico de reingreso (Mi Pase).',
+                    'mensaje' => '⚠️ Usuario marcado como FUERA. Debe usar el QR Dinámico de su móvil para reingresar.',
                 ]);
             }
 

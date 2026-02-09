@@ -50,6 +50,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Evento::class);
     }
+
+    // RELACIÓN CON TICKETS (Usuario)
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
     
     // COMPATIBILIDAD CON CÓDIGO VIEJO ($user->rol)
     // Cuando se pida $user->rol, devolvemos el nombre del rol asociado
@@ -126,5 +132,14 @@ class User extends Authenticatable
     public function isStaff()
     {
         return $this->rol === 'staff';
+    }
+
+    /**
+     * HELPER: Determina si el usuario tiene un ticket activo ('adentro' o 'afuera')
+     * para mostrar el menú "Mi Pase" y gestionar reingresos o invitados.
+     */
+    public function hasExitTicket()
+    {
+        return $this->tickets()->whereIn('estado', ['adentro', 'afuera'])->exists();
     }
 }

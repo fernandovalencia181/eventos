@@ -60,6 +60,12 @@
                             <x-nav-link :href="route('mis.entradas')" :active="request()->routeIs('mis.entradas')">
                                 Mis Entradas
                             </x-nav-link>
+                            
+                            @if(Auth::user()->hasExitTicket())
+                                <x-nav-link :href="route('mi.pase')" :active="request()->routeIs('mi.pase')">
+                                    Mi Pase
+                                </x-nav-link>
+                            @endif
                         @endif
                     @endauth
                 </div>
@@ -191,6 +197,9 @@
 
                 @if(!Auth::user()->isAdmin() && !Auth::user()->isStaff())
                     <a href="{{ route('mis.entradas') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('mis.entradas') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Mis Entradas</a>
+                    @if(Auth::user()->hasExitTicket())
+                        <a href="{{ route('mi.pase') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('mi.pase') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Mi Pase</a>
+                    @endif
                 @endif
             @endauth
             
