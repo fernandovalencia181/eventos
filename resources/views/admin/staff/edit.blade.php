@@ -19,23 +19,23 @@
                     @method('PUT')
                                         
                     <div>
-                        <x-label for="name" value="Nombre Completo" />
-                        <x-input id="name" class="block mt-1 w-full" type="text" name="name" value="{{ $staff->name }}" required />
+                        <label for="name" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nombre Completo</label>
+                        <input id="name" class="block mt-1 w-full rounded-xl border-gray-300 dark:border-primary-600 dark:bg-primary-800 dark:text-white shadow-sm focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600" type="text" name="name" value="{{ $staff->name }}" required />
                     </div>
 
                     <div>
-                        <x-label for="email" value="Correo Electrónico" />
-                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" value="{{ $staff->email }}" required />
+                        <label for="email" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Correo Electrónico</label>
+                        <input id="email" class="block mt-1 w-full rounded-xl border-gray-300 dark:border-primary-600 dark:bg-primary-800 dark:text-white shadow-sm focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600" type="email" name="email" value="{{ $staff->email }}" required />
                     </div>
                     
                     <div>
-                        <x-label for="phone" value="Teléfono" />
-                        <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" value="{{ $staff->phone }}" />
+                        <label for="phone" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Teléfono</label>
+                        <input id="phone" class="block mt-1 w-full rounded-xl border-gray-300 dark:border-primary-600 dark:bg-primary-800 dark:text-white shadow-sm focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600" type="text" name="phone" value="{{ $staff->phone }}" />
                     </div>
 
                     <div>
-                        <x-label for="password" value="Nueva Contraseña (Dejar en blanco para no cambiar)" />
-                        <x-input id="password" class="block mt-1 w-full" type="password" name="password" autocomplete="new-password" />
+                        <label for="password" class="block font-medium text-sm text-gray-700 dark:text-gray-300">Nueva Contraseña (Dejar en blanco para no cambiar)</label>
+                        <input id="password" class="block mt-1 w-full rounded-xl border-gray-300 dark:border-primary-600 dark:bg-primary-800 dark:text-white shadow-sm focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600" type="password" name="password" autocomplete="new-password" />
                     </div>
 
                     <div>

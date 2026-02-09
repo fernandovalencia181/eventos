@@ -7,6 +7,8 @@ use Livewire\WithPagination;
 use App\Models\InvitadoEspecial;
 use App\Models\Evento;
 use App\Models\Ticket;
+use App\Models\Registration;
+use App\Models\Guest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -32,6 +34,12 @@ class Invitados extends Component
     public $generar_entrada = true; // Default to true for Generic Tickets
 
     public $showModal = false;
+    
+    // QR Modal
+    public $viewingQr = false;
+    public $currentQr = null;
+    public $currentTicketId = null; 
+    public $currentGuestName = '';
 
     public function mount()
     {
@@ -74,28 +82,29 @@ class Invitados extends Component
             return;
         }
 
-        // 1. Create InvitadoEspecial
-        $invitado = InvitadoEspecial::create([
-            'evento_id' => $eventoId,
-            'nombre' => $this->nombre,
+        // NUEVA LÓGICA: Crear 'Guest' directamente (Manual Guest)
+        // Usamos un token temporal o final
+        $token = Str::random(32);
+
+        $guest = Guest::create([
+            'registration_id' => null, // Manual
+            'name' => $this->nombre,
             'email' => $this->email,
-            'telefono' => $this->telefono,
-            'cargo' => $this->cargo,
-            'empresa' => $this->empresa,
-            'notas' => $this->notas,
-            'estado' => 'pendiente'
+            'phone' => $this->telefono,
+            'company' => $this->empresa,
+            'qr_token' => $token,
         ]);
 
         // 2. Generate Ticket if requested
         if ($this->generar_entrada) {
-            $this->createTicket($invitado);
+            $this->createTicket($guest, $eventoId);
         }
 
         $this->closeModal();
         session()->flash('success', 'Invitado agregado correctamente.');
     }
 
-    public function createTicket(InvitadoEspecial $invitado)
+    public function createTicket(Guest $guest, $eventoId)
     {
         // Check if ticket already exists (simple check by name/event to avoid spamming, though names can be duplicate)
         // Ideally we would store ticket_id, but assuming we can't modify schema right now:
@@ -103,33 +112,95 @@ class Invitados extends Component
         
         Ticket::create([
             'id' => (string) Str::uuid(), // Ensure UUID if not auto-generated (Model says HasUuids so maybe auto)
-            'evento_id' => $invitado->evento_id,
+            'evento_id' => $eventoId,
             'user_id' => null, // Generic
-            'nombre_asistente' => $invitado->nombre,
+            'nombre_asistente' => $guest->name,
+            // 'telefono' => removed from entradas table, access via guest relation
             'estado' => 'generada',
-            'token_seguridad_qr' => Str::random(32),
+            'token_seguridad_qr' => $guest->qr_token,
             // We can store a reference in notas or just rely on name matching for display
         ]);
     }
 
-    public function descargarEntrada($invitadoId)
+    // SINCRONIZACIÓN DE DATOS ANTIGUOS
+    public function syncLegacyData()
     {
-        $invitado = InvitadoEspecial::findOrFail($invitadoId);
+        $count = 0;
         
-        // Find associated ticket (by name and event)
-        $ticket = Ticket::where('evento_id', $invitado->evento_id)
-                        ->where('nombre_asistente', $invitado->nombre)
-                        ->latest()
-                        ->first();
+        // Optimización: traer todos los qr_tokens de tickets
+        $existingTokens = Ticket::pluck('token_seguridad_qr')->toArray();
 
-        if (!$ticket) {
-            $this->createTicket($invitado);
-            $ticket = Ticket::where('evento_id', $invitado->evento_id)
-                        ->where('nombre_asistente', $invitado->nombre)
-                        ->latest()
-                        ->first();
+        // 1. Sincronizar REGISTROS (Titulares)
+        foreach(Registration::cursor() as $reg) {
+            if (in_array($reg->qr_token, $existingTokens)) continue;
+
+            Ticket::create([
+                'evento_id' => $reg->event_id,
+                'user_id' => $reg->user_id,
+                'nombre_asistente' => $reg->name,
+                // 'telefono' => $reg->phone, 
+                'estado' => 'generada',
+                'token_seguridad_qr' => $reg->qr_token,
+            ]);
+            $count++;
+            $existingTokens[] = $reg->qr_token;
         }
 
+        // 2. Sincronizar ACOMPAÑANTES (Guests)
+        foreach(Guest::with('registration')->cursor() as $guest) {
+            if (in_array($guest->qr_token, $existingTokens)) continue;
+            
+            if (!$guest->registration) continue; // Skip orphans
+
+            Ticket::create([
+                'evento_id' => $guest->registration->event_id,
+                'user_id' => null, 
+                'nombre_asistente' => $guest->name,
+                // 'telefono' => $guest->phone,
+                'estado' => 'generada',
+                'token_seguridad_qr' => $guest->qr_token,
+            ]);
+            $count++;
+            $existingTokens[] = $guest->qr_token;
+        }
+
+        session()->flash('success', "Se han sincronizado $count registros antiguos.");
+        return redirect()->route('staff.invitados');
+    }
+
+    public function verQr($ticketId)
+    {
+        // $ticketId ya es el ID de la entrada directamente
+        $ticket = Ticket::findOrFail($ticketId);
+        
+        $this->currentGuestName = $ticket->nombre_asistente;
+        $this->currentTicketId = $ticket->id;
+
+        // Generate QR Code matching the one in PDF
+        $contenido = json_encode(['id' => $ticket->id, 'sec' => $ticket->token_seguridad_qr]);
+        
+        $renderer = new ImageRenderer(
+            new RendererStyle(300, 1),
+            new SvgImageBackEnd()
+        );
+        $writer = new Writer($renderer);
+        $qrBase64 = base64_encode($writer->writeString($contenido));
+        $this->currentQr = 'data:image/svg+xml;base64,' . $qrBase64;
+        
+        $this->viewingQr = true;
+    }
+
+    public function closeQr()
+    {
+        $this->viewingQr = false;
+        $this->currentQr = null;
+    }
+
+    public function descargarEntrada($ticketId)
+    {
+        // En este contexto, tratamos $ticketId como el ID de la entrada directamente
+        $ticket = Ticket::findOrFail($ticketId);
+        
         // Generate QR Code
         $contenido = json_encode(['id' => $ticket->id, 'sec' => $ticket->token_seguridad_qr]);
         
@@ -148,43 +219,58 @@ class Invitados extends Component
         
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->output();
-        }, 'entrada-' . Str::slug($invitado->nombre) . '.pdf');
+        }, 'entrada-' . Str::slug($ticket->nombre_asistente) . '.pdf');
     }
 
     public function render()
     {
         $user = Auth::user();
         
-        $query = InvitadoEspecial::query();
+        // CAMBIO PRINCIPAL: Ahora buscamos en la tabla de TICKETS (Entradas)
+        // para traer a TODO el mundo (Usuarios, Acompañantes y VIPs)
+        $query = Ticket::query();
 
+        // 1. Filtrar por evento
         if ($this->evento_id_filter) {
             $query->where('evento_id', $this->evento_id_filter);
         } elseif ($user->evento_id) {
             $query->where('evento_id', $user->evento_id);
         }
 
+        // 2. Búsqueda
         if ($this->search) {
             $query->where(function($q) {
-                $q->where('nombre', 'like', '%' . $this->search . '%')
-                  ->orWhere('email', 'like', '%' . $this->search . '%')
-                  ->orWhere('empresa', 'like', '%' . $this->search . '%');
+                $term = $this->search;
+                $q->where('nombre_asistente', 'like', '%' . $term . '%')
+                  // Búsqueda en Usuario (Email y Teléfono)
+                  ->orWhereHas('user', function($u) use ($term) {
+                      $u->where('email', 'like', '%' . $term . '%')
+                        ->orWhere('phone', 'like', '%' . $term . '%');
+                  })
+                  // Búsqueda en Guest (Teléfono antiguo)
+                  ->orWhereHas('guest', function($g) use ($term) {
+                      $g->where('phone', 'like', '%' . $term . '%');
+                  });
             });
         }
 
         $stats = [
             'total' => (clone $query)->count(),
-            'pendientes' => (clone $query)->where('estado', 'pendiente')->count(),
+            // 'pendientes' ya no tiene tanto sentido en Tickets generados, pero podríamos contar los escaneados si tuvieramos ese flag
+            // Por ahora mostramos usuarios vs invitados
+            'usuarios' => (clone $query)->whereNotNull('user_id')->count(),
+            'invitados' => (clone $query)->whereNull('user_id')->count(),
         ];
 
-        $invitados = $query->latest()->paginate(10);
+        $invitados = $query->with('user', 'evento')->latest()->paginate(10);
         
-        // Allow admin to select event, staff is locked
+        // Allow admin to select event
         $eventos = $user->evento_id 
             ? Evento::where('id', $user->evento_id)->get() 
             : Evento::where('fecha', '>=', now()->subDays(30))->orderBy('fecha', 'desc')->get();
 
         return view('livewire.staff.invitados', [
-            'invitados' => $invitados,
+            'invitados' => $invitados, // Mantenemos el nombre de variable para no romper la vista
             'eventos' => $eventos,
             'stats' => $stats
         ]);

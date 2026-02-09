@@ -24,7 +24,8 @@ class StaffController extends Controller
                 ->whereDate('created_at', today())->count(),
             'aforo_actual' => Asistencia::when($eventoId, fn($q) => $q->where('evento_id', $eventoId))
                 ->whereDate('created_at', today())->distinct('ticket_id')->count(),
-            'invitados' => \App\Models\InvitadoEspecial::when($eventoId, fn($q) => $q->where('evento_id', $eventoId))
+            'invitados' => Ticket::when($eventoId, fn($q) => $q->where('evento_id', $eventoId))
+                ->whereNull('user_id') // Invitados (no usuarios registrados)
                 ->whereDate('created_at', today())->count(),
             'incidencias' => \App\Models\Incidencia::when($eventoId, fn($q) => $q->where('evento_id', $eventoId))
                 ->where('estado', 'pendiente')->count(),
@@ -137,20 +138,8 @@ class StaffController extends Controller
             abort(403, 'No tienes permiso para acceder a la gestión de invitados.');
         }
 
-        $user = Auth::user();
-
-        if ($user->evento_id) {
-            $eventos = Evento::where('id', $user->evento_id)->get();
-            $invitados = \App\Models\InvitadoEspecial::with('evento')
-                ->where('evento_id', $user->evento_id)
-                ->latest()
-                ->get();
-        } else {
-            $eventos = Evento::where('fecha', '>=', now())->orderBy('fecha')->get();
-            $invitados = \App\Models\InvitadoEspecial::with('evento')->latest()->get();
-        }
-        
-        return view('staff.invitados', compact('eventos', 'invitados'));
+        // Ya no necesitamos pasar nada, Livewire se encarga de todo
+        return view('staff.invitados');
     }
 
     // Vista de incidencias
