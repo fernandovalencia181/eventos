@@ -10,6 +10,40 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    
+    {{-- Google Translate --}}
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'es',
+                includedLanguages: 'ca,es,en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+        .goog-te-banner-frame { display: none !important; }
+        body { top: 0 !important; }
+        .goog-te-gadget { font-size: 0 !important; }
+        .goog-te-gadget .goog-te-combo {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            background: rgba(30, 41, 59, 0.8);
+            color: #e2e8f0;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+        }
+        .goog-te-gadget .goog-te-combo:hover {
+            border-color: rgba(99, 102, 241, 0.6);
+        }
+        .skiptranslate { display: none !important; }
+        .goog-te-spinner-pos { display: none !important; }
+    </style>
+    
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark')

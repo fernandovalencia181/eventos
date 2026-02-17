@@ -115,7 +115,9 @@ class StaffController extends Controller
     // Vista de invitados
     public function invitados()
     {
-        if (!Auth::user()->hasPermission('access_guests')) {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user->hasPermission('access_guests')) {
             abort(403, 'No tienes permiso para acceder a la gestión de invitados.');
         }
 
@@ -316,13 +318,15 @@ class StaffController extends Controller
             'estado' => 'pendiente',
         ]);
 
-        return back()->with('success', '✅ Incidencia registrada correctamente');
+        return back()->with('success', 'Incidencia registrada correctamente');
     }
 
     // Registrar invitado especial
     public function registrarInvitado(Request $request)
     {
-        if (!Auth::user()->hasPermission('access_guests')) {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user->hasPermission('access_guests')) {
             abort(403);
         }
 
