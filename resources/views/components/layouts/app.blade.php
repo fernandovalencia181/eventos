@@ -9,19 +9,27 @@
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
     
     @livewireStyles
 </head>
-<body class="font-sans antialiased bg-secondary-50">
+<body class="font-sans antialiased bg-secondary-50 dark:bg-primary-950 text-secondary-900 dark:text-gray-100 transition-colors duration-300">
     
     <div class="min-h-screen flex flex-col">
-        @include('navigation-menu')
+        @include('partials.navigation-menu')
 
         <main class="flex-grow">
             {{ $slot }}
         </main>
         
-        @include('footer')
+        @include('partials.footer')
     </div>
 
     @livewireScripts

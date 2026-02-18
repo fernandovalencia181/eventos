@@ -16,7 +16,15 @@ class Ticket extends Model
         'user_id',
         'nombre_asistente',
         'estado',
-        'token_seguridad_qr'
+        'token_seguridad_qr',
+        'token_reentrada',
+        'token_reentrada_expira',
+        'token_invitado',
+        'dispositivo_invitado',
+    ];
+
+    protected $casts = [
+        'token_reentrada_expira' => 'datetime',
     ];
 
     public function evento()
@@ -27,5 +35,19 @@ class Ticket extends Model
     public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Relación con Guest (Acompañante antiguo) basada en el token QR.
+     * Útil para recuperar datos como el teléfono que no están en la tabla tickets.
+     */
+    public function guest()
+    {
+        return $this->hasOne(Guest::class, 'qr_token', 'token_seguridad_qr');
     }
 }

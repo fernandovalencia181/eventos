@@ -2,26 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Asistencia extends Model
 {
-    use HasFactory;
+    protected $table = 'checkins';
 
     protected $fillable = [
         'ticket_id',
-        'user_id',
+        'guest_qr_token', // ✅ Per convidats (guests)
+        'staff_id',
         'evento_id',
-        'hora_entrada',
-        'hora_salida',
-        'validado_por',
-        'notas',
+        'fecha_checkin',
+        'metodo',
     ];
 
     protected $casts = [
-        'hora_entrada' => 'datetime',
-        'hora_salida' => 'datetime',
+        'fecha_checkin' => 'datetime',
     ];
 
     public function ticket()
@@ -29,18 +26,18 @@ class Asistencia extends Model
         return $this->belongsTo(Ticket::class);
     }
 
-    public function user()
+    public function guest()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Guest::class, 'guest_qr_token', 'qr_token');
+    }
+
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id');
     }
 
     public function evento()
     {
         return $this->belongsTo(Evento::class);
-    }
-
-    public function validador()
-    {
-        return $this->belongsTo(User::class, 'validado_por');
     }
 }

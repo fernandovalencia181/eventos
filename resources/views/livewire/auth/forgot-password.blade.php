@@ -1,19 +1,19 @@
 <x-guest-layout>
     <div class="mb-6 text-center">
-        <h2 class="text-xl font-bold text-secondary-900">¿Olvidaste tu contraseña?</h2>
-        <p class="text-sm text-secondary-500 mt-2">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white">¿Olvidaste tu contraseña?</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
             No te preocupes. Escribe tu correo y te enviaremos un enlace para recuperarla.
         </p>
     </div>
 
     @if (session('status'))
-        <div class="mb-4 font-medium text-sm text-green-600 bg-green-50 p-3 rounded-lg border border-green-200">
+        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 p-3 rounded-lg border border-green-200 dark:border-green-800">
             {{ session('status') }}
         </div>
     @endif
 
     @if ($errors->any())
-        <div class="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+        <div class="mb-4 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-800">
             <ul class="list-disc list-inside">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -26,16 +26,16 @@
         @csrf
 
         <div class="block">
-            <label for="email" class="block text-sm font-medium text-secondary-700">Correo Electrónico</label>
-            <input id="email" class="block mt-1 w-full rounded-lg border-secondary-300 shadow-sm focus:border-primary-500 focus:ring-primary-500" type="email" name="email" :value="old('email')" required autofocus />
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correo Electrónico</label>
+            <input id="email" class="block mt-1 w-full rounded-lg border-gray-300 dark:border-primary-600 bg-white dark:bg-primary-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-colors" type="email" name="email" value="{{ old('email') }}" required autofocus />
         </div>
 
-        <div class="flex items-center justify-end mt-6">
-            <a href="{{ route('login') }}" class="text-sm text-secondary-600 hover:text-primary-600 underline mr-4">
+        <div class="flex items-center justify-between mt-6">
+            <a href="{{ route('login') }}" class="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 underline transition-colors">
                 Volver al Login
             </a>
             
-            <button type="submit" class="bg-primary-600 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:bg-primary-700 transition transform hover:-translate-y-0.5">
+            <button type="submit" class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-md hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 Enviar Enlace
             </button>
         </div>

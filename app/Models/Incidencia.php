@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Incidencia extends Model
 {
-    use HasFactory;
+    protected $table = 'incidencias';
 
     protected $fillable = [
         'evento_id',
@@ -31,6 +30,16 @@ class Incidencia extends Model
         return $this->belongsTo(Evento::class);
     }
 
+    public function reportadoPor()
+    {
+        return $this->belongsTo(User::class, 'reportado_por');
+    }
+
+    public function resuelto()
+    {
+        return $this->belongsTo(User::class, 'resuelto_por');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -39,15 +48,5 @@ class Incidencia extends Model
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
-    }
-
-    public function reportador()
-    {
-        return $this->belongsTo(User::class, 'reportado_por');
-    }
-
-    public function resolutor()
-    {
-        return $this->belongsTo(User::class, 'resuelto_por');
     }
 }

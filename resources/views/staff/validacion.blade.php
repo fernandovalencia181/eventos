@@ -1,3 +1,7 @@
-<x-staff-layout :evento="$evento">
-    @livewire('staff.validar-entrada', ['eventoId' => $eventoId])
-</x-staff-layout>
+@extends('staff.layout')
+
+@section('title', 'Validación de Accesos')
+
+@section('content')
+    @livewire('validar-acceso')
+@endsection
