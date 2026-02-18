@@ -73,6 +73,8 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     // Gestión de Usuarios
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/crear', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 

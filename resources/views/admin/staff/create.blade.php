@@ -18,23 +18,23 @@
                     @csrf
                                         
                     <div>
-                        <x-label for="name" value="Nombre Completo" />
-                        <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                        <label for="name" class="block font-medium text-sm text-secondary-700 dark:text-secondary-300 mb-1">Nombre Completo</label>
+                        <input id="name" class="block mt-1 w-full border border-secondary-300 dark:border-primary-600 rounded-xl shadow-sm focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 sm:text-sm py-3 px-4 dark:bg-primary-800 dark:text-white" type="text" name="name" value="{{ old('name') }}" required autofocus />
                     </div>
 
                     <div>
-                        <x-label for="email" value="Correo Electrónico (Login)" />
-                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                        <label for="email" class="block font-medium text-sm text-secondary-700 dark:text-secondary-300 mb-1">Correo Electrónico (Login)</label>
+                        <input id="email" class="block mt-1 w-full border border-secondary-300 dark:border-primary-600 rounded-xl shadow-sm focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 sm:text-sm py-3 px-4 dark:bg-primary-800 dark:text-white" type="email" name="email" value="{{ old('email') }}" required />
                     </div>
                     
                     <div>
-                        <x-label for="phone" value="Teléfono (Opcional)" />
-                        <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" />
+                        <label for="phone" class="block font-medium text-sm text-secondary-700 dark:text-secondary-300 mb-1">Teléfono (Opcional)</label>
+                        <input id="phone" class="block mt-1 w-full border border-secondary-300 dark:border-primary-600 rounded-xl shadow-sm focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 sm:text-sm py-3 px-4 dark:bg-primary-800 dark:text-white" type="text" name="phone" value="{{ old('phone') }}" />
                     </div>
 
                     <div>
-                        <x-label for="password" value="Contraseña" />
-                        <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+                        <label for="password" class="block font-medium text-sm text-secondary-700 dark:text-secondary-300 mb-1">Contraseña</label>
+                        <input id="password" class="block mt-1 w-full border border-secondary-300 dark:border-primary-600 rounded-xl shadow-sm focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 sm:text-sm py-3 px-4 dark:bg-primary-800 dark:text-white" type="password" name="password" required autocomplete="new-password" />
                     </div>
 
                     <div>
@@ -43,7 +43,7 @@
                             <select name="evento_id" id="evento_id" class="block w-full rounded-xl border-secondary-300 dark:border-primary-600 dark:bg-primary-800 dark:text-white shadow-sm focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 sm:text-sm py-3" required>
                                 <option value="">-- Seleccionar Evento --</option>
                                 @foreach($eventos as $evento)
-                                    <option value="{{ $evento->id }}">
+                                    <option value="{{ $evento->id }}" {{ old('evento_id') == $evento->id ? 'selected' : '' }}>
                                         {{ $evento->fecha }} - {{ Str::limit($evento->nombre, 40) }}
                                     </option>
                                 @endforeach
@@ -57,7 +57,7 @@
 
                     <div class="bg-secondary-50 dark:bg-primary-800/50 p-4 rounded-xl border border-secondary-100 dark:border-primary-800">
                         <label class="flex items-start space-x-3 cursor-pointer">
-                            <input type="checkbox" name="access_guests" class="mt-1 rounded border-secondary-300 dark:border-primary-600 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-primary-700">
+                            <input type="checkbox" name="access_guests" value="1" {{ old('access_guests') ? 'checked' : '' }} class="mt-1 rounded border-secondary-300 dark:border-primary-600 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-primary-700">
                             <div>
                                 <span class="block text-sm font-bold text-secondary-800 dark:text-secondary-200">Habilitar vista de invitados (Check-in manual)</span>
                                 <span class="text-xs text-secondary-500 dark:text-secondary-400 block mt-1">Permite buscar invitados manualmente en todos los eventos, útil para recepcionistas.</span>

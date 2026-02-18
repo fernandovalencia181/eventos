@@ -40,6 +40,10 @@ class Invitados extends Component
     public $currentQr = null;
     public $currentTicketId = null; 
     public $currentGuestName = '';
+    
+    // Dynamic QR props
+    public $showDynamicQr = false;
+    public $timeLeft = 20;
 
     public function mount()
     {
@@ -174,26 +178,76 @@ class Invitados extends Component
         $ticket = Ticket::findOrFail($ticketId);
         
         $this->currentGuestName = $ticket->nombre_asistente;
-        $this->currentTicketId = $ticket->id;
+        // Mostramos el ID del ticket, pero el QR se genera con el TOKEN que es lo que valida el scanner
+        $this->currentTicketId = $ticket->id; 
+        $this->showDynamicQr = false; // Reset to static
 
-        // Generate QR Code matching the one in PDF
-        $contenido = json_encode(['id' => $ticket->id, 'sec' => $ticket->token_seguridad_qr]);
+        // Generate Static QR Code
+        // CORREGIDO: Usamos el token_seguridad_qr porque es lo que está en la BD como identificador externo "d89f..."
+        // y lo que el scanner espera encontrar.
+        $this->generateQrImage($ticket->token_seguridad_qr); 
         
-        $renderer = new ImageRenderer(
+        $this->viewingQr = true;
+    }
+
+    public function toggleQrType()
+    {
+        $this->showDynamicQr = !$this->showDynamicQr;
+        $this->refreshDynamicQr();
+    }
+    
+    public function setQrMode($isDynamic)
+    {
+        $this->showDynamicQr = $isDynamic;
+        $this->refreshDynamicQr();
+    }
+
+    public function refreshDynamicQr()
+    {
+        if (!$this->viewingQr) return;
+
+        $ticket = Ticket::find($this->currentTicketId);
+        if (!$ticket) return;
+
+        if ($this->showDynamicQr) {
+            // Lógica MODO DINÁMICO (idéntica a MiPase)
+            
+            // Si expiró o no existe token dinámico, generar uno nuevo
+            if (!$ticket->token_reentrada || $ticket->token_reentrada_expira < now()) {
+                $newToken = Str::random(16);
+                $ticket->update([
+                    'token_reentrada' => $newToken,
+                    'token_reentrada_expira' => now()->addSeconds(20) // 20 segundos
+                ]);
+                $this->timeLeft = 20;
+            } else {
+                // Calcular tiempo restante
+                $this->timeLeft = $ticket->token_reentrada_expira->diffInSeconds(now());
+            }
+
+            $this->generateQrImage($ticket->token_reentrada);
+        } else {
+            // Lógica MODO ESTÁTICO: Usar el token original de seguridad
+            $this->generateQrImage($ticket->token_seguridad_qr);
+        }
+    }
+
+    private function generateQrImage($content)
+    {
+         $renderer = new ImageRenderer(
             new RendererStyle(300, 1),
             new SvgImageBackEnd()
         );
         $writer = new Writer($renderer);
-        $qrBase64 = base64_encode($writer->writeString($contenido));
+        $qrBase64 = base64_encode($writer->writeString($content ?: 'ERROR_NO_TOKEN'));
         $this->currentQr = 'data:image/svg+xml;base64,' . $qrBase64;
-        
-        $this->viewingQr = true;
     }
 
     public function closeQr()
     {
         $this->viewingQr = false;
         $this->currentQr = null;
+        $this->showDynamicQr = false; // Reset
     }
 
     public function descargarEntrada($ticketId)

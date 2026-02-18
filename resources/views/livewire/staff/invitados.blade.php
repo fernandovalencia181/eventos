@@ -231,19 +231,57 @@
 
     <!-- QR Modal -->
     @if($viewingQr)
-    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4">
-        <div class="bg-white dark:bg-primary-900 rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center transform transition-all scale-100">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Código QR de Acceso</h3>
-            <p class="text-gray-500 dark:text-gray-400 mb-6">{{ $currentGuestName }}</p>
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4" 
+         @if($showDynamicQr) wire:poll.1s="refreshDynamicQr" @endif>
+        
+        <div class="bg-white dark:bg-primary-900 rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center transform transition-all scale-100 relative">
             
-            <div class="bg-white p-4 rounded-xl border border-gray-200 inline-block mb-6">
-                <img src="{{ $currentQr }}" alt="QR Code" class="h-48 w-48 mx-auto">
+            <!-- Close X -->
+            <button wire:click="closeQr" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            <!-- TABS -->
+            <div class="flex justify-center space-x-1 mb-6 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
+                <button wire:click="setQrMode(false)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ !$showDynamicQr ? 'bg-white dark:bg-primary-700 shadow-sm text-primary-700 dark:text-white ring-1 ring-black/5' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700' }}">
+                    QR Entrada
+                </button>
+                <button wire:click="setQrMode(true)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ $showDynamicQr ? 'bg-white dark:bg-primary-700 shadow-sm text-primary-700 dark:text-white ring-1 ring-black/5' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700' }}">
+                    QR Dinámico
+                </button>
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
+                {{ $showDynamicQr ? 'Acceso Dinámico' : 'Acceso Estático' }}
+            </h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 truncate px-4">{{ $currentGuestName }}</p>
+            
+            <div class="bg-white p-4 rounded-xl border-2 border-dashed border-gray-200 inline-block mb-6 relative group">
+                <img src="{{ $currentQr }}" alt="QR Code" class="h-48 w-48 mx-auto object-contain transition-opacity duration-300">
+                 
+                 <!-- Dynamic Timer Badge -->
+                 @if($showDynamicQr)
+                    <div class="absolute bottom-2 right-2 bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-200 shadow-sm flex items-center gap-1">
+                        <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        {{ $timeLeft }}s
+                    </div>
+                 @endif
             </div>
             
-            <p class="text-xs text-gray-400 dark:text-gray-500 mb-6 font-mono break-all">{{ $currentTicketId }}</p>
+            <!-- Progress Bar -->
+            @if($showDynamicQr)
+                <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700 max-w-[220px] mx-auto mb-6 overflow-hidden">
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full transition-all duration-1000 ease-linear" 
+                            style="width: {{ ($timeLeft / 20) * 100 }}%"></div>
+                </div>
+            @endif
+            
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-xs text-gray-400 dark:text-gray-500 font-mono break-all mb-4">
+                ID: {{ $currentTicketId }}
+            </div>
 
             <button wire:click="closeQr" class="w-full bg-gray-100 dark:bg-primary-800 text-gray-700 dark:text-gray-200 py-3 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-primary-700 transition">
-                Cerrar
+                Cerrar Ventana
             </button>
         </div>
     </div>
