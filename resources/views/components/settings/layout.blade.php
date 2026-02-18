@@ -16,9 +16,9 @@
                     <a href="{{ route($link['route']) }}" wire:navigate
                        class="group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap
                               {{ $isActive 
-                                 ? 'bg-primary-50 text-primary-700 hover:bg-primary-100 hover:text-primary-800' 
-                                 : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900' }}">
-                        <svg class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 {{ $isActive ? 'text-primary-700' : 'text-gray-400 group-hover:text-gray-500' }}" 
+                                 ? 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100 hover:text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300' 
+                                 : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:bg-primary-800' }}">
+                        <svg class="flex-shrink-0 -ml-1 mr-3 h-6 w-6 {{ $isActive ? 'text-indigo-700 dark:text-indigo-400' : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-400' }}" 
                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="{{ $link['icon'] }}" />
                         </svg>
@@ -30,13 +30,21 @@
 
         <!-- Content -->
         <div class="lg:col-span-9">
-            <div class="mb-4">
-                <h2 class="text-2xl font-bold text-gray-900">{{ $heading ?? '' }}</h2>
-                <p class="mt-1 text-sm text-gray-500">{{ $subheading ?? '' }}</p>
+            <div class="mb-6 flex items-center gap-4">
+               <div class="relative w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{{ $heading ?? 'Configuración' }}</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ $subheading ?? 'Gestiona tu cuenta y preferencias' }}</p>
+                </div>
             </div>
             
-            <div class="bg-white shadow sm:rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
+            <div class="bg-white dark:bg-primary-900 border border-secondary-200 dark:border-primary-800 shadow-xl rounded-2xl overflow-hidden">
+                <div class="px-6 py-8 sm:p-10">
                     {{ $slot }}
                 </div>
             </div>

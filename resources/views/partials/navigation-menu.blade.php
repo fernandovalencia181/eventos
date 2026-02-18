@@ -76,6 +76,18 @@
                 <!-- Dark Mode Toggle -->
                 <button x-data="{ 
                             darkMode: localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+                            init() {
+                                if (this.darkMode) {
+                                    document.documentElement.classList.add('dark');
+                                } else {
+                                    document.documentElement.classList.remove('dark');
+                                }
+                                
+                                // Escuchar cambios de navegación de Livewire para persistir el tema
+                                document.addEventListener('livewire:navigated', () => {
+                                    if (this.darkMode) document.documentElement.classList.add('dark');
+                                });
+                            },
                             toggle() {
                                 this.darkMode = !this.darkMode;
                                 if (this.darkMode) {
@@ -87,6 +99,7 @@
                                 }
                             }
                         }" 
+                        x-init="init()"
                         @click="toggle()"
                         class="text-primary-200 hover:text-white transition focus:outline-none p-2 rounded-lg hover:bg-primary-800"
                         title="Cambiar tema">

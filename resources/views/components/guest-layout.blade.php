@@ -8,25 +8,43 @@
         <title>{{ config('app.name', 'EventosU') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
+        <script>
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark')
+            } else {
+                document.documentElement.classList.remove('dark')
+            }
+        </script>
     </head>
-    <body class="font-sans text-gray-900 antialiased bg-[#010d1e]" style="background-color: #010d1e;">
-        {{-- Background Gradient Wrapper --}}
-        <div class="min-h-screen flex flex-col justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-[#010d1e] to-[#022046] px-4" style="background: linear-gradient(to bottom right, #010d1e, #022046);">
-            <div class="mb-6 sm:mb-8">
-                <a href="/" class="text-3xl sm:text-4xl font-bold text-white flex items-center gap-3 drop-shadow-md transition-transform hover:scale-105">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10 text-white/90">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v4.086c0 .698.509 1.3 1.209 1.36a11.97 11.97 0 005.996 4.024q.16.035.32.065V19.5a3 3 0 003 3h5.25a3 3 0 003-3v-2.25a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 9.375v-1.5h3.375c.621 0 1.125-.504 1.125-1.125V5.25c0-.621-.504-1.125-1.125-1.125h-13.5c-.621 0-1.125.504-1.125 1.125z" />
-                    </svg>
-                    EventosU
-                </a>
+    <body class="font-sans antialiased bg-gray-50 dark:bg-primary-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+        <div class="min-h-screen flex flex-col">
+            
+            {{-- Navigation Menu (Shared with App Layout) --}}
+            @include('partials.navigation-menu')
+
+            <div class="flex-grow flex flex-col justify-center items-center pt-6 sm:pt-0 px-4 py-12">
+                {{-- Logo (Visible on mobile or small screens above card) --}}
+                <div class="mb-6 sm:mb-8 md:hidden">
+                    <a href="/" class="flex items-center gap-2">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center text-white shadow-lg">
+                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-7 h-7">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="w-full sm:max-w-md px-6 py-8 bg-white dark:bg-primary-900 shadow-xl overflow-hidden rounded-2xl border border-gray-200 dark:border-primary-800 transition-colors">
+                    {{ $slot }}
+                </div>
             </div>
 
-            <div class="w-full sm:max-w-md px-6 py-8 bg-white/95 backdrop-blur-sm shadow-2xl overflow-hidden rounded-2xl border border-white/20 transform transition-all">
-                {{ $slot }}
-            </div>
+            @include('partials.footer')
         </div>
+        @livewireScripts
     </body>
 </html>

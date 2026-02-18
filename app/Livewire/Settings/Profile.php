@@ -15,6 +15,8 @@ class Profile extends Component
     public string $name = '';
 
     public string $email = '';
+    
+    public string $phone = '';
 
     /**
      * Mount the component.
@@ -23,6 +25,7 @@ class Profile extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->phone = Auth::user()->phone ?? '';
     }
 
     /**
@@ -43,9 +46,15 @@ class Profile extends Component
                 'max:255',
                 Rule::unique(User::class)->ignore($user->id),
             ],
+
+            'phone' => ['nullable', 'string', 'max:20'],
         ]);
 
-        $user->fill($validated);
+        $user->fill([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
+        ]);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;

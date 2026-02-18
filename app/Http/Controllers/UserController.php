@@ -26,7 +26,12 @@ class UserController extends Controller
 
         // Filtro por Rol (opcional, pero útil)
         if ($request->has('rol') && $request->rol != '') {
-            $query->where('rol', $request->rol);
+            if ($request->rol === 'user') {
+                // Buscamos tanto 'user' como 'usuario' por inconsistencias en BD
+                $query->whereIn('rol', ['user', 'usuario']);
+            } else {
+                $query->where('rol', $request->rol);
+            }
         }
 
         $users = $query->paginate(10);
