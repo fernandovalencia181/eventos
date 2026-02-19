@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Evento;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AdminStaffController extends Controller
 {
     public function index()
     {
         // Obtener usuarios que tienen rol 'staff' (ya sea por string o ID)
-        $staffUsers = \App\Models\User::whereHas('role', function($q) {
+        $staffUsers = User::whereHas('role', function($q) {
             $q->where('name', 'staff');
         })->orWhere('rol', 'staff')->with(['role', 'evento'])->get();
 
@@ -18,7 +23,7 @@ class AdminStaffController extends Controller
 
     public function create()
     {
-        $eventos = \App\Models\Evento::where('fecha', '>=', now())->get();
+        $eventos = Evento::where('fecha', '>=', now())->get();
         return view('admin.staff.create', compact('eventos'));
     }
 
@@ -33,18 +38,18 @@ class AdminStaffController extends Controller
         ]);
 
         // Obtener o crear rol staff
-        $staffRole = \App\Models\Role::firstOrCreate(['name' => 'staff'], ['label' => 'Staff']);
+        $staffRole = Role::firstOrCreate(['name' => 'staff'], ['label' => 'Staff']);
 
         $permissions = [];
         if ($request->has('access_guests')) {
             $permissions['access_guests'] = true;
         }
 
-        \App\Models\User::create([
+        User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-            'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+            'password' => Hash::make($validated['password']),
             'rol' => 'staff', // para compatibilidad antigua
             'role_id' => $staffRole->id,
             'evento_id' => $validated['evento_id'],
@@ -54,13 +59,13 @@ class AdminStaffController extends Controller
         return redirect()->route('admin.staff.index')->with('status', 'Miembro de Staff creado correctamente.');
     }
 
-    public function edit(\App\Models\User $staff)
+    public function edit(User $staff)
     {
-        $eventos = \App\Models\Evento::where('fecha', '>=', now())->get();
+        $eventos = Evento::where('fecha', '>=', now())->get();
         return view('admin.staff.edit', compact('staff', 'eventos'));
     }
 
-    public function update(Request $request, \App\Models\User $staff)
+    public function update(Request $request, User $staff)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -78,7 +83,7 @@ class AdminStaffController extends Controller
         ];
 
         if ($request->filled('password')) {
-            $data['password'] = \Illuminate\Support\Facades\Hash::make($validated['password']);
+            $data['password'] = Hash::make($validated['password']);
         }
 
         // Handle permissions
@@ -95,14 +100,14 @@ class AdminStaffController extends Controller
         return redirect()->route('admin.staff.index')->with('status', 'Miembro de Staff actualizado.');
     }
 
-    public function destroy(\App\Models\User $staff)
+    public function destroy(User $staff)
     {
         // Precaución: Borrar usuario
         $staff->delete();
         return redirect()->route('admin.staff.index')->with('status', 'Cuenta de staff eliminada.');
     }
 
-    public function togglePermission(Request $request, \App\Models\User $staff)
+    public function togglePermission(Request $request, User $staff)
     {
         $request->validate([
             'permission' => 'required|string',
