@@ -90,61 +90,65 @@
                             </div>
                         </div>
 
-                        @if($openDate === $dateKey)
-                            <!-- Modal/Popup (Fixed Center Mode) -->
-                            <div class="fixed inset-0 z-[100] flex items-center justify-center bg-secondary-900/60 backdrop-blur-sm p-4 cursor-default"
-                                wire:click.self="toggleDate(null)">
-                                
-                                <div class="bg-white dark:bg-primary-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-fade-in-up ring-1 ring-black/5 relative transform transition-all scale-100 dark:border dark:border-primary-700">
-                                    
-                                    <div class="bg-gradient-to-r from-cyan-600 to-blue-600 px-5 py-4 flex justify-between items-center text-white">
-                                        <h4 class="text-lg font-bold flex items-center gap-2">
-                                            <svg class="w-5 h-5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                            <span class="capitalize">{{ $currentDayDate->isoFormat('dddd D [de] MMMM') }}</span>
-                                        </h4>
-                                        
-                                        <button wire:click.stop="toggleDate(null)" class="text-white/80 hover:text-white hover:bg-white/20 rounded-lg p-1 transition">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="p-3 space-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar bg-white dark:bg-primary-900">
-                                        @forelse($dayEvents as $event)
-                                            <a href="{{ route('eventos.edit', $event['id']) }}" class="flex flex-col p-4 rounded-xl hover:bg-cyan-50 dark:hover:bg-primary-800/50 transition border border-secondary-100 dark:border-primary-800 hover:border-cyan-200 dark:hover:border-cyan-800/50 group">
-                                                <div class="flex items-center justify-between mb-1">
-                                                    <span class="font-bold text-secondary-800 dark:text-white group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors">{{ $event['title'] }}</span>
-                                                    <span class="w-2.5 h-2.5 rounded-full {{ $event['color'] ?? 'bg-secondary-300' }}"></span>
-                                                </div>
-                                                <div class="flex items-center text-sm text-secondary-500 dark:text-secondary-400">
-                                                    <svg class="w-4 h-4 mr-1.5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                    {{ \Carbon\Carbon::parse($event['date'])->format('H:i') }} hs
-                                                </div>
-                                            </a>
-                                        @empty
-                                            <div class="flex flex-col items-center justify-center py-12 text-center">
-                                                <div class="bg-secondary-50 dark:bg-primary-800 rounded-full p-4 mb-3">
-                                                    <svg class="w-8 h-8 text-secondary-300 dark:text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                                                </div>
-                                                <p class="text-sm text-secondary-500 dark:text-secondary-400 font-medium">No hay eventos programados</p>
-                                                <p class="text-xs text-secondary-400 dark:text-secondary-500 mt-1">Selecciona 'Nuevo Evento' para agregar uno.</p>
-                                            </div>
-                                        @endforelse
-                                    </div>
-
-                                    <div class="p-4 border-t border-secondary-100 dark:border-primary-800 bg-secondary-50 dark:bg-primary-800/50">
-                                        <a href="{{ route('eventos.create') }}" 
-                                        class="w-full flex items-center justify-center gap-2 text-base bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:from-cyan-700 hover:to-blue-700 font-bold py-3 px-4 rounded-xl shadow-lg transform hover:scale-[1.02] transition-all duration-200">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                            Crear Nuevo Evento
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
                     </div>
                 @endfor
             </div>
         </div>
+
+        @if($openDate)
+            @php
+                 $currentDayDate = \Carbon\Carbon::createFromFormat('Y-m-d', $openDate);
+                 $dayEvents = $eventsByDate[$openDate] ?? [];
+            @endphp
+            <!-- Modal/Popup (Fixed Center Mode) - Moved outside loop -->
+            <div class="fixed inset-0 z-[100] flex items-center justify-center bg-secondary-900/60 backdrop-blur-sm p-4 cursor-default"
+                wire:click.self="toggleDate(null)">
+                
+                <div class="bg-white dark:bg-primary-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden animate-fade-in-up ring-1 ring-black/5 relative transform transition-all scale-100 dark:border dark:border-primary-700">
+                    
+                    <div class="bg-gradient-to-r from-cyan-600 to-blue-600 px-5 py-4 flex justify-between items-center text-white">
+                        <h4 class="text-lg font-bold flex items-center gap-2">
+                            <svg class="w-5 h-5 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <span class="capitalize">{{ $currentDayDate->locale('es')->isoFormat('dddd D [de] MMMM') }}</span>
+                        </h4>
+                        
+                        <button wire:click.stop="toggleDate(null)" class="text-white/80 hover:text-white hover:bg-white/20 rounded-lg p-1 transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                    
+                    <div class="p-3 space-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar bg-white dark:bg-primary-900">
+                        @forelse($dayEvents as $event)
+                            <a href="{{ route('eventos.edit', $event['id']) }}" class="flex flex-col p-4 rounded-xl hover:bg-cyan-50 dark:hover:bg-primary-800/50 transition border border-secondary-100 dark:border-primary-800 hover:border-cyan-200 dark:hover:border-cyan-800/50 group">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-bold text-secondary-800 dark:text-white group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors">{{ $event['title'] }}</span>
+                                    <span class="w-2.5 h-2.5 rounded-full {{ $event['color'] ?? 'bg-secondary-300' }}"></span>
+                                </div>
+                                <div class="flex items-center text-sm text-secondary-500 dark:text-secondary-400">
+                                    <svg class="w-4 h-4 mr-1.5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    {{ \Carbon\Carbon::parse($event['date'])->format('H:i') }} hs
+                                </div>
+                            </a>
+                        @empty
+                            <div class="flex flex-col items-center justify-center py-12 text-center">
+                                <div class="bg-secondary-50 dark:bg-primary-800 rounded-full p-4 mb-3">
+                                    <svg class="w-8 h-8 text-secondary-300 dark:text-secondary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                </div>
+                                <p class="text-sm text-secondary-500 dark:text-secondary-400 font-medium">No hay eventos programados</p>
+                                <p class="text-xs text-secondary-400 dark:text-secondary-500 mt-1">Selecciona 'Nuevo Evento' para agregar uno.</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <div class="p-4 border-t border-secondary-100 dark:border-primary-800 bg-secondary-50 dark:bg-primary-800/50">
+                        <a href="{{ route('eventos.create') }}" 
+                        class="w-full flex items-center justify-center gap-2 text-base bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:from-cyan-700 hover:to-blue-700 font-bold py-3 px-4 rounded-xl shadow-lg transform hover:scale-[1.02] transition-all duration-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Crear Nuevo Evento
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 </div>
