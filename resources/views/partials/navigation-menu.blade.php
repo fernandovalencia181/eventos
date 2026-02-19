@@ -13,6 +13,10 @@
                         <span class="text-xl font-bold text-white tracking-tight">EventosU</span>
                     </a>
                 </div>
+                <!-- Google Translate Button -->
+                <div class="flex items-center ml-4">
+                    <div id="google_translate_element" style="background: #0f172a; border-radius: 0.5rem; padding: 0.25rem 0.75rem; margin-left: 0.5rem; box-shadow: 0 2px 8px 0 #0002; display: flex; align-items: center; min-height: 36px;"></div>
+                </div>
 
                 <div class="hidden space-x-8 lg:-my-px lg:ml-10 lg:flex">
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
@@ -72,6 +76,43 @@
             </div>
 
             <div class="hidden lg:flex lg:items-center lg:ml-6 space-x-4">
+                </nav>
+                <!-- Google Translate Widget Script -->
+                <style>
+                    /* Google Translate custom styles */
+                    #google_translate_element select {
+                        background: #1e293b;
+                        color: #fff;
+                        border: none;
+                        border-radius: 0.375rem;
+                        padding: 0.25rem 0.75rem;
+                        font-size: 1rem;
+                        font-weight: 500;
+                        box-shadow: 0 1px 4px 0 #0001;
+                        margin: 0;
+                        outline: none;
+                        transition: background 0.2s;
+                    }
+                    #google_translate_element select:focus {
+                        background: #334155;
+                    }
+                    .goog-logo-link, .goog-te-gadget span, .goog-te-gadget-simple img {
+                        display: none !important;
+                    }
+                    .goog-te-gadget {
+                        font-size: 0 !important;
+                    }
+                </style>
+                <script type="text/javascript">
+                    function googleTranslateElementInit() {
+                        new google.translate.TranslateElement({
+                            pageLanguage: 'es',
+                            includedLanguages: 'ca',
+                            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                        }, 'google_translate_element');
+                    }
+                </script>
+                <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
                 
                 <!-- Dark Mode Toggle -->
                 <button x-data="{ 
