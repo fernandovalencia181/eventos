@@ -39,21 +39,6 @@ return new class extends Migration
             $table->index(['evento_id', 'created_at']);
         });
 
-        Schema::create('incidencias', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('evento_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('ticket_id')->nullable()->constrained()->onDelete('set null');
-            $table->enum('tipo', ['perdida_qr', 'error_datos', 'doble_entrada', 'otro']);
-            $table->text('descripcion');
-            $table->enum('estado', ['pendiente', 'resuelto', 'escalado'])->default('pendiente');
-            $table->foreignId('reportado_por')->constrained('users'); // Staff que reporta
-            $table->foreignId('resuelto_por')->nullable()->constrained('users');
-            $table->timestamp('fecha_resolucion')->nullable();
-            $table->text('solucion')->nullable();
-            $table->timestamps();
-        });
-
         Schema::create('invitados_especiales', function (Blueprint $table) {
             $table->id();
             $table->foreignId('evento_id')->constrained()->onDelete('cascade');
@@ -97,7 +82,6 @@ return new class extends Migration
         Schema::dropIfExists('asignaciones_espacio');
         Schema::dropIfExists('espacios_evento');
         Schema::dropIfExists('invitados_especiales');
-        Schema::dropIfExists('incidencias');
         Schema::dropIfExists('asistencias');
         Schema::dropIfExists('tickets');
     }
