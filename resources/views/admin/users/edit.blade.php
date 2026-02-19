@@ -19,20 +19,20 @@
                     @method('PUT')
 
                     <div>
-                        <x-label for="name" value="Nombre" />
-                        <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $user->name)" required autofocus />
+                        <label for="name" class="block font-medium text-sm text-secondary-700 dark:text-secondary-300 mb-1">Nombre</label>
+                        <input id="name" class="block mt-1 w-full" type="text" name="name" value="{{ old('name', $user->name) }}" required autofocus />
                         @error('name') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
-                        <x-label for="email" value="Email" />
-                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $user->email)" required />
+                        <label for="email" class="block font-medium text-sm text-secondary-700 dark:text-secondary-300 mb-1">Email</label>
+                        <input id="email" class="block mt-1 w-full" type="email" name="email" value="{{ old('email', $user->email) }}" required />
                         @error('email') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
-                        <x-label for="phone" value="Teléfono" />
-                        <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone', $user->phone)" />
+                        <label for="phone" class="block font-medium text-sm text-secondary-700 dark:text-secondary-300 mb-1">Teléfono</label>
+                        <input id="phone" class="block mt-1 w-full" type="text" name="phone" value="{{ old('phone', $user->phone) }}" />
                         @error('phone') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
 

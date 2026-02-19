@@ -21,7 +21,7 @@
 
         <div class="block">
             <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correo Electrónico</label>
-            <input id="email" class="block mt-1 w-full rounded-lg border-gray-300 dark:border-primary-600 bg-white dark:bg-primary-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-colors" type="email" name="email" :value="old('email', $request->email)" required autofocus />
+            <input id="email" class="block mt-1 w-full rounded-lg border-gray-300 dark:border-primary-600 bg-white dark:bg-primary-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-colors" type="email" name="email" value="{{ old('email', $request->email) }}" required autofocus />
         </div>
 
         <div class="mt-4">

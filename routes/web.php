@@ -73,6 +73,8 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     // Gestión de Usuarios
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/crear', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
@@ -84,6 +86,47 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::resource('admin/staff', \App\Http\Controllers\AdminStaffController::class, ['as' => 'admin']);
 
     // Aquí irán futuras rutas de admin (editar, borrar, escanear, etc.)
+});
+
+
+// --- 5. ZONA STAFF (Protegida por middleware 'staff') ---
+Route::middleware(['auth', 'verified', 'staff'])->prefix('staff')->name('staff.')->group(function () {
+    
+    // Dashboard Staff
+    Route::get('/dashboard', function () {
+        $eventos = \App\Models\Evento::where('fecha', '>=', now())
+            ->orderBy('fecha')
+            ->get();
+        return view('staff.dashboard', compact('eventos'));
+    })->name('dashboard');
+    
+    // Gestión de Evento Específico
+    Route::prefix('evento/{eventoId}')->name('evento.')->group(function () {
+        
+        // Check-in / Validación
+        Route::get('/validacion', function ($eventoId) {
+            $evento = \App\Models\Evento::findOrFail($eventoId);
+            return view('staff.validacion', compact('evento', 'eventoId'));
+        })->name('validacion');
+        
+        // Control de Aforo
+        Route::get('/aforo', function ($eventoId) {
+            $evento = \App\Models\Evento::findOrFail($eventoId);
+            return view('staff.aforo', compact('evento', 'eventoId'));
+        })->name('aforo');
+        
+        // Gestión de Incidencias
+        Route::get('/incidencias', function ($eventoId) {
+            $evento = \App\Models\Evento::findOrFail($eventoId);
+            return view('staff.incidencias', compact('evento', 'eventoId'));
+        })->name('incidencias');
+        
+        // Gestión de Invitados Especiales
+        Route::get('/invitados', function ($eventoId) {
+            $evento = \App\Models\Evento::findOrFail($eventoId);
+            return view('staff.invitados', compact('evento', 'eventoId'));
+        })->name('invitados');
+    });
 });
 
 

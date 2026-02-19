@@ -18,7 +18,7 @@ class MiPase extends Component
     public $ticket;
     public $guests = []; // Nueva propiedad para almacenar info de acompañantes
     public $qrCodeSvg;
-    public $timeLeft = 30;
+    public $timeLeft = 20;
 
     public function mount()
     {
@@ -79,9 +79,9 @@ class MiPase extends Component
             $newToken = Str::random(16);
             $this->ticket->update([
                 'token_reentrada' => $newToken,
-                'token_reentrada_expira' => now()->addSeconds(30) // 30 segundos de vida
+                'token_reentrada_expira' => now()->addSeconds(20) // 20 segundos de vida (ajustado)
             ]);
-            $this->timeLeft = 30;
+            $this->timeLeft = 20;
         } else {
             // Calcular tiempo restante
             $this->timeLeft = $this->ticket->token_reentrada_expira->diffInSeconds(now());
