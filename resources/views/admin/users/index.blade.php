@@ -24,6 +24,12 @@
                         <p class="text-secondary-600 dark:text-secondary-400 mt-2">Administración global de cuentas</p>
                     </div>
                 </div>
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('users.create') }}" class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-pink-600 to-rose-600 border border-transparent rounded-xl font-semibold text-xs text-white uppercase tracking-widest hover:from-pink-700 hover:to-rose-700 active:bg-pink-800 disabled:opacity-25 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                        Nuevo Usuario
+                    </a>
+                </div>
             </div>
 
             @if(session('status'))

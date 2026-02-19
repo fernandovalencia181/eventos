@@ -19,7 +19,8 @@ class GoogleController extends Controller
     public function callback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            // FIX: Bypass SSL verification for local development (cURL error 60)
+            $googleUser = Socialite::driver('google')->setHttpClient(new \GuzzleHttp\Client(['verify' => false]))->user();
 
             $user = User::where('google_id', $googleUser->id)
                 ->orWhere('email', $googleUser->email)
