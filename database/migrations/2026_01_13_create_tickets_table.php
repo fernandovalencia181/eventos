@@ -39,22 +39,6 @@ return new class extends Migration
             $table->index(['evento_id', 'created_at']);
         });
 
-        Schema::create('invitados_especiales', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('evento_id')->constrained()->onDelete('cascade');
-            $table->string('nombre');
-            $table->string('email')->nullable();
-            $table->string('telefono')->nullable();
-            $table->enum('tipo', ['ponente', 'prensa', 'vip', 'organizador'])->default('ponente');
-            $table->string('folio')->unique();
-            $table->string('qr_code')->nullable();
-            $table->boolean('ha_ingresado')->default(false);
-            $table->timestamp('hora_ingreso')->nullable();
-            $table->foreignId('registrado_por')->constrained('users'); // Staff que lo registró
-            $table->foreignId('validado_por')->nullable()->constrained('users');
-            $table->timestamps();
-        });
-
         // Tabla para espacios/salas si el evento tiene subdivisiones
         Schema::create('espacios_evento', function (Blueprint $table) {
             $table->id();
@@ -81,7 +65,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('asignaciones_espacio');
         Schema::dropIfExists('espacios_evento');
-        Schema::dropIfExists('invitados_especiales');
         Schema::dropIfExists('asistencias');
         Schema::dropIfExists('tickets');
     }
