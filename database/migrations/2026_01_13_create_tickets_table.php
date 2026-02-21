@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        /*
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -38,6 +39,7 @@ return new class extends Migration
             
             $table->index(['evento_id', 'created_at']);
         });
+        */
 
         // Tabla para espacios/salas si el evento tiene subdivisiones
         Schema::create('espacios_evento', function (Blueprint $table) {
@@ -65,7 +67,9 @@ return new class extends Migration
     {
         Schema::dropIfExists('asignaciones_espacio');
         Schema::dropIfExists('espacios_evento');
+        /*
         Schema::dropIfExists('asistencias');
         Schema::dropIfExists('tickets');
+        */
     }
 };
