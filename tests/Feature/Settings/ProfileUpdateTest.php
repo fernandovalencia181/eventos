@@ -44,6 +44,8 @@ test('email verification status is unchanged when email address is unchanged', f
     expect($user->refresh()->email_verified_at)->not->toBeNull();
 });
 
+
+
 test('user can delete their account', function () {
     $user = User::factory()->create();
 

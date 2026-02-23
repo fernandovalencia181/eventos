@@ -2,22 +2,26 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Illuminate\Support\Facades\Auth;
+
 // CONTROLADORES
 use App\Http\Controllers\EventoController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\AdminStaffController;
+
 // LIVEWIRE
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
-
-// IMPORTACIONES DE TU EQUIPO (NUEVO)
-use App\Http\Controllers\TicketController; // Descomentar cuando tu compa cree el suyo
-use App\Http\Controllers\PdfController; // Descomentar cuando tu compa cree el suyo
-use App\Http\Controllers\StaffController; 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\GoogleController;
 use App\Livewire\MisEntradas;
-use App\Livewire\Calendario; 
+use App\Livewire\Calendario;
+
 // =========================================================================
 // 🌍 ZONA PÚBLICA (Lo que ve todo el mundo sin loguearse)
 // =========================================================================
@@ -26,27 +30,15 @@ use App\Livewire\Calendario;
 Route::get('auth/google', [GoogleController::class, 'redirect'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
 
-// Cambiamos la función anónima por TU controlador para mostrar los eventos reales
+// Página de Inicio
 Route::get('/', [EventoController::class, 'index'])->name('home');
 
 // --- 2. ZONA DE REDIRECCIÓN (Login exitoso) ---
-Route::get('/dashboard', function () {
-    /** @var \App\Models\User $user */ // <--- ESTO LE DICE A VS CODE QUIÉN ES EL USUARIO
-    $user = Auth::user();  
-
-    if ($user->rol === 'admin') {
-        return redirect()->route('admin.dashboard');
-    }
-    
-    if ($user->rol === 'staff') {
-        return redirect()->route('staff.index');
-    }
-    
-    return redirect()->route('home');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 // SISTEMA DE REGISTRO DE ENTRADAS (PÚBLICO)
-use App\Http\Controllers\RegistrationController;
 Route::get('/registro/{evento}', [RegistrationController::class, 'create'])->name('registro.create');
 Route::post('/registro/{evento}', [RegistrationController::class, 'store'])->name('registro.store');
 Route::get('/registro/descargar/{registration}', [RegistrationController::class, 'download'])->name('registro.download');
@@ -79,11 +71,11 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
     // Gestión de Roles
-    Route::resource('roles', \App\Http\Controllers\RoleController::class);
+    Route::resource('roles', RoleController::class);
 
     // Gestión de Equipo Staff (Cuentas)
-    Route::post('admin/staff/{staff}/toggle-permission', [\App\Http\Controllers\AdminStaffController::class, 'togglePermission'])->name('admin.staff.toggle-permission');
-    Route::resource('admin/staff', \App\Http\Controllers\AdminStaffController::class, ['as' => 'admin']);
+    Route::post('admin/staff/{staff}/toggle-permission', [AdminStaffController::class, 'togglePermission'])->name('admin.staff.toggle-permission');
+    Route::resource('admin/staff', AdminStaffController::class, ['as' => 'admin']);
 
     // Aquí irán futuras rutas de admin (editar, borrar, escanear, etc.)
 });

@@ -383,9 +383,11 @@
                     <button wire:click="setQrMode(false)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ !$showDynamicQr ? 'bg-white dark:bg-primary-600 shadow-sm text-primary-700 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
                         Estático
                     </button>
+                    @if($canShowDynamicQr)
                     <button wire:click="setQrMode(true)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ $showDynamicQr ? 'bg-white dark:bg-primary-600 shadow-sm text-primary-700 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
                         Dinámico
                     </button>
+                    @endif
                 </div>
 
                 <p class="text-sm font-medium text-gray-900 dark:text-white truncate mb-1">{{ $currentGuestName }}</p>
