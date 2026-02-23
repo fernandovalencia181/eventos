@@ -232,7 +232,7 @@
     <!-- QR Modal -->
     @if($viewingQr)
     <div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4" 
-         @if($showDynamicQr) wire:poll.1s="refreshDynamicQr" @endif>
+         wire:poll.2s="checkDynamicStatus">
         
         <div class="bg-white dark:bg-primary-900 rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center transform transition-all scale-100 relative">
             
@@ -246,9 +246,11 @@
                 <button wire:click="setQrMode(false)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ !$showDynamicQr ? 'bg-white dark:bg-primary-700 shadow-sm text-primary-700 dark:text-white ring-1 ring-black/5' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700' }}">
                     QR Entrada
                 </button>
+                @if($canShowDynamicQr)
                 <button wire:click="setQrMode(true)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ $showDynamicQr ? 'bg-white dark:bg-primary-700 shadow-sm text-primary-700 dark:text-white ring-1 ring-black/5' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700' }}">
                     QR Dinámico
                 </button>
+                @endif
             </div>
 
             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">

@@ -44,6 +44,7 @@ class Invitados extends Component
     // Dynamic QR props
     public $showDynamicQr = false;
     public $timeLeft = 20;
+    public $canShowDynamicQr = false; // Nueva propiedad
 
     public function mount()
     {
@@ -174,20 +175,15 @@ class Invitados extends Component
 
     public function verQr($ticketId)
     {
-        // $ticketId ya es el ID de la entrada directamente
         $ticket = Ticket::findOrFail($ticketId);
-        
         $this->currentGuestName = $ticket->nombre_asistente;
-        // Mostramos el ID del ticket, pero el QR se genera con el TOKEN que es lo que valida el scanner
-        $this->currentTicketId = $ticket->id; 
-        $this->showDynamicQr = false; // Reset to static
+        $this->currentTicketId = $ticket->id;
+        $this->showDynamicQr = false;
 
-        // Generate Static QR Code
-        // CORREGIDO: Usamos el token_seguridad_qr porque es lo que está en la BD como identificador externo "d89f..."
-        // y lo que el scanner espera encontrar.
-        $this->generateQrImage($ticket->token_seguridad_qr); 
-        
+        $this->generateQrImage($ticket->token_seguridad_qr);
         $this->viewingQr = true;
+        
+        $this->checkDynamicStatus(); // Verificar estado inicial
     }
 
     public function toggleQrType()
@@ -202,6 +198,27 @@ class Invitados extends Component
         $this->refreshDynamicQr();
     }
 
+    public function checkDynamicStatus()
+    {
+        if (!$this->viewingQr) return;
+
+        $ticket = Ticket::find($this->currentTicketId);
+        if (!$ticket) return;
+
+        // Verificar si el usuario ha generado/activado el código dinámico recientemente
+        $this->canShowDynamicQr = ($ticket->token_reentrada && $ticket->token_reentrada_expira > now());
+
+        if ($this->showDynamicQr) {
+             if (!$this->canShowDynamicQr) {
+                 // Si estaba viendo el dinámico y expiró, volver al estático automáticamente
+                 $this->showDynamicQr = false;
+                 $this->generateQrImage($ticket->token_seguridad_qr);
+             } else {
+                 $this->refreshDynamicQr();
+             }
+        }
+    }
+
     public function refreshDynamicQr()
     {
         if (!$this->viewingQr) return;
@@ -210,27 +227,23 @@ class Invitados extends Component
         if (!$ticket) return;
 
         if ($this->showDynamicQr) {
-            // Lógica MODO DINÁMICO (idéntica a MiPase)
             
-            // Si expiró o no existe token dinámico, generar uno nuevo
-            if (!$ticket->token_reentrada || $ticket->token_reentrada_expira < now()) {
-                $newToken = Str::random(16);
-                $ticket->update([
-                    'token_reentrada' => $newToken,
-                    'token_reentrada_expira' => now()->addSeconds(20) // 20 segundos
-                ]);
-                $this->timeLeft = 20;
+            // Permitimos que el staff vea el QR mientras sea válido por fecha
+            // NO generamos nuevos automáticamente, eso es tarea del usuario activo.
+            
+            if ($ticket->token_reentrada && $ticket->token_reentrada_expira > now()) {
+                 $this->timeLeft = $ticket->token_reentrada_expira->diffInSeconds(now());
+                 $this->generateQrImage($ticket->token_reentrada);
             } else {
-                // Calcular tiempo restante
-                $this->timeLeft = $ticket->token_reentrada_expira->diffInSeconds(now());
+                 // Si caducó, volvemos a estático
+                 $this->showDynamicQr = false;
+                 $this->generateQrImage($ticket->token_seguridad_qr);
             }
-
-            $this->generateQrImage($ticket->token_reentrada);
-        } else {
-            // Lógica MODO ESTÁTICO: Usar el token original de seguridad
-            $this->generateQrImage($ticket->token_seguridad_qr);
-        }
+        
+    } else {
+             $this->generateQrImage($ticket->token_seguridad_qr);
     }
+}
 
     private function generateQrImage($content)
     {
