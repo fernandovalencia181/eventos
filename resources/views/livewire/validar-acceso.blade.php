@@ -108,16 +108,16 @@
 
                 <!-- Mensajes Flash -->
                 @if (session()->has('success'))
-                    <div class="bg-green-100 dark:bg-green-900/40 border-l-4 border-green-500 text-green-700 dark:text-green-300 p-4 rounded-xl shadow-md animate-fade-in-down">
-                        <div class="font-bold text-lg">¡Acceso Permitido!</div>
-                        <p>{{ session('success') }}</p>
-                    </div>
+                <div class="mb-6 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-400 px-4 py-3 rounded-lg flex justify-between items-center">
+                    <span>{!! session('success') !!}</span>
+                    <button wire:click="$set('showModal', false)" class="text-green-700 dark:text-green-400 hover:text-green-900 font-bold text-xl">&times;</button>
+                </div>
                 @endif
+                
                 @if (session()->has('error'))
-                    <div class="bg-red-100 dark:bg-red-900/40 border-l-4 border-red-500 text-red-700 dark:text-red-300 p-4 rounded-xl shadow-md animate-bounce-short">
-                        <div class="font-bold text-lg">¡Acceso Denegado!</div>
-                        <p>{{ session('error') }}</p>
-                    </div>
+                <div class="mb-6 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg">
+                    {!! session('error') !!}
+                </div>
                 @endif
             </div>
         </div>

@@ -142,4 +142,9 @@ class User extends Authenticatable
     {
         return $this->tickets()->whereIn('estado', ['adentro', 'afuera'])->exists();
     }
+
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class);
+    }
 }

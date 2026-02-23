@@ -21,11 +21,11 @@
                     
                     @auth
                         @if(Auth::user()->isAdmin())
-                            <x-nav-link :href="route('eventos.create')" :active="request()->routeIs('eventos.create')">
-                                Crear Evento
-                            </x-nav-link>
                             <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                                 Panel Admin
+                            </x-nav-link>
+                            <x-nav-link :href="route('eventos.create')" :active="request()->routeIs('eventos.create')">
+                                Crear Evento
                             </x-nav-link>
                             <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
                                 Usuarios
@@ -51,7 +51,7 @@
                             </x-nav-link>
                             @if(Auth::user()->hasPermission('access_guests'))
                                 <x-nav-link :href="route('staff.invitados')" :active="request()->routeIs('staff.invitados')">
-                                    Invitados
+                                    Gestión de Asistentes
                                 </x-nav-link>
                             @endif
                         @endif
@@ -189,8 +189,8 @@
             
             @auth
                  @if(Auth::user()->isAdmin())
-                    <a href="{{ route('eventos.create') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('eventos.create') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Crear Evento</a>
                     <a href="{{ route('admin.dashboard') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('admin.dashboard') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Panel Admin</a>
+                    <a href="{{ route('eventos.create') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('eventos.create') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Crear Evento</a>
                     <a href="{{ route('users.index') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('users.*') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Usuarios</a>
                     <a href="{{ route('admin.staff.index') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('admin.staff.*') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Equipo Staff</a>
                     <a href="{{ route('calendario') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('calendario') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Calendario</a>
@@ -204,7 +204,7 @@
                     <a href="{{ route('staff.asistencia') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('staff.asistencia') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Asistencia</a>
                     
                     @if(Auth::user()->hasPermission('access_guests'))
-                        <a href="{{ route('staff.invitados') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('staff.invitados') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Invitados</a>
+                        <a href="{{ route('staff.invitados') }}" class="block px-3 py-3 rounded-xl text-base font-bold {{ request()->routeIs('staff.invitados') ? 'bg-white/10 text-white shadow-inner' : 'text-primary-100 hover:bg-white/5 hover:text-white' }} transition-all">Gestión de Asistentes</a>
                     @endif
                 @endif
 

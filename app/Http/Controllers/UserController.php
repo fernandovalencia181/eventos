@@ -88,9 +88,24 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable|string|max:20',
             'rol' => 'required|in:admin,user,staff',
+            'course' => 'nullable|string|max:255',
         ]);
 
-        $user->update($validated);
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'rol' => $validated['rol'],
+        ]);
+
+        // Actualizar Ciclo (Course) si se envía
+        if ($request->has('course')) {
+            $lastRegistration = $user->registrations()->latest()->first();
+            if ($lastRegistration) {
+                $lastRegistration->update(['course' => $validated['course']]);
+            }
+            // Nota: Si no hay registro previo, no creamos uno nuevo aquí para evitar inconsistencias de datos (evento_id, etc.)
+        }
 
         return redirect()->route('users.index')->with('status', 'Usuario actualizado correctamente.');
     }

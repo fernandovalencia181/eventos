@@ -34,13 +34,17 @@ class RegistrationController extends Controller
 
     public function store(Request $request, Evento $evento)
     {
+        $maxGuests = $evento->max_guests ?? 0;
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'estudios' => 'required|string',
-            'guests' => 'nullable|array|max:3',
+            'guests' => 'nullable|array|max:' . $maxGuests,
             'guests.*.name' => 'required|string|max:255',
-            'guests.*.phone' => 'nullable|string|max:20', // Validar telefono
+            'guests.*.phone' => 'nullable|string|max:20', 
+        ], [
+            'guests.max' => 'El número máximo de acompañantes permitidos es ' . $maxGuests . '.',
         ]);
 
         // 0. Validar Aforo Disponible

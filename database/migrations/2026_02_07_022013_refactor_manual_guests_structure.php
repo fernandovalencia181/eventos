@@ -53,9 +53,11 @@ return new class extends Migration
         Schema::dropIfExists('invitados_especiales');
 
         // 4. Borrar columna telefono de entradas (ya que ahora se leerá de guests o users)
-        Schema::table('entradas', function (Blueprint $table) {
-            $table->dropColumn('telefono');
-        });
+        if (Schema::hasColumn('entradas', 'telefono')) {
+            Schema::table('entradas', function (Blueprint $table) {
+                $table->dropColumn('telefono');
+            });
+        }
     }
 
     /**

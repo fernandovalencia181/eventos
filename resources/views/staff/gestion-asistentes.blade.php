@@ -1,26 +1,39 @@
-<div>
-    <div class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <!-- Header con Estilo Unificado -->
         <div class="flex items-center gap-4 w-full md:w-auto">
-            <div class="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-all duration-300 flex-shrink-0">
-                <div class="absolute inset-0 bg-white/20 rounded-2xl backdrop-blur-sm"></div>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-white relative z-10">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-                </svg>
+            <div class="relative w-16 h-16 shrink-0 bg-gradient-to-br from-purple-500 via-indigo-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:-rotate-3 transition-all duration-300">
+                <div class="absolute inset-0 bg-white/20 rounded-3xl backdrop-blur-sm"></div>
+                <!-- Icono SVG Grande -->
+                <div class="relative z-10 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                    </svg>
+                </div>
             </div>
             <div>
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Lista de Asistentes</h1>
-                <p class="text-gray-600 dark:text-gray-400 text-sm mt-0.5">Control de entradas, titulares y acompañantes del evento</p>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">Gestión de Asistentes</h1>
+                <p class="text-secondary-600 dark:text-secondary-400 mt-2">Administración total de usuarios</p>
             </div>
         </div>
 
-        <button wire:click="openModal" 
-                class="w-full md:w-auto justify-center bg-gray-100 dark:bg-primary-800 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-200 dark:hover:bg-primary-700 transition shadow-sm inline-flex items-center gap-2 border border-gray-300 dark:border-primary-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            Agregar Manualmente
-        </button>
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <button wire:click="openModal" 
+                class="w-full md:w-auto justify-center bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-indigo-700 transition shadow-lg transform hover:scale-105 inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Agregar Manualmente
+            </button>
+
+            <a href="{{ route('staff.index') }}" 
+            class="w-full sm:w-auto justify-center bg-white dark:bg-primary-800 text-secondary-700 dark:text-secondary-300 border border-secondary-300 dark:border-primary-600 px-5 py-2.5 rounded-xl hover:bg-secondary-50 dark:hover:bg-primary-700 transition shadow-sm inline-flex items-center gap-2 font-bold">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                Volver al Panel
+            </a>
+        </div>
     </div>
 
     <!-- Banner de Sincronización (Para registros antiguos) -->
@@ -77,7 +90,7 @@
             <div class="flex-1">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Buscar Asistente</label>
                 <div class="relative">
-                    <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar por nombre, email o teléfono..." 
+                    <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar por nombre, email o telófono..." 
                         class="w-full rounded-lg border-gray-300 dark:border-primary-600 bg-white dark:bg-primary-800 text-gray-900 dark:text-white focus:ring-primary-500 focus:border-primary-500 pl-10 h-10">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -100,14 +113,15 @@
         </div>
     </div>
 
-    <!-- Tabla -->
-    <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 overflow-hidden mb-8">
+    <!-- Tabla (Vista Escritorio) -->
+    <div class="hidden md:block bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 overflow-hidden mb-8">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-primary-800">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Asistente</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tipo / Contacto / Teléfono</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ciclo</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tipo / Correo / Telófono</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Estado Entrada</th>
                         <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Entrada / QR</th>
                     </tr>
@@ -128,6 +142,18 @@
                                 </div>
                             </div>
                         </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                            @php
+                                $ciclo = 'N/A';
+                                if ($invitado->user) {
+                                    $reg = $invitado->user->registrations->where('event_id', $invitado->evento_id)->first();
+                                    $ciclo = $reg->course ?? 'N/A';
+                                } elseif ($invitado->guest && $invitado->guest->registration) {
+                                    $ciclo = $invitado->guest->registration->course ?? 'N/A';
+                                }
+                            @endphp
+                            {{ Str::limit($ciclo, 20) }}
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex flex-col gap-1">
                                 <!-- Etiqueta de Tipo -->
@@ -138,7 +164,7 @@
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
-                                            Invitado / Acompañante
+                                            Invitado / Acompaóante
                                         </span>
                                     @endif
                                 </div>
@@ -154,7 +180,7 @@
                                 @endif
 
                                 @php
-                                    // Búsqueda inteligente de teléfono:
+                                    // Bósqueda inteligente de telófono:
                                     // 1. Si es Usuario Registrado: user->phone
                                     // 2. Si es Guest (antiguo o manual migrado): guest->phone
                                     $telefono = null;
@@ -167,27 +193,22 @@
 
                                 @if($telefono)
                                     @php
-                                        // Limpiar teléfono para formato wa.me
+                                        // Limpiar telófono para formato wa.me
                                         $telefonoClean = preg_replace('/[^0-9]/', '', $telefono);
-                                        $mensaje = "Hola " . ($invitado->nombre_asistente ?? 'Asistente') . ", aquí tienes tu entrada para el evento " . ($invitado->evento->nombre ?? '') . ".";
+                                        $mensaje = "Hola " . ($invitado->nombre_asistente ?? 'Asistente') . ", aquó tienes tu entrada para el evento " . ($invitado->evento->nombre ?? '') . ".";
                                     @endphp
                                     <div class="text-sm flex items-center gap-2 mt-1">
                                         <a href="https://wa.me/{{ $telefonoClean }}?text={{ urlencode($mensaje) }}" 
                                            target="_blank" 
                                            title="Enviar entrada por WhatsApp"
-                                           class="group flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                                           class="mt-1 flex items-center text-sm text-green-600 dark:text-green-400 font-medium hover:text-green-700 transition-colors">
                                             
-                                            <!-- Icono Teléfono (Cambia de color al hover) -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                                            <!-- Icono WhatsApp -->
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                                             </svg>
                                             
-                                            <span class="group-hover:underline decoration-dotted underline-offset-2">{{ $telefono }}</span>
-
-                                            <!-- Icono WhatsApp (aparece al hover) -->
-                                            <svg class="w-4 h-4 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-                                            </svg>
+                                            {{ $telefono }}
                                         </a>
                                     </div>
                                 @endif
@@ -229,65 +250,183 @@
         </div>
     </div>
 
+    <!-- VISTA CAMBIADA A MóVIL (Tarjetas) -->
+    <div class="md:hidden space-y-4 mb-8">
+        @forelse($invitados as $invitado)
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md p-5 border border-secondary-200 dark:border-primary-800">
+            
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-full bg-gradient-to-r from-primary-400 to-blue-500 flex items-center justify-center text-white font-bold flex-shrink-0">
+                        {{ substr($invitado->nombre_asistente ?? '-', 0, 1) }}
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 dark:text-white leading-tight">{{ $invitado->nombre_asistente }}</h3>
+                        <p class="text-xs text-secondary-500 dark:text-secondary-400">{{ $invitado->evento->nombre ?? 'N/A' }}</p>
+                    </div>
+                </div>
+                <!-- Estado Entrada -->
+                <span class="px-2 py-1 text-xs font-bold rounded-full {{ $invitado->estado === 'generada' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400' }}">
+                    {{ ucfirst($invitado->estado) }}
+                </span>
+            </div>
+
+            <!-- Datos Secundarios -->
+            <div class="space-y-2 mb-4">
+                <!-- Ciclo -->
+                <div class="bg-gray-50 dark:bg-primary-800/50 p-2.5 rounded-lg border border-gray-100 dark:border-primary-700">
+                    <span class="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Ciclo</span>
+                    @php
+                        $ciclo = 'N/A';
+                        if ($invitado->user) {
+                            $reg = $invitado->user->registrations->where('event_id', $invitado->evento_id)->first();
+                            $ciclo = $reg->course ?? 'N/A';
+                        } elseif ($invitado->guest && $invitado->guest->registration) {
+                            $ciclo = $invitado->guest->registration->course ?? 'N/A';
+                        }
+                    @endphp
+                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ Str::limit($ciclo, 30) }}</span>
+                </div>
+
+                <!-- Contacto & Telófono -->
+                <div class="flex flex-col gap-1">
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span>
+                            @if($invitado->user_id) <span class="text-blue-600 dark:text-blue-400 font-bold">Titular</span>
+                            @else <span class="text-purple-600 dark:text-purple-400 font-bold">Invitado</span> @endif
+                        </span>
+                        @if($invitado->user)
+                            <span>{{ $invitado->user->email }}</span>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- WhatsApp Button -->
+                @php
+                    $telefono = null;
+                    if ($invitado->user) {
+                        $telefono = $invitado->user->phone;
+                    } elseif ($invitado->guest) {
+                        $telefono = $invitado->guest->phone;
+                    }
+                @endphp
+                @if($telefono)
+                    @php
+                        $telefonoClean = preg_replace('/[^0-9]/', '', $telefono);
+                        $mensaje = "Hola " . ($invitado->nombre_asistente ?? 'Asistente') . ", aquó tienes tu entrada para el evento " . ($invitado->evento->nombre ?? '') . ".";
+                    @endphp
+                    <a href="https://wa.me/{{ $telefonoClean }}?text={{ urlencode($mensaje) }}" 
+                       target="_blank" 
+                       class="flex items-center justify-center w-full py-2 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 rounded-lg text-sm font-semibold text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 transition gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                        {{ $telefono }}
+                    </a>
+                @endif
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="flex gap-3 pt-3 border-t border-secondary-100 dark:border-primary-800">
+                <button type="button" wire:click="verQr('{{ $invitado->id }}')" class="flex-1 py-2 bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-medium hover:bg-blue-100 dark:hover:bg-blue-900/60 transition flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                    </svg>
+                    Ver QR
+                </button>
+                <button type="button" wire:click="descargarEntrada('{{ $invitado->id }}')" class="flex-1 py-2 bg-purple-50 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-lg text-sm font-medium hover:bg-purple-100 dark:hover:bg-purple-900/60 transition flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    PDF
+                </button>
+            </div>
+        </div>
+        @empty
+        <div class="text-center p-8 bg-white dark:bg-primary-900 rounded-lg border border-dashed border-secondary-300 dark:border-primary-700">
+            <svg class="w-12 h-12 text-gray-400 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <p class="text-secondary-500 dark:text-secondary-400 font-medium">No se encontraron asistentes.</p>
+        </div>
+        @endforelse
+
+        <div class="mt-4">
+            {{ $invitados->links() }}
+        </div>
+    </div>
+
     <!-- QR Modal -->
     @if($viewingQr)
-    <div class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 p-4" 
+    <div class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity" 
          @if($showDynamicQr) wire:poll.1s="refreshDynamicQr" @endif>
         
-        <div class="bg-white dark:bg-primary-900 rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center transform transition-all scale-100 relative">
+        <div class="bg-white dark:bg-primary-900 rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden transform transition-all scale-100 animate-fade-in-up">
             
-            <!-- Close X -->
-            <button wire:click="closeQr" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-
-            <!-- TABS -->
-            <div class="flex justify-center space-x-1 mb-6 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
-                <button wire:click="setQrMode(false)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ !$showDynamicQr ? 'bg-white dark:bg-primary-700 shadow-sm text-primary-700 dark:text-white ring-1 ring-black/5' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700' }}">
-                    QR Entrada
-                </button>
-                <button wire:click="setQrMode(true)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ $showDynamicQr ? 'bg-white dark:bg-primary-700 shadow-sm text-primary-700 dark:text-white ring-1 ring-black/5' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700' }}">
-                    QR Dinámico
+            <!-- Header Mejorado -->
+            <div class="flex justify-between items-center p-4 border-b border-gray-100 dark:border-primary-800">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">
+                    {{ $showDynamicQr ? 'Acceso Dinámico' : 'Acceso Estático' }}
+                </h3>
+                <button wire:click="closeQr" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition bg-gray-100 dark:bg-primary-800 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-primary-700">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
 
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
-                {{ $showDynamicQr ? 'Acceso Dinámico' : 'Acceso Estático' }}
-            </h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 truncate px-4">{{ $currentGuestName }}</p>
-            
-            <div class="bg-white p-4 rounded-xl border-2 border-dashed border-gray-200 inline-block mb-6 relative group">
-                <img src="{{ $currentQr }}" alt="QR Code" class="h-48 w-48 mx-auto object-contain transition-opacity duration-300">
-                 
-                 <!-- Dynamic Timer Badge -->
-                 @if($showDynamicQr)
-                    <div class="absolute bottom-2 right-2 bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-200 shadow-sm flex items-center gap-1">
-                        <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        {{ $timeLeft }}s
-                    </div>
-                 @endif
-            </div>
-            
-            <!-- Progress Bar -->
-            @if($showDynamicQr)
-                <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700 max-w-[220px] mx-auto mb-6 overflow-hidden">
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full transition-all duration-1000 ease-linear" 
-                            style="width: {{ ($timeLeft / 20) * 100 }}%"></div>
+            <!-- Body -->
+            <div class="p-6 text-center">
+                <!-- TABS -->
+                <div class="flex justify-center space-x-1 mb-6 bg-gray-100 dark:bg-primary-800 p-1 rounded-xl">
+                    <button wire:click="setQrMode(false)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ !$showDynamicQr ? 'bg-white dark:bg-primary-600 shadow-sm text-primary-700 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
+                        Estático
+                    </button>
+                    <button wire:click="setQrMode(true)" class="flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all {{ $showDynamicQr ? 'bg-white dark:bg-primary-600 shadow-sm text-primary-700 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200' }}">
+                        Dinámico
+                    </button>
                 </div>
-            @endif
-            
-            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-xs text-gray-400 dark:text-gray-500 font-mono break-all mb-4">
-                ID: {{ $currentTicketId }}
-            </div>
 
-            <button wire:click="closeQr" class="w-full bg-gray-100 dark:bg-primary-800 text-gray-700 dark:text-gray-200 py-3 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-primary-700 transition">
-                Cerrar Ventana
-            </button>
+                <p class="text-sm font-medium text-gray-900 dark:text-white truncate mb-1">{{ $currentGuestName }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Muestra este código al staff</p>
+                
+                <div class="bg-white p-4 rounded-xl border-2 border-dashed border-gray-200 inline-block mb-6 relative group mx-auto">
+                    <img src="{{ $currentQr }}" alt="QR Code" class="h-48 w-48 object-contain transition-opacity duration-300">
+                     
+                     <!-- Dynamic Timer Badge -->
+                     @if($showDynamicQr)
+                        <div class="absolute bottom-2 right-2 bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-0.5 rounded-full border border-indigo-200 shadow-sm flex items-center gap-1">
+                            <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            {{ $timeLeft }}s
+                        </div>
+                     @endif
+                </div>
+                
+                <!-- Progress Bar -->
+                @if($showDynamicQr)
+                    <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700 max-w-[220px] mx-auto mb-6 overflow-hidden">
+                        <div class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full transition-all duration-1000 ease-linear" 
+                                style="width: {{ ($timeLeft / 20) * 100 }}%"></div>
+                    </div>
+                @endif
+                
+                <div class="bg-gray-50 dark:bg-primary-800/50 rounded-lg p-3 text-xs text-gray-400 dark:text-gray-500 font-mono break-all border border-gray-100 dark:border-primary-800">
+                    ID: {{ $currentTicketId }}
+                </div>
+            </div>
+            
+            <!-- Footer Action -->
+            <div class="p-4 bg-gray-50 dark:bg-primary-800 border-t border-gray-100 dark:border-primary-700">
+                <button wire:click="closeQr" class="w-full bg-white dark:bg-primary-700 border border-gray-300 dark:border-primary-600 text-gray-700 dark:text-gray-200 py-2.5 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-primary-600 transition shadow-sm">
+                    Cerrar
+                </button>
+            </div>
         </div>
     </div>
     @endif
 
-    <!-- Estadísticas (MOVIDO AL FINAL) -->
+    <!-- Estadósticas (MOVIDO AL FINAL) -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md p-6 border border-secondary-200 dark:border-primary-800">
             <div class="flex items-center justify-between mb-2">
@@ -311,7 +450,7 @@
 
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md p-6 border border-secondary-200 dark:border-primary-800">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Invitados / Acompañantes</h3>
+                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Acompaóantes</h3>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-purple-500 dark:text-purple-400">
                     <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM15.75 9.75a3 3 0 116 0 3 3 0 01-6 0zM2.25 9.75a3 3 0 116 0 3 3 0 01-6 0zM6.31 15.117A6.745 6.745 0 0112 12a6.745 6.745 0 016.709 7.498.75.75 0 01-.372.568A12.696 12.696 0 0112 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 01-.372-.568 6.787 6.787 0 011.019-4.38z" clip-rule="evenodd" />
                     <path d="M5.082 14.254a8.287 8.287 0 00-1.308 5.135 9.687 9.687 0 01-1.764-.44l-.115-.04a.563.563 0 01-.373-.487l-.01-.121a3.75 3.75 0 013.57-4.047zM20.226 19.389a8.287 8.287 0 00-1.308-5.135 3.75 3.75 0 013.57 4.047l-.01.121a.563.563 0 01-.373.486l-.115.04c-.567.2-1.156.349-1.764.441z" />
@@ -364,7 +503,7 @@
                                         <input type="email" wire:model="email" class="mt-1 block w-full rounded-md border-gray-300 dark:border-primary-600 dark:bg-primary-800 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Telófono</label>
                                         <input type="text" wire:model="telefono" class="mt-1 block w-full rounded-md border-gray-300 dark:border-primary-600 dark:bg-primary-800 shadow-sm focus:border-primary-500 focus:ring-primary-500">
                                     </div>
                                 </div>
@@ -372,10 +511,10 @@
                                 <div class="flex items-center">
                                     <input type="checkbox" wire:model="generar_entrada" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
                                     <label class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
-                                        Generar Entrada (QR) automáticamente
+                                        Generar Entrada (QR) automóticamente
                                     </label>
                                 </div>
-                                <p class="text-xs text-gray-500">Si se marca, se creará una entrada válida para escanear en puerta.</p>
+                                <p class="text-xs text-gray-500">Si se marca, se crearó una entrada vólida para escanear en puerta.</p>
                             </div>
                         </div>
                     </div>

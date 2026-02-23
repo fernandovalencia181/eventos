@@ -11,6 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Primero eliminar tablas dependientes o claves foráneas
+        Schema::dropIfExists('asistencias');
+        Schema::dropIfExists('incidencias'); // Esta también solía tener relación con tickets
+        
+        // Finalmente eliminar la tabla tickets
         Schema::dropIfExists('tickets');
     }
 

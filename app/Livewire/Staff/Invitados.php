@@ -284,17 +284,25 @@ class Invitados extends Component
         // para traer a TODO el mundo (Usuarios, Acompañantes y VIPs)
         $query = Ticket::query();
 
-        // 1. Filtrar por evento
+        // 2. Filtrar por evento
         if ($this->evento_id_filter) {
             $query->where('evento_id', $this->evento_id_filter);
         } elseif ($user->evento_id) {
             $query->where('evento_id', $user->evento_id);
         }
 
-        // 2. Búsqueda
+        // 3. EXCLUIR ADMINS Y STAFF (Mostrar solo usuarios e invitados reales)
+        $query->where(function($q) {
+            $q->whereHas('user', function($u) {
+                $u->whereNotIn('rol', ['admin', 'staff']);
+            })
+            ->orWhereNull('user_id'); // Invitados sin usuario asociado (Guests puros)
+        });
+
+        // 4. Búsqueda
         if ($this->search) {
-            $query->where(function($q) {
-                $term = $this->search;
+            $term = $this->search;
+            $query->where(function($q) use ($term) {
                 $q->where('nombre_asistente', 'like', '%' . $term . '%')
                   // Búsqueda en Usuario (Email y Teléfono)
                   ->orWhereHas('user', function($u) use ($term) {
@@ -323,10 +331,10 @@ class Invitados extends Component
             ? Evento::where('id', $user->evento_id)->get() 
             : Evento::where('fecha', '>=', now()->subDays(30))->orderBy('fecha', 'desc')->get();
 
-        return view('livewire.staff.invitados', [
+        return view('staff.gestion-asistentes', [
             'invitados' => $invitados, // Mantenemos el nombre de variable para no romper la vista
             'eventos' => $eventos,
             'stats' => $stats
-        ]);
+        ])->layout('components.layouts.app');
     }
 }

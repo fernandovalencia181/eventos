@@ -1,9 +1,5 @@
-@extends('staff.layout')
-
-@section('title', 'Panel de Staff')
-
-@section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<x-app-layout>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- Cabecera -->
     <div class="mb-8">
@@ -26,39 +22,136 @@
         </div>
     </div>
 
-    <!-- Accesos Rápidos (MOVIDO ARRIBA) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <a href="{{ route('staff.scanner') }}" class="bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-lg p-6 hover:from-primary-700 hover:to-primary-800 transition shadow-lg transform hover:scale-105">
-            <div class="mb-3">
-                <svg viewBox="0 0 48 48" class="w-12 h-12" fill="none">
-                    <rect x="6" y="6" width="14" height="14" rx="2" stroke="white" stroke-width="3" fill="white" opacity="0.3"/>
-                    <rect x="28" y="6" width="14" height="14" rx="2" stroke="white" stroke-width="3" fill="white" opacity="0.3"/>
-                    <rect x="6" y="28" width="14" height="14" rx="2" stroke="white" stroke-width="3" fill="white" opacity="0.3"/>
-                    <circle cx="13" cy="13" r="3" fill="white"/>
-                    <circle cx="35" cy="13" r="3" fill="white"/>
-                    <circle cx="13" cy="35" r="3" fill="white"/>
-                </svg>
+    <!-- Evento Actual (Top Banner) -->
+    <div class="mb-6">
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-sm border border-secondary-200 dark:border-primary-800 p-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-base font-bold text-secondary-900 dark:text-white inline-flex items-center gap-2">
+                    <svg viewBox="0 0 20 20" class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="currentColor">
+                        <rect x="3" y="4" width="14" height="13" rx="2" fill="currentColor" opacity="0.2"/>
+                        <rect x="3" y="2" width="14" height="4" rx="1" fill="currentColor"/>
+                        <circle cx="7" cy="9" r="1" fill="currentColor"/>
+                        <circle cx="10" cy="9" r="1" fill="currentColor"/>
+                        <circle cx="13" cy="9" r="1" fill="currentColor"/>
+                    </svg>
+                    Evento Actual
+                </h3>
+                <div class="flex items-center gap-3">
+                     @forelse($eventos as $evento)
+                        <span class="inline-flex items-center gap-2 px-3 py-1 bg-secondary-50 dark:bg-primary-800 rounded-md text-sm">
+                            <span class="font-medium text-secondary-900 dark:text-white">{{ $evento->nombre }}</span>
+                            <span class="text-secondary-400">|</span>
+                            <span class="text-secondary-600 dark:text-secondary-400">{{ $evento->fecha->format('d M Y - H:i') }}</span>
+                        </span>
+                    @empty
+                        <span class="text-sm text-secondary-500 dark:text-secondary-400 italic">No hay eventos activos</span>
+                    @endforelse
+                </div>
             </div>
-            <h3 class="text-lg font-bold mb-2">Escáner QR</h3>
-            <p class="text-primary-100 text-sm">Validar entradas con código QR</p>
+        </div>
+    </div>
+
+    <!-- Accesos Rápidos (MOVIDO ARRIBA) -->
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+        <!-- Escáner QR -->
+        <a href="{{ route('staff.scanner') }}" class="bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-lg p-6 hover:from-primary-700 hover:to-primary-800 transition shadow-lg transform hover:scale-105 group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center shadow-lg mb-3 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                    <svg viewBox="0 0 24 24" class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75zM6.75 16.5h.75v.75h-.75v-.75zM16.5 6.75h.75v.75h-.75v-.75zM13.5 13.5h.75v.75h-.75v-.75zM13.5 19.5h.75v.75h-.75v-.75zM19.5 13.5h.75v.75h-.75v-.75zM16.5 16.5h.75v.75h-.75v-.75zM19.5 19.5h.75v.75h-.75v-.75z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1">Escáner QR</h3>
+                <p class="text-primary-100 text-xs">Validar entradas</p>
+            </div>
         </a>
 
-        <a href="{{ route('staff.asistencia') }}" class="bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg p-6 hover:from-green-700 hover:to-green-800 transition shadow-lg transform hover:scale-105">
-            <div class="mb-3">
-                <svg viewBox="0 0 48 48" class="w-12 h-12" fill="none">
-                    <rect x="8" y="6" width="32" height="36" rx="2" stroke="white" stroke-width="3" fill="white" opacity="0.2"/>
-                    <line x1="16" y1="16" x2="32" y2="16" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                    <line x1="16" y1="24" x2="32" y2="24" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                    <line x1="16" y1="32" x2="26" y2="32" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
+        <!-- Lista de Asistencia -->
+        <a href="{{ route('staff.asistencia') }}" class="bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg p-6 hover:from-green-700 hover:to-green-800 transition shadow-lg transform hover:scale-105 group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center shadow-lg mb-3 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                    <svg viewBox="0 0 24 24" class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 17.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1">Asistencia</h3>
+                <p class="text-green-100 text-xs">Ver listado en vivo</p>
             </div>
-            <h3 class="text-lg font-bold mb-2">Lista de Asistencia</h3>
-            <p class="text-green-100 text-sm">Ver y buscar asistentes</p>
+        </a>
+
+        <!-- Gestión de Invitados -->
+        <a href="{{ route('staff.invitados') }}" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg p-6 hover:from-purple-700 hover:to-indigo-700 transition shadow-lg transform hover:scale-105 group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center shadow-lg mb-3 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                    <svg viewBox="0 0 24 24" class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1">Gestión de Invitados</h3>
+                <p class="text-purple-100 text-xs">Gestionar accesos</p>
+            </div>
+        </a>
+
+        <!-- Incidencias -->
+        <a href="{{ route('staff.incidencias') }}" class="bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-lg p-6 hover:from-red-700 hover:to-rose-700 transition shadow-lg transform hover:scale-105 group relative overflow-hidden">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center shadow-lg mb-3 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm">
+                    <svg viewBox="0 0 24 24" class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1">Incidencias</h3>
+                <p class="text-red-100 text-xs">Reportar problemas</p>
+            </div>
         </a>
     </div>
 
     <!-- Estadísticas Rápidas -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Aforo Actual -->
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Aforo Actual</h3>
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                    <svg viewBox="0 0 24 24" class="w-6 h-6" fill="white">
+                        <circle cx="8" cy="6" r="3"/>
+                        <circle cx="16" cy="6" r="2.5" opacity="0.7"/>
+                        <path d="M2 18c0-2.8 2.2-5 5-5h2c2.8 0 5 2.2 5 5v1H2v-1z"/>
+                        <path d="M14 18c0-2 1.3-3.5 3-3.5h2c1.7 0 3 1.5 3 3.5v1h-8v-1z" opacity="0.7"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-secondary-900 dark:text-white">{{ $stats['aforo_actual'] }}</p>
+            <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 inline-flex items-center gap-1">
+                <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
+                    <circle cx="6" cy="4" r="2"/>
+                    <path d="M2 10c0-2 1.8-3.5 4-3.5s4 1.5 4 3.5v1H2v-1z"/>
+                </svg>
+                Personas dentro
+            </p>
+        </div>
+
+        <!-- Validados Hoy -->
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Validados</h3>
+                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                    <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/>
+                        <path d="M8 12l2 2 5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-secondary-900 dark:text-white">{{ $stats['validadas_hoy'] }}</p>
+            <p class="text-sm text-green-600 dark:text-green-400 mt-2 inline-flex items-center gap-1">
+                <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
+                    <path d="M6 1l1 3h3l-2.5 2 1 3L6 7 3.5 9l1-3L2 4h3z"/>
+                </svg>
+                Accesos validados
+            </p>
+        </div>
+
         <!-- Meta Asistencia (NUEVO) -->
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
             <div class="flex items-center justify-between mb-4">
@@ -87,49 +180,6 @@
             <p class="text-xs text-secondary-500 dark:text-secondary-400 text-right">{{ round($porcentaje) }}% completado</p>
         </div>
 
-        <!-- Validados Hoy -->
-        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Validados</h3>
-                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
-                    <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/>
-                        <path d="M8 12l2 2 5-5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-            </div>
-            <p class="text-3xl font-bold text-secondary-900 dark:text-white">{{ $stats['validadas_hoy'] }}</p>
-            <p class="text-sm text-green-600 dark:text-green-400 mt-2 inline-flex items-center gap-1">
-                <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
-                    <path d="M6 1l1 3h3l-2.5 2 1 3L6 7 3.5 9l1-3L2 4h3z"/>
-                </svg>
-                Accesos validados
-            </p>
-        </div>
-
-        <!-- Aforo Actual -->
-        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Aforo Actual</h3>
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
-                    <svg viewBox="0 0 24 24" class="w-6 h-6" fill="white">
-                        <circle cx="8" cy="6" r="3"/>
-                        <circle cx="16" cy="6" r="2.5" opacity="0.7"/>
-                        <path d="M2 18c0-2.8 2.2-5 5-5h2c2.8 0 5 2.2 5 5v1H2v-1z"/>
-                        <path d="M14 18c0-2 1.3-3.5 3-3.5h2c1.7 0 3 1.5 3 3.5v1h-8v-1z" opacity="0.7"/>
-                    </svg>
-                </div>
-            </div>
-            <p class="text-3xl font-bold text-secondary-900 dark:text-white">{{ $stats['aforo_actual'] }}</p>
-            <p class="text-sm text-blue-600 dark:text-blue-400 mt-2 inline-flex items-center gap-1">
-                <svg viewBox="0 0 12 12" class="w-3 h-3" fill="currentColor">
-                    <circle cx="6" cy="4" r="2"/>
-                    <path d="M2 10c0-2 1.8-3.5 4-3.5s4 1.5 4 3.5v1H2v-1z"/>
-                </svg>
-                Personas dentro
-            </p>
-        </div>
-
         <!-- Incidencias Pendientes -->
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
             <div class="flex items-center justify-between mb-4">
@@ -156,34 +206,8 @@
 
     <!-- Evento Actual y Picos de Llegada -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <!-- Evento Actual -->
-        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
-            <h3 class="text-lg font-bold text-secondary-900 dark:text-white mb-4 inline-flex items-center gap-2">
-                <svg viewBox="0 0 20 20" class="w-5 h-5" fill="currentColor">
-                    <rect x="3" y="4" width="14" height="13" rx="2" fill="currentColor" opacity="0.2"/>
-                    <rect x="3" y="2" width="14" height="4" rx="1" fill="currentColor"/>
-                    <circle cx="7" cy="9" r="1" fill="currentColor"/>
-                    <circle cx="10" cy="9" r="1" fill="currentColor"/>
-                    <circle cx="13" cy="9" r="1" fill="currentColor"/>
-                </svg>
-                Evento Actual
-            </h3>
-            <div class="space-y-3">
-                @forelse($eventos as $evento)
-                <div class="flex items-center justify-between p-3 bg-secondary-50 dark:bg-primary-800 rounded-lg">
-                    <div class="flex-1">
-                        <p class="font-medium text-secondary-900 dark:text-white">{{ $evento->nombre }}</p>
-                        <p class="text-sm text-secondary-600 dark:text-secondary-400">{{ $evento->fecha->format('d M Y - H:i') }}</p>
-                    </div>
-                </div>
-                @empty
-                <p class="text-center text-secondary-600 dark:text-secondary-400 py-8">No hay eventos activos</p>
-                @endforelse
-            </div>
-        </div>
-
         <!-- Picos de Llegada -->
-        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
+        <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6 lg:col-span-2">
             <h3 class="text-lg font-bold text-secondary-900 dark:text-white mb-4 inline-flex items-center gap-2">
                 <svg viewBox="0 0 20 20" class="w-5 h-5" fill="currentColor">
                     <path d="M2 16l3-4 3 3 4-6 4 4 2-3v6H2z" fill="currentColor" opacity="0.3"/>
@@ -318,6 +342,6 @@
             @endforelse
         </div>
     </div>
-
 </div>
-@endsection
+</x-app-layout>
+

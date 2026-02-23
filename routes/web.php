@@ -184,7 +184,7 @@ Route::middleware(['auth', 'staff'])->prefix('staff')->name('staff.')->group(fun
     Route::get('/scanner', [StaffController::class, 'scanner'])->name('scanner');
     Route::get('/validacion', [StaffController::class, 'validacion'])->name('validacion');
     Route::get('/asistencia', [StaffController::class, 'asistencia'])->name('asistencia');
-    Route::get('/invitados', [StaffController::class, 'invitados'])->name('invitados');
+    Route::get('/invitados', App\Livewire\Staff\Invitados::class)->name('invitados');
     Route::get('/incidencias', [StaffController::class, 'incidencias'])->name('incidencias');
     
     // AJAX y acciones

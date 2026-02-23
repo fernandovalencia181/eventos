@@ -43,6 +43,7 @@ class EventoController extends Controller
             'fecha' => 'required|date|after:today',
             'lugar' => 'required|string',
             'aforo_maximo' => 'required|integer|min:1',
+            'max_guests' => 'required|integer|min:0', // Validar máximo de invitados por registro
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de imagen (máx 2MB)
         ]);
 
@@ -74,6 +75,7 @@ class EventoController extends Controller
             'fecha' => 'required|date',
             'lugar' => 'required|string',
             'aforo_maximo' => 'required|integer|min:1',
+            'max_guests' => 'required|integer|min:0', // Validar máximo de invitados al editar
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
