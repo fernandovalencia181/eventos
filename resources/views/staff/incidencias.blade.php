@@ -1,22 +1,39 @@
-@extends('staff.layout')
-
-@section('title', 'Gestión de Incidencias')
-
-@section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<x-app-layout>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
-    <div class="mb-8 flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-primary-900 dark:text-white">⚠️ Gestión de Incidencias</h1>
-            <p class="text-secondary-600 dark:text-secondary-400 mt-2">Reportar y gestionar problemas durante los eventos</p>
+    <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-center gap-4 w-full md:w-auto">
+            <div class="relative w-16 h-16 bg-gradient-to-br from-red-500 via-rose-500 to-pink-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:-rotate-3 transition-all duration-300">
+                <div class="absolute inset-0 bg-white/20 rounded-3xl backdrop-blur-sm"></div>
+                <div class="relative z-10 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                </div>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">Gestión de Incidencias</h1>
+                <p class="text-secondary-600 dark:text-secondary-400 mt-2">Reportar y gestionar problemas durante los eventos</p>
+            </div>
         </div>
-        <button onclick="document.getElementById('modal_incidencia').classList.remove('hidden')" 
-                class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition shadow-md inline-flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-            </svg>
-            Reportar Incidencia
-        </button>
+
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <button onclick="document.getElementById('modal_incidencia').classList.remove('hidden')" 
+                    class="w-full md:w-auto justify-center bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-3 rounded-xl hover:from-red-700 hover:to-rose-700 transition shadow-lg transform hover:scale-105 inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                Reportar Incidencia
+            </button>
+            
+            <a href="{{ route('staff.index') }}" 
+            class="w-full sm:w-auto justify-center bg-white dark:bg-primary-800 text-secondary-700 dark:text-secondary-300 border border-secondary-300 dark:border-primary-600 px-5 py-2.5 rounded-xl hover:bg-secondary-50 dark:hover:bg-primary-700 transition shadow-sm inline-flex items-center gap-2 font-bold">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                Volver al Panel
+            </a>
+        </div>
     </div>
 
     @if(session('success'))
@@ -30,8 +47,8 @@
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md p-6 border border-secondary-200 dark:border-primary-800">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Pendientes</h3>
-                <div class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-red-600 dark:text-red-400">
+                <div class="w-12 h-12 bg-gradient-to-br from-red-400 to-rose-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                     </svg>
                 </div>
@@ -43,8 +60,8 @@
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md p-6 border border-secondary-200 dark:border-primary-800">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">En Proceso</h3>
-                <div class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-yellow-600 dark:text-yellow-400">
+                <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
@@ -56,8 +73,8 @@
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md p-6 border border-secondary-200 dark:border-primary-800">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-sm font-medium text-secondary-600 dark:text-secondary-400">Resueltas</h3>
-                <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-green-600 dark:text-green-400">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
@@ -161,8 +178,12 @@
         </div>
         @empty
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-12 text-center">
-            <div class="text-6xl mb-4">✅</div>
-            <p class="text-lg font-medium text-secondary-900 dark:text-white mb-2">¡Excelente!</p>
+            <div class="mx-auto w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center shadow-lg mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10 text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <p class="text-xl font-bold text-secondary-900 dark:text-white mb-2">¡Excelente!</p>
             <p class="text-secondary-600 dark:text-secondary-400">No hay incidencias registradas</p>
         </div>
         @endforelse
@@ -171,48 +192,85 @@
 </div>
 
 <!-- Modal Nueva Incidencia -->
-<div id="modal_incidencia" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-primary-900 rounded-lg max-w-lg w-full p-6">
-        <h3 class="text-xl font-bold text-secondary-900 dark:text-white mb-6">⚠️ Reportar Incidencia</h3>
-        <form method="POST" action="{{ route('staff.registrar-incidencia') }}">
-            @csrf
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2">Evento *</label>
-                    <select name="evento_id" required class="w-full bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
-                        <option value="">Seleccionar evento...</option>
-                        @foreach($eventos as $evento)
-                            <option value="{{ $evento->id }}">{{ $evento->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2">Tipo de Incidencia *</label>
-                    <select name="tipo" required class="w-full bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
-                        <option value="perdida_qr">📱 QR Perdido</option>
-                        <option value="error_datos">❌ Error en Datos</option>
-                        <option value="doble_entrada">🔁 Doble Entrada</option>
-                        <option value="otro">⚠️ Otro</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2">Descripción *</label>
-                    <textarea name="descripcion" required rows="4" placeholder="Describe el problema con detalle..." class="w-full bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white"></textarea>
-                </div>
-                <div class="flex gap-3 pt-4">
-                    <button type="button" onclick="document.getElementById('modal_incidencia').classList.add('hidden')" class="flex-1 bg-secondary-300 dark:bg-primary-800 text-secondary-900 dark:text-white py-3 rounded-lg hover:bg-secondary-400 dark:hover:bg-primary-700 transition font-medium">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition font-medium">
-                        Reportar
+<div id="modal_incidencia" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-secondary-900/75 backdrop-blur-sm transition-opacity"></div>
+
+    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-primary-900 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-secondary-200 dark:border-primary-800">
+            
+            <!-- Header con gradiente -->
+            <div class="bg-gradient-to-r from-red-600 to-rose-600 px-6 py-4">
+                <div class="flex items-center justify-between text-white">
+                    <h3 class="text-xl font-bold flex items-center gap-2" id="modal-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                        Reportar Incidencia
+                    </h3>
+                    <button type="button" onclick="document.getElementById('modal_incidencia').classList.add('hidden')" class="text-white/80 hover:text-white transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </button>
                 </div>
             </div>
-        </form>
+
+            <form method="POST" action="{{ route('staff.registrar-incidencia') }}" class="p-6">
+                @csrf
+                <div class="space-y-5">
+                    <!-- Evento (Automático si staff tiene evento, sino Select) -->
+                    @if(optional(auth()->user())->evento_id)
+                        <input type="hidden" name="evento_id" value="{{ auth()->user()->evento_id }}">
+                        <div class="bg-secondary-50 dark:bg-primary-800/50 p-3 rounded-lg border border-secondary-200 dark:border-primary-700 flex items-center justify-between">
+                            <span class="text-sm font-medium text-secondary-500 dark:text-secondary-400">Evento Actual:</span>
+                            <span class="text-sm font-bold text-secondary-900 dark:text-white">
+                                {{ optional(auth()->user()->evento)->nombre ?? 'Evento Asignado' }}
+                            </span>
+                        </div>
+                    @else
+                        <div>
+                            <label class="block text-sm font-medium text-secondary-700 dark:text-secondary-300 mb-1">Evento *</label>
+                            <select name="evento_id" required class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-600 rounded-xl px-4 py-2.5 text-secondary-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition">
+                                <option value="">Seleccionar evento...</option>
+                                @foreach($eventos as $evento)
+                                    <option value="{{ $evento->id }}">{{ $evento->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+
+                    <div>
+                        <label class="block text-sm font-medium text-secondary-700 dark:text-secondary-300 mb-1">Tipo de Incidencia *</label>
+                        <select name="tipo" required class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-600 rounded-xl px-4 py-2.5 text-secondary-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition">
+                            <option value="">Seleccione el tipo...</option>
+                            <option value="qr_perdido">📱 QR Perdido / No legible</option>
+                            <option value="error_datos">❌ Error en Datos / ID Inválido</option>
+                            <option value="acceso_denegado">🚫 Acceso Denegado (Múltiples intentos)</option>
+                            <option value="tecnico">🔧 Problema Técnico (Scanner/App)</option>
+                            <option value="seguridad">👮 Seguridad / Comportamiento</option>
+                            <option value="otro">⚠️ Otro motivo</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-secondary-700 dark:text-secondary-300 mb-1">Descripción detallada *</label>
+                        <textarea name="descripcion" required rows="4" placeholder="Describe qué sucedió, número de ticket afectado, etc..." class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-600 rounded-xl px-4 py-3 text-secondary-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:border-red-500 transition resize-none"></textarea>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="button" onclick="document.getElementById('modal_incidencia').classList.add('hidden')" class="flex-1 px-4 py-2.5 bg-white dark:bg-primary-800 border border-secondary-300 dark:border-primary-600 text-secondary-700 dark:text-secondary-300 rounded-xl hover:bg-secondary-50 dark:hover:bg-primary-700 font-bold transition shadow-sm">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="flex-1 px-4 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl hover:from-red-700 hover:to-rose-700 font-bold transition shadow-lg transform active:scale-95">
+                            Reportar Problema
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-@endsection
 
 @push('scripts')
 <script>
@@ -248,3 +306,4 @@
     filtroEvento.addEventListener('change', aplicarFiltros);
 </script>
 @endpush
+</x-app-layout>

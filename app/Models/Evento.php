@@ -14,6 +14,7 @@ class Evento extends Model
         'fecha',
         'lugar',
         'aforo_maximo',
+        'max_guests',
         'imagen',
     ];
 
@@ -50,6 +51,20 @@ class Evento extends Model
     // Calcular cupos libres
     public function getLugaresDisponiblesAttribute()
     {
-        return max(0, $this->aforo_maximo - $this->ocupacion);
+        // Contar registros titulares
+        $titulares = $this->registrations()->count();
+        
+        // Contar acompañantes asociados a esos registros
+        $acompanantes = \App\Models\Guest::whereHas('registration', function($query) {
+            $query->where('event_id', $this->id);
+        })->count();
+        
+        // Sumar también los tickets generados manualmente o invitados especiales que no pasaron por registration
+        // (Esto depende de tu lógica exacta, pero si usas Ticket como fuente de verdad, mejor contar Tickets)
+        // Por ahora mantenemos la lógica de la migración anterior a base de Registration + Guest
+        
+        $totalOcupados = $titulares + $acompanantes;
+
+        return max(0, $this->aforo_maximo - $totalOcupados);
     }
 }

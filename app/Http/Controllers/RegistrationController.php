@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EntranceMail;
 
 class RegistrationController extends Controller
 {
@@ -32,13 +34,17 @@ class RegistrationController extends Controller
 
     public function store(Request $request, Evento $evento)
     {
+        $maxGuests = $evento->max_guests ?? 0;
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'estudios' => 'required|string',
-            'guests' => 'nullable|array|max:3',
+            'guests' => 'nullable|array|max:' . $maxGuests,
             'guests.*.name' => 'required|string|max:255',
-            'guests.*.phone' => 'nullable|string|max:20', // Validar telefono
+            'guests.*.phone' => 'nullable|string|max:20', 
+        ], [
+            'guests.max' => 'El número máximo de acompañantes permitidos es ' . $maxGuests . '.',
         ]);
 
         // 0. Validar Aforo Disponible
@@ -106,8 +112,19 @@ class RegistrationController extends Controller
 
             DB::commit();
 
-            // 3. Generar y Descargar PDF (Con QR en Base64)
-            return $this->generatePdfResponse($registration, $evento);
+            // 3. Generar PDF
+            $pdf = $this->preparePdf($registration, $evento);
+            $output = $pdf->output();
+
+            // 4. Enviar Email
+            try {
+                Mail::to($registration->email)->send(new EntranceMail($registration, $output));
+            } catch (\Exception $e) {
+                // Loguear error pero no detener la descarga
+                \Illuminate\Support\Facades\Log::error('Error enviando email: ' . $e->getMessage());
+            }
+
+            return $pdf->download('entrada-' . Str::slug($evento->nombre) . '-' . $registration->id . '.pdf');
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -122,14 +139,12 @@ class RegistrationController extends Controller
             abort(403);
         }
         
-        // Si no está logueado, podríamos permitirlo si conoce la URL, pero mejor restringir o dejar abierto si es público.
-        // Dado el requerimiento "acceder alli para descargar", asumimos contexto seguro.
-        
         $registration->load('guests', 'event');
-        return $this->generatePdfResponse($registration, $registration->event);
+        $pdf = $this->preparePdf($registration, $registration->event);
+        return $pdf->download('entrada-' . Str::slug($registration->event->nombre) . '-' . $registration->id . '.pdf');
     }
 
-    private function generatePdfResponse(Registration $registration, Evento $evento)
+    private function preparePdf(Registration $registration, Evento $evento)
     {
         // Helper para obtener QR en base64
         $getQrBase64 = function($token) {
@@ -151,6 +166,6 @@ class RegistrationController extends Controller
         $pdf = Pdf::loadView('registrations.pdf', compact('registration'));
         $pdf->setOption('isRemoteEnabled', true); // Backup
         
-        return $pdf->download('entrada-' . Str::slug($evento->nombre) . '-' . $registration->id . '.pdf');
+        return $pdf;
     }
 }

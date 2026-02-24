@@ -1,17 +1,26 @@
-<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8" wire:poll.1s="generateQr">
-    <div class="md:grid md:grid-cols-3 md:gap-6">
-        <div class="md:col-span-1">
-            <div class="px-4 sm:px-0">
-                <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Mi Pase Dinámico</h3>
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Utiliza este código para salir y re-ingresar al recinto.
-                </p>
+<div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8" wire:poll.1s="generateQr">
+    
+    <!-- Cabecera Estilo Proyecto -->
+    <div class="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4 text-center sm:text-left">
+            <div class="relative w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:rotate-3 transition-all duration-300 flex-shrink-0">
+                <div class="absolute inset-0 bg-white/20 rounded-3xl backdrop-blur-sm"></div>
+                <div class="relative z-10">
+                    <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                    </svg>
+                </div>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Mi Pase Dinámico</h1>
+                <p class="text-secondary-600 dark:text-secondary-400 mt-2">Utiliza este código para salir y re-ingresar al recinto.</p>
             </div>
         </div>
+    </div>
 
-        <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:p-6 shadow sm:rounded-md">
-                @if(!$ticket)
+    <div class="bg-white dark:bg-primary-900 shadow-xl rounded-2xl border border-secondary-200 dark:border-primary-800 overflow-hidden">
+        <div class="px-4 py-8 sm:p-10">
+            @if(!$ticket)
                     <div class="text-center py-10">
                         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -79,7 +88,6 @@
                     @endif
 
                 @endif
-            </div>
         </div>
     </div>
 </div>

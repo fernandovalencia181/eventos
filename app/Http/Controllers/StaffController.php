@@ -139,7 +139,7 @@ class StaffController extends Controller
         }
 
         // Ya no necesitamos pasar nada, Livewire se encarga de todo
-        return view('staff.invitados');
+        return view('staff.gestion-asistentes');
     }
 
     // Vista de incidencias
@@ -188,7 +188,7 @@ class StaffController extends Controller
             'ticket' => function($q) {
                 $q->with('user'); // Cargar explícitamente la relación user
             },
-            'guest', // Cargar invitados especiales
+            'guest.registration', // Cargar invitados con su registro (para ver curso)
             'evento'
         ]);
         
@@ -196,9 +196,110 @@ class StaffController extends Controller
             $query->where('evento_id', $evento_id);
         }
         
-        $asistencias = $query->latest()->paginate(50);
+        // FILTRAR SOLO USERS (Excluir Staff y Admin para el conteo de asistencia real de alumnos/invitados)
+        $query->where(function($q) {
+            // Case 1: Has Ticket with User who is NOT Admin/Staff
+            $q->whereHas('ticket', function($qt) {
+                $qt->whereHas('user', function($u) {
+                    $u->where('rol', '!=', 'admin')
+                      ->where('rol', '!=', 'staff');
+                });
+            })
+            // Case 2: Has Guest (Invitados especiales) - Guest records are always valid
+            ->orWhereHas('guest');
+        });
+
+        // Filtro por Ciclo (Curso)
+        if ($request->has('course') && $request->course != '') {
+            $course = $request->course;
+            
+            $query->where(function($q) use ($course) {
+                // Caso 1: Ticket vinculado a Usuario -> Buscar en Registration
+                $q->whereHas('ticket', function($qTicket) use ($course) {
+                    $qTicket->whereHas('user', function($qUser) use ($course) {
+                        // Buscamos la registration de este usuario para el evento del ticket
+                        // Como no podemos acceder fácilmente al evento_id del ticket en este nivel sin un join complejo,
+                        // asumiremos que filtra por curso en CUALQUIER registro de este usuario que coincida.
+                        // Dado que filtramos por evento_id a nivel global, el riesgo de colisión es bajo.
+                        $qUser->whereHas('registrations', function($qReg) use ($course) {
+                            $qReg->where('course', $course);
+                        });
+                    });
+                })
+                // Caso 2: Guest -> Buscar en su Registration padre
+                ->orWhereHas('guest', function($qGuest) use ($course) {
+                    $qGuest->whereHas('registration', function($qReg) use ($course) {
+                        $qReg->where('course', $course);
+                    });
+                });
+            });
+        }
         
-        return view('staff.asistencia', compact('eventos', 'asistencias', 'evento_id'));
+        $asistencias = $query->latest()->paginate(50)->withQueryString();
+
+
+
+        // Calcular Total Registrados (Potenciales asistentes) para el filtro actual
+        // 1. Tickets (Usuarios) - Filtramos tickets activos del evento (o de todos si no hay filtro)
+        $ticketsQuery = Ticket::query()->where('estado', '!=', 'cancelada');
+        
+        // FILTRAR SOLO USERS (Excluir Staff y Admin para el conteo de total registrados también)
+        $ticketsQuery->whereHas('user', function($u) {
+            $u->whereNotIn('rol', ['admin', 'staff']);
+        });
+
+        if ($evento_id) {
+            $ticketsQuery->where('evento_id', $evento_id);
+        } else {
+             // Si no hay evento seleccionado, solo mostramos tickets de los eventos visibles
+             $ticketsQuery->whereIn('evento_id', $eventos->pluck('id'));
+        }
+            
+        // Si hay filtro de curso, filtramos los tickets cuyos usuarios tengan registration en ese curso
+        if ($request->has('course') && $request->course != '') {
+             $course = $request->course;
+             $ticketsQuery->whereHas('user', function($qUser) use ($course) {
+                $qUser->whereHas('registrations', function($qReg) use ($course) {
+                    $qReg->where('course', $course);
+                });
+            });
+        }
+        
+        $countTickets = $ticketsQuery->count();
+
+        // 2. Guests (Invitados especiales)
+        $guestsQuery = \App\Models\Guest::whereHas('registration', function($q) use ($evento_id, $request, $eventos) {
+            if ($evento_id) {
+                $q->where('event_id', $evento_id);
+            } else {
+                $q->whereIn('event_id', $eventos->pluck('id'));
+            }
+            
+            if ($request->has('course') && $request->course != '') {
+                $q->where('course', $request->course);
+            }
+        });
+        
+        $countGuests = $guestsQuery->count();
+        
+        $total_registrados = $countTickets + $countGuests;
+
+        // Obtener lista de cursos para el filtro
+        $cursosQuery = \App\Models\Registration::query();
+        if ($evento_id) {
+            $cursosQuery->where('event_id', $evento_id);
+        } else {
+            $cursosQuery->whereIn('event_id', $eventos->pluck('id'));
+        }
+        $cursos = $cursosQuery->select('course')->distinct()->orderBy('course')->pluck('course');
+        
+        return view('staff.asistencia', [
+            'eventos' => $eventos, 
+            'asistencias' => $asistencias, 
+            'evento_id' => $evento_id, 
+            'cursos' => $cursos, 
+            'total_registrados' => $total_registrados
+        ]);
     }
 
     // Reportes y analytics

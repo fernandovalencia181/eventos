@@ -205,12 +205,18 @@ class Invitados extends Component
         $ticket = Ticket::find($this->currentTicketId);
         if (!$ticket) return;
 
-        // Verificar si el usuario ha generado/activado el código dinámico recientemente
-        $this->canShowDynamicQr = ($ticket->token_reentrada && $ticket->token_reentrada_expira > now());
+        // Lógica de visualización:
+        // El QR dinámico se habilita SOLO si el usuario está "afuera" (necesita reingresar)
+        // O si ya tiene un token activo generado (por consistencia)
+        $isOutside = $ticket->estado === 'afuera';
+        $hasActiveToken = ($ticket->token_reentrada && $ticket->token_reentrada_expira > now());
+
+        $this->canShowDynamicQr = $isOutside || $hasActiveToken;
 
         if ($this->showDynamicQr) {
+             // Si el modo dinámico está activo pero ya no se puede mostrar (ej. cambió estado a adentro y expiró token)
+             // volvemos al estático.
              if (!$this->canShowDynamicQr) {
-                 // Si estaba viendo el dinámico y expiró, volver al estático automáticamente
                  $this->showDynamicQr = false;
                  $this->generateQrImage($ticket->token_seguridad_qr);
              } else {
@@ -228,22 +234,36 @@ class Invitados extends Component
 
         if ($this->showDynamicQr) {
             
-            // Permitimos que el staff vea el QR mientras sea válido por fecha
-            // NO generamos nuevos automáticamente, eso es tarea del usuario activo.
-            
+            // Si el token existe y es válido, lo mostramos
             if ($ticket->token_reentrada && $ticket->token_reentrada_expira > now()) {
-                 $this->timeLeft = $ticket->token_reentrada_expira->diffInSeconds(now());
+                 $this->timeLeft = (int) $ticket->token_reentrada_expira->diffInSeconds(now());
                  $this->generateQrImage($ticket->token_reentrada);
-            } else {
-                 // Si caducó, volvemos a estático
+            } 
+            // Si NO existe o expiró, pero el usuario está AFUERA, generamos uno nuevo "on demand"
+            // Esto permite sincronizar si el usuario abre su app, o si el staff lo genera.
+            elseif ($ticket->estado === 'afuera') {
+                // Generar nuevo token (Sincronizado)
+                $newToken = Str::random(64);
+                $expiration = now()->addSeconds(30);
+
+                $ticket->update([
+                    'token_reentrada' => $newToken,
+                    'token_reentrada_expira' => $expiration
+                ]);
+
+                $this->timeLeft = 30;
+                $this->generateQrImage($newToken);
+            }
+            else {
+                 // Si caducó y NO está afuera (casos raros), volvemos a estático
                  $this->showDynamicQr = false;
                  $this->generateQrImage($ticket->token_seguridad_qr);
             }
         
-    } else {
+        } else {
              $this->generateQrImage($ticket->token_seguridad_qr);
+        }
     }
-}
 
     private function generateQrImage($content)
     {
@@ -297,17 +317,25 @@ class Invitados extends Component
         // para traer a TODO el mundo (Usuarios, Acompañantes y VIPs)
         $query = Ticket::query();
 
-        // 1. Filtrar por evento
+        // 2. Filtrar por evento
         if ($this->evento_id_filter) {
             $query->where('evento_id', $this->evento_id_filter);
         } elseif ($user->evento_id) {
             $query->where('evento_id', $user->evento_id);
         }
 
-        // 2. Búsqueda
+        // 3. EXCLUIR ADMINS Y STAFF (Mostrar solo usuarios e invitados reales)
+        $query->where(function($q) {
+            $q->whereHas('user', function($u) {
+                $u->whereNotIn('rol', ['admin', 'staff']);
+            })
+            ->orWhereNull('user_id'); // Invitados sin usuario asociado (Guests puros)
+        });
+
+        // 4. Búsqueda
         if ($this->search) {
-            $query->where(function($q) {
-                $term = $this->search;
+            $term = $this->search;
+            $query->where(function($q) use ($term) {
                 $q->where('nombre_asistente', 'like', '%' . $term . '%')
                   // Búsqueda en Usuario (Email y Teléfono)
                   ->orWhereHas('user', function($u) use ($term) {
@@ -336,10 +364,10 @@ class Invitados extends Component
             ? Evento::where('id', $user->evento_id)->get() 
             : Evento::where('fecha', '>=', now()->subDays(30))->orderBy('fecha', 'desc')->get();
 
-        return view('livewire.staff.invitados', [
+        return view('staff.gestion-asistentes', [
             'invitados' => $invitados, // Mantenemos el nombre de variable para no romper la vista
             'eventos' => $eventos,
             'stats' => $stats
-        ]);
+        ])->layout('components.layouts.app');
     }
 }

@@ -1,23 +1,14 @@
-@extends('staff.layout')
-
-@section('title', 'Lista de Asistencia')
-
-@section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<x-app-layout>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- Cabecera -->
     <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="flex items-center gap-4 w-full md:w-auto">
             <div class="relative w-16 h-16 bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-110 hover:-rotate-3 transition-all duration-300">
                 <div class="absolute inset-0 bg-white/20 rounded-3xl backdrop-blur-sm"></div>
-                <div class="relative z-10">
-                    <svg viewBox="0 0 32 32" class="w-8 h-8" fill="none">
-                        <rect x="6" y="4" width="20" height="24" rx="2" stroke="white" stroke-width="2.5" fill="white" opacity="0.3"/>
-                        <line x1="10" y1="10" x2="22" y2="10" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="10" y1="16" x2="22" y2="16" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                        <line x1="10" y1="22" x2="18" y2="22" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                        <circle cx="24" cy="24" r="6" fill="#10b981"/>
-                        <path d="M21 24l2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <div class="relative z-10 text-white">
+                    <svg viewBox="0 0 24 24" class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 17.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                     </svg>
                 </div>
             </div>
@@ -26,20 +17,29 @@
                 <p class="text-secondary-600 dark:text-secondary-400 mt-2">Búsqueda manual por nombre o email</p>
             </div>
         </div>
-        <a href="{{ route('staff.exportar', ['evento_id' => $evento_id]) }}" 
-           class="w-full md:w-auto justify-center bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition shadow-lg transform hover:scale-105 inline-flex items-center gap-2">
-            <svg viewBox="0 0 20 20" class="w-5 h-5" fill="white">
-                <path d="M10 2v10m0 0l-3-3m3 3l3-3" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/>
-                <rect x="3" y="14" width="14" height="4" rx="1" fill="white"/>
-            </svg>
-            Exportar CSV
-        </a>
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <a href="{{ route('staff.exportar', ['evento_id' => $evento_id]) }}" 
+            class="w-full md:w-auto justify-center bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition shadow-lg transform hover:scale-105 inline-flex items-center gap-2">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Exportar CSV
+            </a>
+            
+            <a href="{{ route('staff.index') }}" 
+            class="w-full sm:w-auto justify-center bg-white dark:bg-primary-800 text-secondary-700 dark:text-secondary-300 border border-secondary-300 dark:border-primary-600 px-5 py-2.5 rounded-xl hover:bg-secondary-50 dark:hover:bg-primary-700 transition shadow-sm inline-flex items-center gap-2 font-bold">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                Volver al Panel
+            </a>
+        </div>
     </div>
 
     <!-- Filtros -->
     <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6 mb-6">
         <form method="GET" action="{{ route('staff.asistencia') }}" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Filtro por Evento -->
                 <div>
                     <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2 inline-flex items-center gap-2">
@@ -70,6 +70,27 @@
                     @endif
                 </div>
 
+                <!-- Filtro por Ciclo -->
+                <div>
+                    <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2 inline-flex items-center gap-2">
+                        <svg viewBox="0 0 16 16" class="w-4 h-4" fill="currentColor">
+                            <path d="M4 2h8a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M4 6h8M4 10h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        Filtrar por Ciclo
+                    </label>
+                    <select name="course" 
+                            onchange="this.form.submit()"
+                            class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
+                        <option value="">Todos los ciclos</option>
+                        @foreach($cursos as $curso)
+                            <option value="{{ $curso }}" {{ request('course') == $curso ? 'selected' : '' }}>
+                                {{ Str::limit($curso, 30) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <!-- Búsqueda -->
                 <div>
                     <label class="block text-sm font-medium text-secondary-900 dark:text-white mb-2 inline-flex items-center gap-2">
@@ -81,7 +102,7 @@
                     </label>
                     <input type="text" 
                            id="buscar" 
-                           placeholder="Nombre o email..."
+                           placeholder="Nombre del asistente..."
                            class="w-full bg-secondary-50 dark:bg-primary-800 border border-secondary-300 dark:border-primary-700 rounded-lg px-4 py-2 text-secondary-900 dark:text-white">
                 </div>
             </div>
@@ -90,6 +111,7 @@
 
     <!-- Tabla de Asistencias (Desktop) -->
     <div class="hidden md:block bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 overflow-hidden">
+        <!-- DEBUG INFO: Total Registros en Paginador: {{ $asistencias->total() }} | Count en esta página: {{ $asistencias->count() }} -->
         <div class="overflow-x-auto">
             <table class="w-full" id="tabla-asistencia">
                 <thead class="bg-secondary-50 dark:bg-primary-800">
@@ -106,9 +128,16 @@
                     @php
                         $user = $asistencia->ticket?->user ?? $asistencia->guest;
                         $userName = $user?->name ?? $user?->nombre ?? '';
-                        $userEmail = $user?->email ?? '';
+                        
+                        $ciclo = 'No especificado';
+                        if ($asistencia->ticket && $asistencia->ticket->user) {
+                            $reg = $asistencia->ticket->user->registrations->where('event_id', $asistencia->evento_id)->first();
+                            $ciclo = $reg->course ?? 'No especificado';
+                        } elseif ($asistencia->guest) {
+                            $ciclo = $asistencia->guest->registration->course ?? 'No especificado';
+                        }
                     @endphp
-                    <tr class="border-b border-secondary-100 dark:border-primary-800 hover:bg-secondary-50 dark:hover:bg-primary-800/50 transition" data-nombre="{{ strtolower($userName) }}" data-email="{{ strtolower($userEmail) }}">
+                    <tr class="border-b border-secondary-100 dark:border-primary-800 hover:bg-secondary-50 dark:hover:bg-primary-800/50 transition" data-nombre="{{ strtolower($userName) }}">
                         <td class="hidden md:table-cell py-4 px-6 text-sm text-secondary-600 dark:text-secondary-400">
                             {{ ($asistencias->currentPage() - 1) * $asistencias->perPage() + $index + 1 }}
                         </td>
@@ -129,7 +158,7 @@
                                 @endif
                                 <div>
                                     <p class="text-sm font-medium text-secondary-900 dark:text-white">{{ $userName ?: 'N/A' }}</p>
-                                    <p class="text-xs text-secondary-600 dark:text-secondary-400">{{ $userEmail ?: 'N/A' }}</p>
+                                    <p class="text-xs text-secondary-600 dark:text-secondary-400">{{ $ciclo ?: 'N/A' }}</p>
                                 </div>
                             </div>
                         </td>
@@ -193,11 +222,17 @@
         @php
             $user = $asistencia->ticket?->user ?? $asistencia->guest;
             $userName = $user?->name ?? $user?->nombre ?? '';
-            $userEmail = $user?->email ?? '';
+            
+            $ciclo = 'No especificado';
+            if ($asistencia->ticket && $asistencia->ticket->user) {
+                $reg = $asistencia->ticket->user->registrations->where('event_id', $asistencia->evento_id)->first();
+                $ciclo = $reg->course ?? 'No especificado';
+            } elseif ($asistencia->guest) {
+                $ciclo = $asistencia->guest->registration->course ?? 'No especificado';
+            }
         @endphp
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-4 transition-all hover:shadow-lg"
-             data-nombre="{{ strtolower($userName) }}" 
-             data-email="{{ strtolower($userEmail) }}">
+             data-nombre="{{ strtolower($userName) }}">
             
             <div class="flex justify-between items-start mb-3">
                 <div class="flex items-center gap-3">
@@ -212,7 +247,7 @@
                     @endif
                     <div>
                         <h3 class="font-bold text-secondary-900 dark:text-white text-sm line-clamp-1">{{ $userName ?: 'N/A' }}</h3>
-                        <p class="text-xs text-secondary-500 dark:text-secondary-400">{{ $userEmail ?: 'N/A' }}</p>
+                        <p class="text-xs text-secondary-500 dark:text-secondary-400">{{ $ciclo ?: 'N/A' }}</p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -262,7 +297,9 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-3xl font-bold text-secondary-900 dark:text-white">{{ $asistencias->total() }}</p>
+            <p class="text-3xl font-bold text-secondary-900 dark:text-white">
+                {{ $asistencias->total() }} <span class="text-lg text-secondary-500 font-normal">/ {{ $total_registrados }} (Registrados)</span>
+            </p>
         </div>
 
         <div class="bg-white dark:bg-primary-900 rounded-lg shadow-md border border-secondary-200 dark:border-primary-800 p-6">
@@ -298,11 +335,10 @@
     </div>
 
 </div>
-@endsection
 
-@section('scripts')
+@push('scripts')
 <script>
-    // Búsqueda en tiempo real
+    // Búsqueda en tiempo real (Solo por nombre)
     document.getElementById('buscar').addEventListener('input', function(e) {
         const search = e.target.value.toLowerCase();
         // Seleccionar filas de tabla y tarjetas móviles
@@ -313,9 +349,9 @@
             if (!row.hasAttribute('data-nombre')) return;
 
             const nombre = row.getAttribute('data-nombre') || '';
-            const email = row.getAttribute('data-email') || '';
+            // const email = row.getAttribute('data-email') || ''; // Email deshabilitado por privacidad
             
-            if (nombre.includes(search) || email.includes(search)) {
+            if (nombre.includes(search)) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';
@@ -323,4 +359,5 @@
         });
     });
 </script>
-@endsection
+@endpush
+</x-app-layout>

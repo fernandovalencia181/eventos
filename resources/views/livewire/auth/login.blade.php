@@ -34,12 +34,12 @@
 
         <div class="mb-4">
             <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Correo Electrónico</label>
-            <input id="email" class="block mt-1 w-full rounded-lg border-gray-300 dark:border-primary-600 bg-white dark:bg-primary-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-colors" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" />
+            <input id="email" class="block mt-1 w-full rounded-lg border-gray-300 dark:border-primary-600 bg-white dark:bg-primary-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-colors py-3 px-4" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" />
         </div>
 
         <div class="mb-4">
             <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
-            <input id="password" class="block mt-1 w-full rounded-lg border-gray-300 dark:border-primary-600 bg-white dark:bg-primary-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-colors" type="password" name="password" required autocomplete="current-password" />
+            <input id="password" class="block mt-1 w-full rounded-lg border-gray-300 dark:border-primary-600 bg-white dark:bg-primary-800 text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 shadow-sm transition-colors py-3 px-4" type="password" name="password" required autocomplete="current-password" />
         </div>
 
         <div class="flex items-center justify-between mb-6">
